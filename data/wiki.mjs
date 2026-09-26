@@ -1,5 +1,11 @@
 // Original guide text. Evidence links supplement model-specific references.
 export const articles = [
+ {slug:'single-board-computers',title:'ARM, x86 and RISC-V computers',description:'Find SBC references by architecture, manufacturer and exact model, including LattePanda and Milk-V.',sections:[
+  {heading:'Start with the board, then the architecture',text:'Choose SBC in the board library to combine Raspberry Pi and other single-board computers. Open More filters and choose Architecture to narrow documented ARM, x86 or RISC-V records. Architecture describes the processor ecosystem; it does not determine connector wiring. Records without a verified architecture remain available in the unfiltered library.'},
+  {heading:'LattePanda models stay separate',text:'The collection includes IOTA, Sigma, Alpha, Delta, V1, 3 Delta, Mu and Mu Ultra. Alpha and Delta share a manufacturer diagram with model-specific colors. Mu and Mu Ultra include connector orientation drawings and original signal-definition spreadsheets. An orientation drawing alone does not locate every signal and is not counted as a physical pinout source.'},
+  {heading:'Check the connector scope',text:'A 40-pin GPIO image, such as the Milk-V Mars reference, covers that connector only. It does not document every connector on the computer. Compare physical numbering, signal functions, orientation and electrical limits with the exact model documentation before connecting a peripheral.'},
+  {heading:'Keep specifications close',text:'Board records now expose Specifications & hardware documentation links. A dedicated specification link is distinguished from general source documentation. Missing specifications remain explicit. Source availability does not establish independent electrical testing or complete pin coverage.',links:[['Browse Raspberry Pi computers','https://valleytech-black-wire-guide.pages.dev/wiki/boards/raspberry-pi-sbc/'],['Browse other SBCs','https://valleytech-black-wire-guide.pages.dev/wiki/boards/other-sbc/']]}
+ ]},
  {slug:'getting-started',title:'Start at the workbench',description:'Find the exact board, open a useful pinout and keep its source and revision close.',sections:[
   {heading:'Identify the hardware first',text:'Read the model and revision printed on the PCB, including suffixes. A controller name such as ESP32 or SSD1306 identifies a family of silicon, not a unique physical board. Compare the connectors, USB port and silkscreen with the reference.'},
   {heading:'Find the reference',steps:['Start with the printed model code in the top search bar. Add a manufacturer to narrow similar names.','Choose Entire catalog, Boards & devices, or Displays, sensors & modules. Use Pinout sources only when you need a physical map.','Open a result and read its coverage label. A product photo helps identify a device; it does not establish a pin assignment.','Open the pinout at a useful size. Follow the source link for the exact revision and electrical limits.']},
@@ -53,6 +59,7 @@ export const articles = [
  ]}
 ];
 export const makerIntros={
+ 'FPGA':'FPGA development boards, with original connector maps and specifications. Check model, I/O bank and documented voltage before wiring.',
  'Displays':'OLED, LCD, e-paper and other display records. Compare controller, interface, diagonal size, resolution and exact module revision.',
  'Sensors':'Sensor breakouts and documented families. Compare the exact device code, power, interface and breakout revision.',
  'Power & charging':'Voltage converters, chargers, protection, UPS and power monitoring. Match TP4056 and TP4057 variants to their actual PCB and terminal labels.',

@@ -17,7 +17,16 @@
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
-## New in 0.6.1
+## New in 0.7.0
+
+- **More manufacturer references:** 107 additional board/device listings, 229 reference entries and 15 linked maker records, including Adafruit, SparkFun, FPGA boards, H4M, LattePanda and Milk-V Mars.
+- **SBC and FPGA shortcuts:** browse single-board computers together, then filter ARM, x86 or RISC-V. Mixed-architecture boards appear under either matching architecture.
+- **Specifications close to the diagram:** visible links to manufacturer hardware documentation, with dedicated specs distinguished from general sources.
+- **A new SBC wiki guide** and corrected model identities. [Release details and limits](docs/RELEASE-0.7.0.md).
+
+![LattePanda IOTA GPIO reference with hardware documentation links](docs/screenshots/lattepanda-reference.png)
+
+## Previous update / 0.6.1
 
 - PDF touch scrolling, intrinsic page rotation, direct page selection and retry after a failed load. High zoom uses a bounded canvas allocation.
 - Zoomed, rotated images keep all corners reachable; malformed saved measurements cannot crash the workbench or overwrite saved data.
@@ -31,7 +40,7 @@ Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-pa
 - **Better discovery:** useful titles and descriptions, canonical links, social previews and a sitemap. GitHub wiki pages and issue templates make corrections and contributions easier.
 - **Useful edge-case fixes:** saved theme synchronization across tabs, a clear fallback when storage is blocked, and direct links to undocumented board records.
 
-The current collection is **2026.09.6**: 2,407 board/device listings and 486 maker listings, including families and shared records. A physical source is not an independently approved all-pin reference. [Coverage audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/PINOUT_COVERAGE.md).
+The current collection is **2026.09.7**: 2,514 board/device listings and 501 maker listings, including families and shared records. A physical source is not an independently approved all-pin reference. [Coverage audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/PINOUT_COVERAGE.md).
 
 ## Your board. Its pins. One place.
 
@@ -42,7 +51,7 @@ Built for a student's first breadboard, an educator's lab, a hobbyist's parts dr
 | At your bench | What the app does |
 |---|---|
 | Find the right board | Search names, aliases and filenames; filter manufacturer, MCU variant, family and review status. Dashes, spaces and underscores work interchangeably. |
-| Find a maker device | Dedicated Devices & IoT tab with 310 device records, category filters, exact model references and visible documentation gaps. |
+| Find a maker device | Dedicated Devices & IoT tab with 313 device records, category filters, exact model references and visible documentation gaps. |
 | Read the details | Zoom, pan and rotate diagrams; browse local PDFs; save the original-resolution file. |
 | Check the source | Keep source links, revision notes, coverage labels and hashes with each reference. |
 | Plan power | Read sourced voltage/current profiles and published observations; compare adapter ratings, estimate battery runtime and total power across voltage rails. |
@@ -51,7 +60,7 @@ Built for a student's first breadboard, an educator's lab, a hobbyist's parts dr
 
 ### A growing library
 
-**3,011 reference entries · 1,369 board pinout source image entries · 60 brands/source groups.** There are 1,693 populated catalog records, including shared references and unreviewed source products. This is a collection snapshot, not a claim to cover every board ever made.
+**3,240 reference entries · 1,496 board pinout source image entries · 64 brands/source groups.** There are 1,806 populated catalog records, including shared references and unreviewed source products. This is a collection snapshot, not a claim to cover every board ever made.
 
 ESP32 variants including C5/C6/S3, RP2040/RP2350, CYD displays, Arduino, Teensy, Raspberry Pi, other SBCs, radio boards and GPIO devices are indexed separately where their identities are known. Chip-package references are labeled separately from board pinouts.
 
@@ -61,7 +70,7 @@ ESP32 variants including C5/C6/S3, RP2040/RP2350, CYD displays, Arduino, Teensy,
 
 Browse handhelds, radios, wearables, displays, cameras and controllers. Search T-Embed, T-Beam, Cardputer or Flipper Zero using the same dash-tolerant search. In-development documentation is labeled; missing pinout images stay in a documentation-watch list.
 
-The guide is **First Edition / 2026**, with digital collection snapshot **2026.09.6**. App updates and collection snapshots do not advance the annual book edition. See [publication workflow](docs/MAINTENANCE.md).
+The guide is **First Edition / 2026**, with digital collection snapshot **2026.09.7**. App updates and collection snapshots do not advance the annual book edition. See [publication workflow](docs/MAINTENANCE.md).
 
 ## Look closer
 
@@ -77,11 +86,11 @@ The power desk includes **13 sourced profiles and 22 published operating observa
 
 Check [Releases](https://github.com/valleytechsolutions/black-wire-desktop/releases) for the actual available assets and validation status. An absent platform asset means that platform has not been released.
 
-**Available now: [Windows x64 preview 0.6.0](https://github.com/valleytechsolutions/black-wire-desktop/releases/tag/v0.6.0).** Linux and macOS build targets are provided, but verified downloads for those systems have not been published. For images and PDFs without an application, use the separate [pinout collection releases](https://github.com/valleytechsolutions/black-wire-pinouts/releases); those ZIP files can be read on all three operating systems.
+**Available now: [Windows x64 preview 0.7.0](https://github.com/valleytechsolutions/black-wire-desktop/releases/tag/v0.7.0).** Linux and macOS build targets are provided, but verified downloads for those systems have not been published. For images and PDFs without an application, use the separate [pinout collection releases](https://github.com/valleytechsolutions/black-wire-pinouts/releases); those ZIP files can be read on all three operating systems.
 
 | Platform | Current status |
 |---|---|
-| Windows x64 | 0.6.0 browser and packaged-app checks cover themes, pin references, search, images, PDFs and saved data. Native installation of this version on a clean Windows machine still needs validation. Workshop builds are unsigned unless the release explicitly says otherwise. |
+| Windows x64 | 0.7.0 unsigned preview. Browser and library checks cover this update; clean-machine installation and native launch validation of this build remain outstanding. |
 | Linux x64 / ARM64 | Packaging supported; native launch validation remains outstanding. |
 | macOS Intel / Apple Silicon | Build targets provided; a Mac, Developer ID signing and notarization are needed for a distributable release. No verified Mac binary is claimed. |
 
@@ -110,7 +119,7 @@ See [Build and development](docs/BUILDING.md), [Workbench guide](docs/WORKBENCH.
 
 Original board artwork belongs to its credited authors/manufacturers. This application does not claim ownership or grant new permissions over those references. See the collection's [per-asset ledger](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/catalog/attributions.csv) before reuse. **Original app code: [MIT](LICENSE)** — reuse and modify, including commercially, while retaining the copyright and permission notice. **Original guide material: CC BY 4.0** — reuse with attribution, a license link and a note of changes. See [license scope](LICENSING.md), [creator credit](NOTICE.md) and [privacy](PRIVACY.md). These licenses do not relicense manufacturer diagrams.
 
-First Edition is a growing digital collection for a lasting maker reference. A wiki and annual print editions are future projects, with separate completeness, rights and print-quality reviews.
+First Edition is a growing digital collection for a lasting maker reference. The public wiki is available; annual print editions are a future project, with separate completeness, rights and print-quality reviews.
 
 ---
 Created and curated by **—your pal kal** · [@valleytechsolutions on YouTube](https://www.youtube.com/@valleytechsolutions)

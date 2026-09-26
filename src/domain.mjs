@@ -4,7 +4,7 @@ const words=text=>fold(text).match(/[a-z0-9]+(?:\.[0-9]+)*|\++/g)||[];
 const indexCache=new WeakMap();
 function searchIndex(board){
  if(indexCache.has(board))return indexCache.get(board);
- const core=[board.name,board.brand,board.processor,board.family,board.device?.category,...(board.device?.tags||[])];
+ const core=[board.name,board.brand,board.processor,board.architecture,board.family,board.device?.category,...(board.device?.tags||[])];
  const aliases=board.aliases||[];
  const references=(board.assets||[]).flatMap(a=>[a.label,a.type,...(a.aliases||[]),...(a.originals||[])]);
  const fields=[...core,...aliases,...references,...(board.pinReferences||[]).flatMap(r=>r.pins.flatMap(p=>[p.label,p.purpose])),board.searchText].filter(Boolean);
@@ -16,7 +16,7 @@ function includesModel(field,term){
  while(pos!==-1){const next=field[pos+term.length];if(!/\d$/.test(term)||!next||!/[0-9]/.test(next))return true;pos=field.indexOf(term,pos+1);}
  return false;
 }
-export function searchBoards(boards,{query='',brand='',processor='',family='',kind='',scope='all',savedOnly=false,favorites=[],devicesOnly=false,deviceCategory='',includeUndocumented=false}={}){
+export function searchBoards(boards,{query='',brand='',processor='',family='',architecture='',kind='',scope='all',savedOnly=false,favorites=[],devicesOnly=false,deviceCategory='',includeUndocumented=false}={}){
  const terms=words(query),q=normalize(query);
  // Processor suffixes and decimal revisions are identities, not fuzzy text.
  const variant=normalize(query).match(/esp32(c61|s31|c[2356]|s[23]|h2|p4)(?!\d)/)?.[0];
@@ -24,7 +24,7 @@ export function searchBoards(boards,{query='',brand='',processor='',family='',ki
  const teensyRevision=/teensy/i.test(query)&&terms.some(t=>/^\d+\.\d+$/.test(t));
  if(query.trim()&&!terms.some(t=>/[a-z0-9]/.test(t)))return [];
  return boards.filter(b=>{
-  if(!includeUndocumented&&!b.assets.length||brand&&b.brand!==brand||processor&&b.processor!==processor||family&&b.family!==family)return false;
+  if(!includeUndocumented&&!b.assets.length||brand&&b.brand!==brand||processor&&b.processor!==processor||family&&(family==='SBC'?!['Other SBC','Raspberry Pi SBC'].includes(b.family):b.family!==family)||architecture&&b.architecture!==architecture&&!(b.architecture||'').split(' / ').includes(architecture))return false;
   if(devicesOnly&&!b.device||deviceCategory&&b.device?.category!==deviceCategory)return false;
   if(savedOnly&&!favorites.includes(b.id))return false;
   if(kind&&!b.assets.some(a=>a.type===kind))return false;
