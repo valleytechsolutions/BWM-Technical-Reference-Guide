@@ -113,6 +113,8 @@ See [Website integration](docs/WEBSITE.md) for the prepared page, build commands
 - **[black-wire-pinouts](https://github.com/valleytechsolutions/black-wire-pinouts):** images, PDFs, catalog, board pages and per-reference attribution.
 - **This repository:** desktop application, power data, UI screenshots, tests and packaging. Large library files are imported during a build; personal bookmarks and measurements are never part of the repository.
 
+Power Desk 0.7.0 adds explicit current units, confirmation resets after rating changes, visible input notes, linked observation sources and battery derating. Read the [Power Desk guide](docs/wiki/power-desk.md) and [source review](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/POWER-REVIEW-2026.09.7.md).
+
 See [Build and development](docs/BUILDING.md), [Workbench guide](docs/WORKBENCH.md), [Attribution](ATTRIBUTION.md) and [Contribution guide](CONTRIBUTING.md).
 
 ## Attribution and project status

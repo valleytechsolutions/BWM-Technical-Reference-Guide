@@ -9,6 +9,7 @@ Know your board. Make the connection.
 - [How to read a pinout reference](reading-pinouts.md) — Distinguish physical connector positions, GPIO names and alternate functions before wiring.
 - [GPIO, I²C, SPI and UART](gpio-and-interfaces.md) — A quick introduction to the signal names you will meet in maker pinout sheets.
 - [Identify displays and sensors](displays-and-sensors.md) — Use controller, interface, board revision and physical connectors to distinguish similar modules.
+- [Use the Power Desk carefully](power-desk.md) — Read supply requirements, compare adapter labels and estimate battery runtime without confusing a calculation with a hardware test.
 - [Find a power-module reference](power-module-identification.md) — Distinguish buck, boost, buck-boost, charger and protection records before selecting a pinout.
 - [Search, themes and saved boards](search-and-shortcuts.md) — Use keyboard search, scope filters, dark or light mode, original downloads and workbench backups.
 - [Coverage, sources and review status](coverage-and-sources.md) — What each coverage label means and where the remaining documentation gaps are recorded.

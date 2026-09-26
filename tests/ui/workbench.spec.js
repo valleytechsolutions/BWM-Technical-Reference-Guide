@@ -28,9 +28,12 @@ test('Power profiles, adapter checks, calculations and measured records',async({
  await page.screenshot({path:'test-results/power-chart.png',fullPage:false});
  await page.getByRole('tab',{name:'Adapter check'}).click();await page.getByLabel('Board power profile').selectOption('uno-r3');
  await page.getByLabel('Output voltage',{exact:true}).fill('9');await page.getByLabel('Rated output current').fill('2');await page.getByLabel('Required capacity or worst-case load').fill('0.7');await page.getByLabel('Output type',{exact:true}).selectOption('DC');
- await page.getByLabel('I confirmed regulated').check();await page.getByLabel('Connector, polarity').check();await expect(page.getByRole('heading',{name:'Matches the entered ratings'})).toBeVisible();
+ for(const checkbox of await page.locator('.power-confirmations input').all())await checkbox.check();await expect(page.getByRole('heading',{name:'Entered ratings align'})).toBeVisible();
  await page.getByLabel('Output voltage',{exact:true}).fill('24');await expect(page.getByRole('heading',{name:'Do not connect this combination'})).toBeVisible();
- await page.getByRole('tab',{name:'Battery math'}).click();await expect(page.locator('.large-number')).toContainText('18');
+ await expect(page.locator('.power-confirmations input:checked')).toHaveCount(0);
+ await page.getByRole('tab',{name:'Battery math'}).click();await expect(page.locator('.large-number')).toHaveCount(0);
+ for(const [label,value] of Object.entries({'Cells in series':'2','Parallel strings':'1','Cell nominal voltage':'3.6','Cell fully charged voltage':'4.2','Cell capacity':'2.5','Total load power':'9','Conversion efficiency':'80','Usable nominal energy':'80','Minimum cell voltage under load':'3'}))await page.getByLabel(label,{exact:true}).fill(value);
+ await expect(page.locator('.large-number')).toContainText('18');await expect(page.locator('.result-grid')).toContainText('1.28 hours');
  await page.getByRole('tab',{name:'My measurements'}).click();await page.getByRole('button',{name:'Record a measurement',exact:true}).click();
  const dialog=page.getByRole('dialog',{name:'Record a measurement'});await dialog.getByLabel('Board',{exact:true}).selectOption('raspberry-pi-rp2040-pico');await dialog.getByLabel('PCB revision').fill('Pico Rev3');await dialog.getByLabel('Power input point').fill('VBUS');await dialog.getByLabel('Measured voltage').fill('5');await dialog.getByLabel('Average current',{exact:true}).fill('25');await dialog.getByLabel('Conditions / firmware / peripherals').fill('Test fixture: LED off, no external peripherals');await dialog.getByLabel('Instrument / measurement method').fill('Automated UI test fixture, not a real measurement');await dialog.getByRole('button',{name:'Save measurement'}).click();await expect(page.locator('.measurement-list')).toContainText('0.125');
  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('blackwire-workbench')||'{}').measurements?.length)).toBe(1);

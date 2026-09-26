@@ -21,7 +21,8 @@
         "title": "Raspberry Pi Pico datasheet",
         "url": "https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf",
         "section": "Powering Pico; §3.1.1 Table 1 (printed p.12)",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "757ff485227493b9fcc0c2c96c4dea9de020e1d8b2b11e2aa4f9ee8b25aa89eb"
       }
     ],
     "notes": "USB VBUS is a separate 5 V input. Do not apply this VSYS range to a GPIO pin. Multiple supplies need the documented power-path arrangement.",
@@ -35,7 +36,8 @@
         "caveat": "Includes the expansion board. Scenario results are not guaranteed maxima or a supply-current requirement.",
         "source": 0
       }
-    ]
+    ],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "pico2",
@@ -59,11 +61,13 @@
         "title": "Raspberry Pi Pico 2 datasheet",
         "url": "https://datasheets.raspberrypi.com/pico/pico-2-datasheet.pdf",
         "section": "VSYS / operating conditions, printed pp.9,12,15",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "cbcfaf881018c686495a2e53c7bd281e7e0a8217d79447d73eda7c8f74b7f675"
       }
     ],
     "notes": "USB VBUS is a separate 5 V input. Do not apply this VSYS range to a GPIO pin. Multiple supplies need the documented power-path arrangement.",
-    "observations": []
+    "observations": [],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "uno-r3",
@@ -87,11 +91,13 @@
         "title": "Arduino UNO Rev3 technical specifications",
         "url": "https://store.arduino.cc/products/arduino-uno-rev3",
         "section": "Tech specs and Power",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "388039609cf54d96b9300c9812d40fa802b1f98bfa1269a5cde0d236d86e3f87"
       }
     ],
-    "notes": "Use the recommended 7–12 V range. The published 6–20 V limit is not the recommended range; regulator heating increases with voltage and load. USB is a separate 5 V input.",
-    "observations": []
+    "notes": "Use the recommended 7–12 V range. The published 6–20 V limit is not the recommended range; regulator heating increases with voltage and load. USB is a separate 5 V input. Supplying the 5 V or 3.3 V output pins bypasses regulation; do not apply the VIN range there.",
+    "observations": [],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "pi5",
@@ -114,17 +120,18 @@
       {
         "title": "Raspberry Pi power-supply recommendations",
         "url": "https://www.raspberrypi.com/documentation/computers/getting-started.html",
-        "section": "Recommended power supply",
-        "checked": "2026-09-24"
+        "section": "Power supply / recommended power supply; reviewed rendered official documentation",
+        "checked": "2026-09-26"
       },
       {
-        "title": "Raspberry Pi hardware power tables",
-        "url": "https://www.raspberrypi.com/documentation/hardware/rf/",
+        "title": "Raspberry Pi official power tables (pinned documentation revision)",
+        "url": "https://github.com/raspberrypi/documentation/blob/34dfb87309abda0c73e8cbc454f999fd8eaca73f/documentation/asciidoc/computers/raspberry-pi/power-supplies.adoc",
         "section": "Typical bare-board active current consumption",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "49f6478c1c0164237ebcf1d28aac4709e843d2b5c06442539bacae05e49eafb1"
       }
     ],
-    "notes": "A 5 V / 3 A supply limits USB peripherals to 600 mA. The 5 A mode requires compatible USB-PD negotiation and cable. Do not substitute a higher-voltage PD mode.",
+    "notes": "A 5 V / 3 A supply limits USB peripherals to 600 mA. The 5 A mode requires compatible USB-PD negotiation and cable. Do not substitute a higher-voltage PD mode. The getting-started guide describes 5 V at the plug; hardware documentation describes a 5.1 V supply. Neither figure establishes an input acceptance range in this chart.",
     "observations": [
       {
         "kind": "Manufacturer typical",
@@ -135,7 +142,8 @@
         "caveat": "This is not a worst-case current or a smaller supply recommendation.",
         "source": 1
       }
-    ]
+    ],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "pi4",
@@ -159,17 +167,18 @@
       {
         "title": "Raspberry Pi power-supply recommendations",
         "url": "https://www.raspberrypi.com/documentation/computers/getting-started.html",
-        "section": "Recommended power supply",
-        "checked": "2026-09-24"
+        "section": "Power supply / recommended power supply; reviewed rendered official documentation",
+        "checked": "2026-09-26"
       },
       {
-        "title": "Raspberry Pi hardware power tables",
-        "url": "https://www.raspberrypi.com/documentation/hardware/rf/",
+        "title": "Raspberry Pi official power tables (pinned documentation revision)",
+        "url": "https://github.com/raspberrypi/documentation/blob/34dfb87309abda0c73e8cbc454f999fd8eaca73f/documentation/asciidoc/computers/raspberry-pi/power-supplies.adoc",
         "section": "Typical bare-board active current consumption",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "49f6478c1c0164237ebcf1d28aac4709e843d2b5c06442539bacae05e49eafb1"
       }
     ],
-    "notes": "The source recommends a supply rating for reliable operation with peripherals. Check cable voltage drop. Input-voltage tolerance has not been recorded in this chart.",
+    "notes": "The source recommends a supply rating for reliable operation with peripherals. Check cable voltage drop. Input-voltage tolerance has not been recorded in this chart. The getting-started guide describes 5 V at the plug; hardware documentation describes a 5.1 V supply. Neither figure establishes an input acceptance range in this chart.",
     "observations": [
       {
         "kind": "Manufacturer typical",
@@ -180,7 +189,8 @@
         "caveat": "This is not a worst-case current or a smaller supply recommendation.",
         "source": 1
       }
-    ]
+    ],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "pi3b",
@@ -203,17 +213,18 @@
       {
         "title": "Raspberry Pi power-supply recommendations",
         "url": "https://www.raspberrypi.com/documentation/computers/getting-started.html",
-        "section": "Recommended power supply",
-        "checked": "2026-09-24"
+        "section": "Power supply / recommended power supply; reviewed rendered official documentation",
+        "checked": "2026-09-26"
       },
       {
-        "title": "Raspberry Pi hardware power tables",
-        "url": "https://www.raspberrypi.com/documentation/hardware/rf/",
+        "title": "Raspberry Pi official power tables (pinned documentation revision)",
+        "url": "https://github.com/raspberrypi/documentation/blob/34dfb87309abda0c73e8cbc454f999fd8eaca73f/documentation/asciidoc/computers/raspberry-pi/power-supplies.adoc",
         "section": "Typical bare-board active current consumption",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "49f6478c1c0164237ebcf1d28aac4709e843d2b5c06442539bacae05e49eafb1"
       }
     ],
-    "notes": "The source recommends a supply rating for reliable operation with peripherals. Check cable voltage drop. Input-voltage tolerance has not been recorded in this chart.",
+    "notes": "The source recommends a supply rating for reliable operation with peripherals. Check cable voltage drop. Input-voltage tolerance has not been recorded in this chart. The getting-started guide describes 5 V at the plug; hardware documentation describes a 5.1 V supply. Neither figure establishes an input acceptance range in this chart.",
     "observations": [
       {
         "kind": "Manufacturer typical",
@@ -224,7 +235,8 @@
         "caveat": "This is not a worst-case current or a smaller supply recommendation.",
         "source": 1
       }
-    ]
+    ],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "zero2",
@@ -247,17 +259,18 @@
       {
         "title": "Raspberry Pi power-supply recommendations",
         "url": "https://www.raspberrypi.com/documentation/computers/getting-started.html",
-        "section": "Recommended power supply",
-        "checked": "2026-09-24"
+        "section": "Power supply / recommended power supply; reviewed rendered official documentation",
+        "checked": "2026-09-26"
       },
       {
-        "title": "Raspberry Pi hardware power tables",
-        "url": "https://www.raspberrypi.com/documentation/hardware/rf/",
+        "title": "Raspberry Pi official power tables (pinned documentation revision)",
+        "url": "https://github.com/raspberrypi/documentation/blob/34dfb87309abda0c73e8cbc454f999fd8eaca73f/documentation/asciidoc/computers/raspberry-pi/power-supplies.adoc",
         "section": "Typical bare-board active current consumption",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "49f6478c1c0164237ebcf1d28aac4709e843d2b5c06442539bacae05e49eafb1"
       }
     ],
-    "notes": "The source recommends a supply rating for reliable operation with peripherals. Check cable voltage drop. Input-voltage tolerance has not been recorded in this chart.",
+    "notes": "The source recommends a supply rating for reliable operation with peripherals. Check cable voltage drop. Input-voltage tolerance has not been recorded in this chart. The getting-started guide describes 5 V at the plug; hardware documentation describes a 5.1 V supply. Neither figure establishes an input acceptance range in this chart. The general hardware table lists 2 A for Zero 2 W; this profile retains the getting-started recommendation of a 2.5 A supply.",
     "observations": [
       {
         "kind": "Manufacturer typical",
@@ -268,7 +281,8 @@
         "caveat": "This is not a worst-case current or a smaller supply recommendation.",
         "source": 1
       }
-    ]
+    ],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "teensy40",
@@ -292,13 +306,15 @@
         "title": "PJRC Teensy 4.0 pinout card",
         "url": "https://www.pjrc.com/teensy/card10a_rev2_web.pdf",
         "section": "VIN label",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "d82c571a658942bdac3c7468aca8a6ac21fe8a4466c67b303d46a1b96ec1e1e9"
       },
       {
         "title": "PJRC Teensy 4.0 product documentation",
         "url": "https://www.pjrc.com/store/teensy40.html",
         "section": "Power",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "b11d867565d435d1c4637f401c0e9b69f57e15b3a9d8441dcb997e1e12fc32dd"
       }
     ],
     "notes": "Do not apply external VIN while USB power is connected unless the documented VUSB/VIN isolation is implemented. The 3.3 V pin is a regulated output; its rating is not board consumption.",
@@ -312,7 +328,8 @@
         "caveat": "Approximate operating figure, not guaranteed peak or minimum supply capacity.",
         "source": 1
       }
-    ]
+    ],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "teensy41",
@@ -336,17 +353,20 @@
         "title": "PJRC Teensy 4.1 pinout card",
         "url": "https://www.pjrc.com/teensy/card11a_rev4_web.pdf",
         "section": "VIN label",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "d8e8f77658a43eddd3254fcf7c248e200f8a83a398b990382ee1f71f500debf0"
       },
       {
         "title": "PJRC Teensy 4.1 product documentation",
         "url": "https://www.pjrc.com/store/teensy41.html",
         "section": "Power",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "00bbe5ce5ab5e36b1d9678f5914530f39def67ab9ccaae02a61934790b9e7363"
       }
     ],
     "notes": "Do not apply external VIN while USB power is connected unless the documented VUSB/VIN isolation is implemented. The 3.3 V pin is a regulated output; its rating is not board consumption.",
-    "observations": []
+    "observations": [],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "teensy20",
@@ -370,13 +390,15 @@
         "title": "PJRC external power recommendations",
         "url": "https://www.pjrc.com/teensy/external_power.html",
         "section": "Recommended operating parameters",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "5576403eaca97877eb5c897667c7c2af8bbda00dc217c4c858bb7f86d2849c94"
       },
       {
         "title": "PJRC measured low-power table",
         "url": "https://www.pjrc.com/teensy/low_power.html",
         "section": "Typical current consumed by Teensy",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "8a858302d72eafef7a4bfad5650fe46c81bbf0273e0f978f258aeb678ea65c5c"
       }
     ],
     "notes": "These values apply to the AVR Teensy 2.0 family, not newer Teensy models. Isolate USB power when supplying external VCC.",
@@ -408,7 +430,8 @@
         "caveat": "Sleep consumption is not the current needed during startup or active use.",
         "source": 1
       }
-    ]
+    ],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "teensypp20",
@@ -432,13 +455,15 @@
         "title": "PJRC external power recommendations",
         "url": "https://www.pjrc.com/teensy/external_power.html",
         "section": "Recommended operating parameters",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "5576403eaca97877eb5c897667c7c2af8bbda00dc217c4c858bb7f86d2849c94"
       },
       {
         "title": "PJRC measured low-power table",
         "url": "https://www.pjrc.com/teensy/low_power.html",
         "section": "Typical current consumed by Teensy",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "8a858302d72eafef7a4bfad5650fe46c81bbf0273e0f978f258aeb678ea65c5c"
       }
     ],
     "notes": "These values apply to the AVR Teensy 2.0 family, not newer Teensy models. Isolate USB power when supplying external VCC.",
@@ -470,7 +495,8 @@
         "caveat": "Sleep consumption is not the current needed during startup or active use.",
         "source": 1
       }
-    ]
+    ],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "espc5",
@@ -494,11 +520,13 @@
         "title": "Espressif ESP32-C5-DevKitC-1 v1.2 user guide",
         "url": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c5/esp32-c5-devkitc-1/user_guide.html",
         "section": "Power Supply Options / Current Measurement",
-        "checked": "2026-09-24"
+        "checked": "2026-09-26",
+        "sha256": "46058ce2ffef27b6f0d1fd1f64959bfa6c2be780876a1a79c6f362e79310479f"
       }
     ],
-    "notes": "USB, 5V/GND headers and 3V3/GND headers are mutually exclusive supply methods. The 3V3 input bypasses regulation. Follow the J5 instructions for module-current measurements.",
-    "observations": []
+    "notes": "USB (one or both USB ports), 5V/GND headers and 3V3/GND headers are mutually exclusive supply methods. The 3V3 input bypasses regulation. J5 measures the module current, not the complete board and peripherals.",
+    "observations": [],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   },
   {
     "id": "wireless-paper",
@@ -522,8 +550,9 @@
         "title": "Heltec Wireless Paper datasheet",
         "url": "https://resource.heltec.cn/download/Wireless_Paper/Wireless-Paper.pdf",
         "section": "Table 2.2 Working current, printed p.7",
-        "checked": "2026-09-24",
-        "file": "power/wireless-paper.pdf"
+        "checked": "2026-09-26",
+        "file": "power/wireless-paper.pdf",
+        "sha256": "1de3f7a5343d17b62dbcbce715109e545347abf0c11ac433fd00dcc7f4b8c6dd"
       }
     ],
     "notes": "The table reports currents at 3.7 V and 5 V but does not fully specify the setup, firmware or battery/charging state. Headings and values are preserved as published; verify against the exact revision.",
@@ -618,6 +647,7 @@
         "caveat": "No measured peak/transient value or complete test setup supplied.",
         "source": 0
       }
-    ]
+    ],
+    "reviewStatus": "Manufacturer documentation rechecked 2026-09-26. Not independently electrically tested by Black Wire."
   }
 ]

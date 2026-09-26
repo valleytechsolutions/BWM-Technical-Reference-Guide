@@ -47,30 +47,42 @@ export function searchBoards(boards,{query='',brand='',processor='',family='',ar
  }).sort((a,b)=>b.rank-a.rank||a.b.name.localeCompare(b.b.name)).map(x=>x.b);
 }
 export const finite=(n)=>typeof n==='number'&&Number.isFinite(n);
-export function adapterCheck({voltage,current,minVoltage,maxVoltage,loadCurrent,outputType,regulated,connectorConfirmed}){
+export function adapterCheck({voltage,current,minVoltage,maxVoltage,loadCurrent,outputType,regulated,connectorConfirmed,polarityConfirmed,powerPathConfirmed,limitsConfirmed,loadConfirmed,profile}){
  const issues=[];const unknown=[];
  if(outputType==='AC')issues.push('This input needs DC. An AC-output adapter is not a match.');
  else if(outputType!=='DC')unknown.push('Confirm whether the adapter OUTPUT is AC or DC.');
- if(!finite(voltage)||voltage<=0||!finite(current)||current<=0)return {level:'incomplete',title:'Enter the adapter output ratings',messages:['Use the OUTPUT label, not its mains INPUT rating.']};
+ if(!finite(voltage)||voltage<=0||!finite(current)||current<=0)unknown.push('Enter positive adapter OUTPUT ratings, not its mains INPUT rating.');
  if(!finite(minVoltage)||!finite(maxVoltage)||minVoltage<=0||maxVoltage<minVoltage)unknown.push('Add the allowed input voltage range for this exact connector.');
  else if(voltage<minVoltage||voltage>maxVoltage)issues.push('Adapter voltage is outside the entered input range.');
  if(!finite(loadCurrent)||loadCurrent<=0)unknown.push('A required supply rating or worst-case load current is needed.');
  else if(current<loadCurrent)issues.push('The adapter current rating is below the entered load requirement.');
+ if(finite(profile?.voltageMin)&&finite(minVoltage)&&minVoltage<profile.voltageMin||finite(profile?.voltageMax)&&finite(maxVoltage)&&maxVoltage>profile.voltageMax)issues.push('The entered voltage range extends beyond the selected manufacturer profile.');
+ if(finite(profile?.supplyCurrentA)&&finite(loadCurrent)&&loadCurrent<profile.supplyCurrentA)unknown.push('The entered load is below the manufacturer-recommended supply capacity. A typical current reading does not replace that recommendation.');
  if(!regulated)unknown.push('Confirm regulated output and voltage under load.');
- if(!connectorConfirmed)unknown.push('Confirm connector size, polarity and the selected board input.');
- return {level:issues.length?'mismatch':unknown.length?'incomplete':'candidate',title:issues.length?'Do not connect this combination':unknown.length?'More information needed':'Matches the entered ratings',messages:issues.length?[...issues,...unknown]:unknown.length?unknown:['This is a rating comparison, not a hardware test. Check startup peaks, cable loss and thermal limits under load.'],watts:voltage*current,headroom:finite(loadCurrent)&&loadCurrent>0?current-loadCurrent:null};
+ if(!connectorConfirmed)unknown.push('Confirm the exact connector, input pin and any negotiated USB-PD voltage/current mode.');
+ if(!polarityConfirmed)unknown.push('Confirm positive and negative contacts from the exact board and adapter documentation.');
+ if(!powerPathConfirmed)unknown.push('Check simultaneous USB, battery and external power against the board power-path instructions.');
+ if(!limitsConfirmed)unknown.push('Verify the operating input range for this connector; do not use GPIO voltage or absolute-maximum ratings.');
+ if(!loadConfirmed)unknown.push('Include peripherals, startup and transmit peaks; do not use an idle reading as the load requirement.');
+ const watts=voltage*current,headroom=current-loadCurrent;
+ if(!finite(watts)||!finite(headroom))unknown.push('The calculation is unavailable. Check units and numeric magnitude.');
+ return {level:issues.length?'mismatch':unknown.length?'incomplete':'candidate',title:issues.length?'Do not connect this combination':unknown.length?'More information needed':'Entered ratings align',messages:issues.length?[...issues,...unknown]:unknown.length?unknown:['This compares the values you entered; it does not certify electrical compatibility. Check regulation, cable drop, startup behavior and temperature under the actual load.',...(headroom===0?['No additional current reserve remains above the entered requirement.']:[])],watts:finite(watts)&&voltage>0&&current>0?watts:null,headroom:finite(headroom)&&current>0&&loadCurrent>0?headroom:null};
 }
-export function batteryEstimate({series,parallel,cellVoltage,cellFullVoltage,cellAh,loadWatts,efficiency}){
+export function batteryEstimate({series,parallel,cellVoltage,cellFullVoltage,cellAh,loadWatts,efficiency,minCellVoltage,usablePercent=100}){
  if(![series,parallel,cellVoltage,cellFullVoltage,cellAh,loadWatts,efficiency].every(finite)||!Number.isInteger(series)||!Number.isInteger(parallel)||series<1||parallel<1||series>1000||parallel>1000||cellVoltage<=0||cellFullVoltage<cellVoltage||cellAh<=0||loadWatts<=0||efficiency<=0||efficiency>100)return null;
  const nominal=series*cellVoltage,full=series*cellFullVoltage,ah=parallel*cellAh,wh=nominal*ah;
- return {nominal,full,ah,wh,hours:wh*efficiency/100/loadWatts,cells:series*parallel,inputAmps:loadWatts/(efficiency/100)/nominal};
+ if(!finite(usablePercent)||usablePercent<=0||usablePercent>100||minCellVoltage!=null&&(!finite(minCellVoltage)||minCellVoltage<=0||minCellVoltage>cellVoltage))return null;
+ const lowVoltage=minCellVoltage==null?null:series*minCellVoltage;
+ const result={nominal,full,ah,wh,hours:wh*(usablePercent/100)*(efficiency/100)/loadWatts,cells:series*parallel,inputAmps:loadWatts/(efficiency/100)/nominal,lowVoltage,lowInputAmps:lowVoltage==null?null:loadWatts/(efficiency/100)/lowVoltage};
+ return Object.values(result).every(v=>v===null||finite(v)&&v>0)?result:null;
 }
 export function budgetTotal(rows,margin){
  if(!finite(margin)||margin<0||margin>500||!rows.length)return null;
  if(rows.some(r=>![r.voltage,r.current,r.quantity,r.efficiency].every(finite)||r.voltage<=0||r.current<=0||!Number.isInteger(r.quantity)||r.quantity<1||r.efficiency<=0||r.efficiency>100))return null;
  const loadWatts=rows.reduce((s,r)=>s+r.voltage*r.current*r.quantity,0);
  const inputWatts=rows.reduce((s,r)=>s+r.voltage*r.current*r.quantity/(r.efficiency/100),0);
- return {loadWatts,inputWatts,withMargin:inputWatts*(1+margin/100)};
+ const result={loadWatts,inputWatts,withMargin:inputWatts*(1+margin/100)};
+ return Object.values(result).every(v=>finite(v)&&v>0)?result:null;
 }
 export function validateMeasurement(m,boardIds){
  const required=['boardId','revision','condition','instrument','date','input'];

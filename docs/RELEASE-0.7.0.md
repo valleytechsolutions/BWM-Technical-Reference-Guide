@@ -6,8 +6,10 @@ SBC and FPGA shortcuts complement manufacturer/processor search. Architecture fi
 
 The library holds 2,514 board/device listings, 501 maker listings, 3,240 board reference entries and 1,496 pinout-image entries. Partial connector maps, supporting photos, spreadsheets and schematics retain their separate labels. No worldwide completeness or all-pin approval is claimed.
 
+The Power Desk now exposes input-specific notes and individual observation sources. Adapter comparisons start without assumed ratings, support A/mA, lock recorded operating bounds, and clear confirmations after edits. Battery estimates include usable energy and optional low-voltage current; power budgets reject overflow and explain conversion losses. Thirteen manufacturer profiles and 22 published observations were rechecked; these are not independent Black Wire electrical tests. The wiki includes a Power Desk guide.
+
 ## Validation and distribution
 
-27 unit tests passed, including punctuation-aware search, source URL handling, SBC/mixed-architecture filtering, saved-data validation and PDF sizing. Library manifest paths and original hashes passed validation. Browser checks cover the new filters, specifications links, image/PDF views and narrow layouts. Release assets carry SHA-256 checksums.
+40 unit tests passed, including punctuation-aware search, source URL handling, SBC/mixed-architecture filtering, saved-data validation, power calculations, profile validation and PDF sizing. Library manifest paths and original hashes passed validation. Browser checks cover the new filters, specifications links, image/PDF views and narrow layouts. Release assets carry SHA-256 checksums.
 
 The Windows x64 installer bundles the offline library and is unsigned. Native launch and clean-machine installation of this build are not verified. No new macOS or Linux binaries are claimed. Existing versions remain immutable. First Edition / 2026 remains the editorial edition; the book draft was not changed.

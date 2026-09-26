@@ -1,10 +1,14 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import {validatePowerProfiles} from '../src/power-profiles.mjs';
 const root=path.resolve(process.argv[2]||'library');
 const catalog=JSON.parse(await fs.readFile(path.join(root,'catalog.json'),'utf8'));
 const manifest=new Set(JSON.parse(await fs.readFile(path.join(root,'manifest.json'),'utf8')));
 const errors=[],media=new Map(),ids=new Set(),boards=new Set(catalog.boards.map(b=>b.id));
+errors.push(...validatePowerProfiles(catalog.power,boards));
+const curatedPower=JSON.parse(await fs.readFile(new URL('../data/power-profiles.json',import.meta.url),'utf8'));
+if(JSON.stringify(curatedPower)!==JSON.stringify(catalog.power))errors.push('Imported power profiles differ from the reviewed application data.');
 for(const b of catalog.boards)for(const a of b.assets){
  if(ids.has(a.id))errors.push('Repeated asset ID: '+a.id);ids.add(a.id);media.set(a.file,a.hash);
  for(const field of ['file','thumb','display','vector'])if(a[field]&&!manifest.has(a[field]))errors.push('Missing manifest entry: '+a[field]);
