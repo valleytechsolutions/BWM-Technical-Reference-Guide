@@ -10,6 +10,12 @@ Menu label: **BWM-Technical Reference Guide**
 
 The guide was initially published on September 25, 2026. The guide is linked from the store navigation and footer. Cloudflare Pages hosts the browser application and reference files.
 
+## Manufacturer, SBC and Power Desk update / 0.7.0
+
+Collection **2026.09.7** includes 2,514 board/device listings and 501 maker listings, with 3,240 board references and 1,496 physical pinout-image entries. SBC architecture filters and direct hardware links support the expanded collection. The Power Desk displays reviewed input notes and source citations, resets adapter confirmations after rating changes, and includes battery derating and low-voltage current estimates. These are documented comparisons, not independent electrical certifications.
+
+The generated site has 36 wiki/directory pages and 7,560 files / approximately 2.29 GB. Its largest file is 15.86 MB. The Power Desk and SBC guides are also published in the GitHub wiki. Build reports and browser checks remain local.
+
 ## Reliability update / 0.6.1
 
 PDF scrolling, rotation, bounded zoom, page navigation and retry now share the same web/desktop implementation. Collection snapshot **2026.09.6** adds eight references across five board models.
