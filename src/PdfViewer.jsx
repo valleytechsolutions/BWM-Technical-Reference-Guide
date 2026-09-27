@@ -47,11 +47,12 @@ export default function PdfViewer({url,label,zoom=1,rotation=0}){
   return()=>{stopped=true;renderTask?.cancel();};
  },[doc,pageNumber,width,zoom,rotation,label]);
  function changePage(next){if(doc)setPageNumber(Math.max(1,Math.min(doc.numPages,next)));}
- function go(e){e.preventDefault();if(/^\d+$/.test(pageInput))changePage(Number(pageInput));else setPageInput(String(pageNumber));}
+ // Handle local actions directly: the store iframe deliberately disallows form submission.
+ function go(e){e.preventDefault();if(!e.currentTarget.form.reportValidity())return;if(/^\d+$/.test(pageInput))changePage(Number(pageInput));else setPageInput(String(pageNumber));}
  return <div className="pdf-viewer" onPointerDown={e=>e.stopPropagation()}>
   <div className="pdf-page-controls">
    <button className="secondary-button" disabled={!doc||pageNumber<=1} onClick={()=>changePage(pageNumber-1)}>Previous page</button>
-   <form onSubmit={go}><label>Page <input aria-label="PDF page number" inputMode="numeric" type="number" min="1" max={doc?.numPages||1} value={pageInput} disabled={!doc} onChange={e=>setPageInput(e.target.value)}/></label><button className="secondary-button" disabled={!doc} type="submit">Go</button></form>
+   <form onSubmit={e=>e.preventDefault()}><label>Page <input aria-label="PDF page number" inputMode="numeric" type="number" min="1" max={doc?.numPages||1} value={pageInput} disabled={!doc} onChange={e=>setPageInput(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')go(e);}}/></label><button className="secondary-button" disabled={!doc} type="button" onClick={go}>Go</button></form>
    <span role="status">{doc?`Page ${pageNumber} of ${doc.numPages}`:error?'Document unavailable':'Opening document…'}</span>
    <button className="secondary-button" disabled={!doc||pageNumber>=doc.numPages} onClick={()=>changePage(pageNumber+1)}>Next page</button>
   </div>

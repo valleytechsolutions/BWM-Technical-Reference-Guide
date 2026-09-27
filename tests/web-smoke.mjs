@@ -39,11 +39,39 @@ try{
  await expect(page.locator('.license-notices pre').first()).toContainText('Copyright (c) 2026 Kal (Your Pal Kal) / Valleytech Solutions');
  await page.getByText('Original guide material — CC BY 4.0',{exact:true}).click();
  await expect(page.locator('.license-notices pre').nth(1)).toContainText('Creative Commons Attribution 4.0 International Public License');
- await page.route('**/embed-test',route=>route.fulfill({contentType:'text/html',body:`<h1>Store page integration test</h1><iframe title="BWM guide" src="${url}" style="width:100%;height:900px" sandbox="allow-scripts allow-same-origin allow-downloads allow-popups allow-popups-to-escape-sandbox"></iframe>`}));
+ let embedURL=url;
+ await page.route('**/embed-test',route=>route.fulfill({contentType:'text/html',body:`<h1>Store page integration test</h1><iframe title="BWM guide" src="${embedURL}" style="width:100%;height:900px" sandbox="allow-scripts allow-same-origin allow-downloads allow-popups allow-popups-to-escape-sandbox"></iframe>`}));
  await page.goto('http://127.0.0.1:5187/embed-test');const frame=page.frameLocator('iframe');
  await expect(frame.getByRole('heading',{name:/Board library/})).toBeVisible();await frame.getByRole('combobox',{name:'Search boards and references'}).fill('ESP32-C5');await expect(frame.locator('.board-card').first()).toBeVisible();
+ // Local actions must work without allowing native form submission in the store iframe.
+ embedURL=url+'?board='+encodeURIComponent(pdfBoard.id);await page.reload();
+ await frame.locator('.asset-item').filter({has:frame.locator('small',{hasText:'PDF'})}).first().click();
+ await expect(frame.locator('canvas[data-rendered="true"]')).toBeVisible();
+ await frame.getByRole('spinbutton',{name:'PDF page number'}).fill('3');await frame.getByRole('button',{name:'Go',exact:true}).click();
+ await expect(frame.getByRole('status')).toHaveText('Page 3 of 7');
+ await frame.getByRole('spinbutton',{name:'PDF page number'}).fill('4');await frame.getByRole('spinbutton',{name:'PDF page number'}).press('Enter');
+ await expect(frame.getByRole('status')).toHaveText('Page 4 of 7');
+ await expect(frame.locator('canvas[data-rendered="true"][aria-label$="page 4"]')).toBeVisible();
+ await frame.getByRole('button',{name:'Close board',exact:true}).click();
+ await frame.getByRole('button',{name:'Power desk',exact:false}).first().click();await frame.getByRole('tab',{name:'My measurements',exact:false}).click();
+ for(const method of ['click','enter']){
+  await frame.getByRole('button',{name:'Record a measurement',exact:true}).click();
+  const measurement=frame.getByRole('dialog',{name:'Record a measurement',exact:true});
+  await measurement.getByRole('button',{name:'Save measurement',exact:true}).click();await expect(measurement).toBeVisible();
+  await measurement.getByLabel('Board',{exact:true}).selectOption(pdfBoard.id);
+  await measurement.getByLabel('PCB revision',{exact:true}).fill('Automated test fixture');
+  await measurement.getByLabel('Power input point',{exact:true}).fill('Simulated test input');
+  await measurement.getByLabel('Measured voltage',{exact:false}).fill('3.3');
+  await measurement.getByLabel('Average current',{exact:false}).fill('100');
+  await measurement.getByLabel('Conditions / firmware / peripherals',{exact:true}).fill('Automated sandbox test '+method);
+  await measurement.getByLabel('Conditions / firmware / peripherals',{exact:true}).press('Enter');await expect(measurement).toBeVisible();
+  await measurement.getByLabel('Instrument / measurement method',{exact:true}).fill('Simulated input; not a hardware measurement');
+  if(method==='click')await measurement.getByRole('button',{name:'Save measurement',exact:true}).click();
+  else await measurement.getByLabel('Instrument / measurement method',{exact:true}).press('Enter');
+  await expect(measurement).toHaveCount(0);await expect(frame.locator('.measurement-list')).toContainText('Automated sandbox test '+method);
+ }
  await page.goto(url);await page.setViewportSize({width:390,height:844});await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  expect(errors).toEqual([]);expect(failed).toEqual([]);
- const report={passed:true,base,initialDecodedBytes:initialBytes,references:catalog.stats.referenceEntries,checks:['subpath assets','on-demand originals','dash search','image rendering','original download','browser bookmarks','direct board links','PDF pages','power desk','sandboxed embed','mobile layout','production CSP']};
+ const report={passed:true,base,initialDecodedBytes:initialBytes,references:catalog.stats.referenceEntries,checks:['subpath assets','on-demand originals','dash search','image rendering','original download','browser bookmarks','direct board links','PDF pages','power desk','sandboxed embed','sandboxed PDF page jump by click and Enter','sandboxed measurement validation and saving','mobile layout','production CSP']};
  await fs.writeFile('data/qa/web/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
 }finally{await browser?.close();server.kill();}
