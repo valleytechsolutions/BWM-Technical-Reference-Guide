@@ -1,5 +1,17 @@
 !include "${BUILD_RESOURCES_DIR}\library-package.nsh"
 
+; electron-builder resets SectionSetSize when installation mode changes.
+; Include the external library in those values, not only the initial AddSize.
+!ifdef APP_64_UNPACKED_SIZE
+  !define /redef /math APP_64_UNPACKED_SIZE ${APP_64_UNPACKED_SIZE} + ${BW_LIBRARY_KIB}
+!endif
+!ifdef APP_32_UNPACKED_SIZE
+  !define /redef /math APP_32_UNPACKED_SIZE ${APP_32_UNPACKED_SIZE} + ${BW_LIBRARY_KIB}
+!endif
+!ifdef APP_ARM64_UNPACKED_SIZE
+  !define /redef /math APP_ARM64_UNPACKED_SIZE ${APP_ARM64_UNPACKED_SIZE} + ${BW_LIBRARY_KIB}
+!endif
+
 ; Check before electron-builder uninstalls or replaces any existing version.
 !macro customInit
   IfFileExists "$EXEDIR\${BW_LIBRARY_FILE}" bw_library_present
