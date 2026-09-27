@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 test('Library search, pinout viewer, bookmarks and persistence work offline',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('**/*',route=>route.request().url().startsWith('http://127.0.0.1:5186')||route.request().url().startsWith('data:')?route.continue():route.abort());
- await page.goto('/');await expect(page.getByRole('heading',{name:/Know your board/})).toBeVisible();
+ await page.goto('/');await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();
  await page.screenshot({path:'test-results/library-desktop.png',fullPage:false});
  await page.getByRole('combobox',{name:'Search boards and references'}).fill('teensy 4.1');await page.keyboard.press('Escape');
  await expect(page.locator('.board-card')).toHaveCount(1);
@@ -40,11 +40,11 @@ test('Power profiles, adapter checks, calculations and measured records',async({
  await page.getByRole('button',{name:'About the guide'}).click();const [download]=await Promise.all([page.waitForEvent('download'),page.getByRole('button',{name:'Export backup'}).click()]);expect(download.suggestedFilename()).toBe('Black-Wire-workbench.json');
 });
 test('Narrow layout preserves search, readable cards and navigation',async({page})=>{
- await page.setViewportSize({width:390,height:844});await page.goto('/');await expect(page.getByRole('heading',{name:/Know your board/})).toBeVisible();
+ await page.setViewportSize({width:390,height:844});await page.goto('/');await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();
  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
  await page.getByRole('combobox',{name:'Search boards and references'}).fill('ESP32 C5');await expect(page.locator('.board-card').first()).toBeVisible();
  await page.screenshot({path:'test-results/library-mobile.png',fullPage:false});
- await page.getByRole('button',{name:'Open navigation'}).click();await page.getByRole('button',{name:'About the guide'}).click();await expect(page.getByText('—your pal kal',{exact:true}).last()).toBeVisible();
+ await page.getByRole('button',{name:'Open navigation'}).click();await page.getByRole('button',{name:'About the guide'}).click();await expect(page.getByRole('heading',{name:'About Black Wire'})).toBeVisible();
 });
 
 test('Hyphenated model search and creator links work together',async({page})=>{
@@ -55,8 +55,8 @@ test('Hyphenated model search and creator links work together',async({page})=>{
  const first=await page.locator('.card-title').first().innerText();
  await search.fill('ESP32_C5_DevKitC_1');await expect(page.locator('.card-title').first()).toHaveText(first);
  await expect(page.locator('.sidebar-valleytech img')).toBeVisible();
- await expect(page.locator('.creator-credit a').first()).toHaveAttribute('href','https://www.youtube.com/@valleytechsolutions');
+ await expect(page.locator('.colophon-meta a').first()).toHaveAttribute('href','https://www.youtube.com/@valleytechsolutions');
  await page.getByRole('button',{name:'About the guide'}).click();
- await expect(page.locator('.about-signature a')).toHaveAttribute('href','https://www.youtube.com/@valleytechsolutions');
+ await expect(page.locator('.colophon-meta a')).toHaveAttribute('href','https://www.youtube.com/@valleytechsolutions');
  await page.screenshot({path:'test-results/about.png',fullPage:false});
 });

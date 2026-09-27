@@ -10,11 +10,11 @@ const app=await electron.launch({executablePath:packaged?path.join(process.env.B
 const errors=[];
 try{
  const page=await app.firstWindow();page.on('pageerror',e=>errors.push(e.message));
- await expect(page.getByRole('heading',{name:/Know your board/})).toBeVisible({timeout:60000});
+ await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible({timeout:60000});
  await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
  await expect(page.locator('.logo-tile .brand-dark')).toBeVisible();
  await page.getByRole('button',{name:'Light mode',exact:true}).click();await page.reload();
- await expect(page.getByRole('heading',{name:/Know your board/})).toBeVisible();
+ await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();
  await expect(page.locator('html')).toHaveAttribute('data-theme','light');
  await page.getByRole('button',{name:'Dark mode',exact:true}).click();
  expect(page.url()).toBe('blackwire://app/index.html');
@@ -76,7 +76,7 @@ try{
  await page.getByRole('button',{name:'Reset search & filters'}).click();
  await page.evaluate(()=>window.scrollTo(0,0));
  await page.screenshot({path:path.join(qa,'native-makers.png')});
- expect(catalog.stats.makerRecords).toBe(486);
+ expect(catalog.stats.makerRecords).toBe(JSON.parse(await fs.readFile(path.join(root,'data','library-source.json'),'utf8')).makerRecords);
  expect(errors).toEqual([]);
  const report={packaged,catalog:catalog.stats,pdf:pdfBoard.name,checks:['custom protocol','renderer isolation','PDF delivery','offline image decoding','path whitelist','native save original hash','saved boards persistence','PDF viewer'],qa,passed:true};
  await fs.writeFile(path.join(qa,'report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));

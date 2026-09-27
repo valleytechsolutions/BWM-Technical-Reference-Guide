@@ -10,6 +10,14 @@ Menu label: **BWM-Technical Reference Guide**
 
 The guide was initially published on September 25, 2026. The guide is linked from the store navigation and footer. Cloudflare Pages hosts the browser application and reference files.
 
+## Black Wire brand theme / 0.11.0
+
+The web app, desktop app, static wiki, 404 page and share card use one brand theme: near-black surfaces, Black Wire signal red for the current location, primary actions and status markers, and a light royal gold for labels, links and keyboard focus. A red wire runs along the top edge of every page and under each page title, a faint Black Wire mark sits behind page titles, and each title carries a **BWM Reference / section** label. Reference images and PDFs keep their original colors on a light plate. Light mode keeps the same structure.
+
+Page headers lead with a plain title, one factual sentence and the collection figures, replacing the earlier slogans and circuit artwork. The share card and page description drop "Know your board. Make the connection." in favor of "Board pinouts, manufacturer source files and power data. Every reference keeps its source, revision and review status."
+
+The app theme is `src/brand.css`, loaded after the base stylesheets; the wiki theme is `public/wiki.css`. `node scripts/build-social-card.mjs` regenerates `brand/social-card.png`. The browser theme color and Electron window background are `#0a0808`. After `pnpm build:web`, `pnpm screenshots` recaptures `docs/screenshots` from the browser edition.
+
 ## Search and source audit / 0.9.0
 
 Collection **2026.09.9** has 2,593 board/device listings and 501 maker listings. The update includes source availability, corrected chip classifications and search behavior, and new ESP-Mosaico/P4X/FPGA references. [Evidence and limitations](RELEASE-0.9.0.md). The generated web build has 39 wiki/directory pages and 7,823 files; references still load on demand.
@@ -32,7 +40,7 @@ PDF scrolling, rotation, bounded zoom, page navigation and retry now share the s
 
 ## Theme and discovery update / 0.6.0
 
-The web and desktop apps share a default charcoal-and-gold dark theme and a persistent Light mode. The current title is **The Black Wire Maker's Technical Reference Guide**. Collection snapshot **2026.09.5** is unchanged; this is an interface and documentation release.
+The web and desktop apps share a default charcoal-and-gold dark theme (since replaced by the brand theme above) and a persistent Light mode. The current title is **The Black Wire Maker's Technical Reference Guide**. Collection snapshot **2026.09.5** is unchanged; this is an interface and documentation release.
 
 The public [reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) includes eight guides plus board-family and maker-category directories. All 32 wiki/directory pages are static HTML. The root app has crawlable fallback content, and the site includes canonical metadata, a social card, structured data, robots.txt and a 33-URL sitemap. See [discovery maintenance](DISCOVERABILITY.md).
 

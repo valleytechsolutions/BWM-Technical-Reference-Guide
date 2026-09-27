@@ -4,5 +4,5 @@
   try { if (localStorage.getItem('blackwire-theme') === 'light') theme = 'light'; } catch (_) {}
   document.documentElement.dataset.theme = theme;
   document.documentElement.style.colorScheme = theme;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#151514' : '#f7f5f0');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#0a0808' : '#fbfaf8');
 })();

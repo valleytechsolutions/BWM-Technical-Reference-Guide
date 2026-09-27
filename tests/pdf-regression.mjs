@@ -10,7 +10,7 @@ try{
  if(native){app=await electron.launch({executablePath:process.env.BLACKWIRE_PACKAGED_DIR?path.join(process.env.BLACKWIRE_PACKAGED_DIR,'Black Wire Technical Reference Guide.exe'):path.resolve('node_modules/electron/dist/electron.exe'),args:process.env.BLACKWIRE_PACKAGED_DIR?[]:[process.cwd()],env:{...process.env,BLACKWIRE_TEST_DATA:path.resolve(qa,'native-'+Date.now())}});page=await app.firstWindow();}
  else{browser=await chromium.launch();page=await browser.newPage({viewport:{width:1440,height:1000},hasTouch:true});await page.goto(base);}
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await expect(page.getByRole('heading',{name:/Know your board/})).toBeVisible();
+ await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();
  const catalog=await page.evaluate(()=>fetch('catalog.json').then(r=>r.json()));
  async function openPDF(file){
   if(await page.getByRole('dialog').count())await page.keyboard.press('Escape');

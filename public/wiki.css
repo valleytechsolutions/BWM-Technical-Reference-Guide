@@ -1,7 +1,99 @@
-:root{color-scheme:dark;--bg:#151514;--panel:#1e1e1c;--ink:#f1eee6;--muted:#b1aea4;--line:#3e3c33;--gold:#dfbc72;font:16px/1.75 system-ui,sans-serif;background:var(--bg);color:var(--ink)}
-:root[data-theme=light]{color-scheme:light;--bg:#f7f5f0;--panel:#fff;--ink:#282720;--muted:#69665c;--line:#dcd6c8;--gold:#85601b}
-*{box-sizing:border-box}body{margin:0}a{color:var(--gold);text-underline-offset:4px}a:hover{text-decoration:underline}button,input{font:inherit;color:var(--ink)}button{cursor:pointer}a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:5px}[hidden]{display:none!important}
-.wiki-header{padding:22px max(24px,calc((100vw - 1220px)/2));border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:25px;background:var(--panel)}.wiki-brand{display:flex;gap:15px;align-items:center;text-decoration:none;color:var(--ink);font-size:13px;font-weight:650;line-height:1.5}.wiki-brand img{object-fit:contain}.wiki-brand small{display:block;color:var(--gold);font:9px/2.5 monospace;letter-spacing:1px}.wiki-header nav{display:flex;align-items:center;flex-wrap:wrap;gap:18px;font-size:13px;white-space:nowrap}.wiki-header nav a{text-decoration:none}.wiki-theme{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:7px 12px;font-size:12px;color:var(--gold)}
-main{max-width:1120px;margin:60px auto;padding:0 24px;min-height:55vh}h1{font-size:clamp(30px,5vw,52px);line-height:1.12;letter-spacing:-1.8px;font-weight:650;margin:16px 0 25px}h2{font-size:23px;letter-spacing:-.5px;line-height:1.35;margin:32px 0 14px}.kicker{font:10px monospace;letter-spacing:2px;color:var(--gold)}.intro{font-size:18px;color:var(--muted);max-width:800px;margin-bottom:36px}article{max-width:800px}article section{margin:36px 0;padding-top:7px}article p,article li{color:var(--muted)}li{padding-left:5px;margin:10px 0}.source-link{font-size:14px}.wiki-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:32px 0}.wiki-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:26px;color:var(--ink);text-decoration:none}.wiki-card h2{margin:0 0 12px;font-size:21px}.wiki-card span{color:var(--gold);float:right}.wiki-card p{color:var(--muted);font-size:14px;margin:0}.wiki-card:hover{border-color:var(--gold);text-decoration:none}.note,.next-link{border-top:1px solid var(--line);padding-top:20px;margin-top:32px;color:var(--muted);font-size:14px}footer{max-width:1120px;padding:25px 24px 40px;margin:0 auto;font-size:13px;border-top:1px solid var(--line);color:var(--muted)}footer p{font-size:12px}.skip-link{position:absolute;top:-100px;left:20px;padding:10px;background:var(--panel)}.skip-link:focus{top:10px}
-.directory-search{display:flex;align-items:center;gap:15px;font-size:14px}.directory-search input{background:var(--panel);border:1px solid var(--line);padding:11px 14px;border-radius:7px;max-width:100%;flex:1}.directory-count{color:var(--muted);font-size:12px}.directory-table{overflow-x:auto;border:1px solid var(--line);border-radius:8px}table{border-collapse:collapse;width:100%;font-size:14px;text-align:left}th,td{padding:16px;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--panel);font-size:12px}td:first-child{width:48%}td small{display:block;font-size:11px;color:var(--muted);margin-top:7px}td a{font-weight:600}.status{font-size:12px;color:var(--ink)}
-@media(max-width:800px){.wiki-header{flex-direction:column;align-items:flex-start;padding:20px}.wiki-header nav{gap:15px;font-size:12px}.wiki-grid{grid-template-columns:1fr}main{margin-top:35px;padding-inline:20px}.directory-search{flex-direction:column;align-items:stretch}.directory-table table{min-width:620px}}
+/* Static wiki and directory pages. Mirrors the app's brand theme (src/brand.css):
+   red and black, with a light royal-gold undertone; red marks the wire and where you are. */
+:root{color-scheme:dark;
+ --bg:#0a0808;--panel:#110e0e;--panel-2:#191414;--ink:#f4efe8;--ink-2:#d2c9bf;--muted:#978b81;--line:#271f1e;--line-strong:#3a2d2a;
+ --brand:#ee1c24;--brand-hi:#ff4a4f;--brand-soft:#ee1c241f;--gold:#d9b872;--gold-ink:#ecd49c;--gold-soft:#d9b87214;--gold-line:#d9b87238;
+ --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+ --mono:"JetBrains Mono","SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+ font:16px/1.7 var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;scrollbar-color:#3a2d2a transparent}
+:root[data-theme=light]{color-scheme:light;
+ --bg:#fbfaf8;--panel:#fff;--panel-2:#f5f2ee;--ink:#1a1414;--ink-2:#3e3432;--muted:#6f645d;--line:#e8e1d9;--line-strong:#d6ccc1;
+ --brand:#d0101a;--brand-hi:#b00d16;--brand-soft:#d0101a14;--gold:#8f6a1c;--gold-ink:#76560f;--gold-soft:#8f6a1c12;--gold-line:#8f6a1c33;scrollbar-color:#d6ccc1 transparent}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(900px 420px at 100% -80px,var(--gold-soft),transparent 70%) no-repeat,var(--bg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:2px;z-index:10;pointer-events:none;background:linear-gradient(90deg,var(--brand) 0,var(--brand) 55%,var(--gold) 100%)}
+::selection{background:var(--brand);color:#fff}
+a{color:var(--gold);text-decoration:none;text-underline-offset:3px}a:hover{color:var(--gold-ink);text-decoration:underline}
+button,input{font:inherit;color:var(--ink)}button{cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+[hidden]{display:none!important}
+.skip-link{position:absolute;top:-100px;left:20px;padding:10px;background:var(--panel)}.skip-link:focus{top:10px}
+
+/* Header: the mark and wordmark, then section navigation. */
+.wiki-header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px max(24px,calc((100vw - 1120px)/2));margin-top:2px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 92%,transparent)}
+.wiki-brand{display:flex;align-items:center;gap:11px;color:var(--ink);text-decoration:none!important}
+.wiki-brand img{width:30px;height:34px;object-fit:contain}
+.wiki-brand b{display:block;font-size:16px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1.1}
+.wiki-brand small{display:block;margin-top:3px;font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.wiki-header nav{display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:13.5px;white-space:nowrap}
+.wiki-header nav a{padding:6px 10px;border-radius:6px;color:var(--ink-2);text-decoration:none}
+.wiki-header nav a:hover{background:var(--panel-2);color:var(--ink)}
+.wiki-header nav a[aria-current=page]{color:var(--ink);box-shadow:inset 0 -2px var(--brand);border-radius:6px 6px 0 0}
+.wiki-header nav a.open-guide{margin-left:6px;background:var(--brand);color:#fff;font-weight:550}
+.wiki-header nav a.open-guide:hover{background:var(--brand-hi)}
+.wiki-theme{margin-left:6px;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:6px 10px;font-size:12px;color:var(--ink-2)}
+.wiki-theme:hover{border-color:var(--gold-line);color:var(--ink)}
+
+/* Page header: kicker, title, the wire underline and a faint mark on the right. */
+main{max-width:1120px;margin:48px auto 0;padding:0 24px;min-height:55vh}
+.page-header{position:relative;padding-bottom:28px;margin-bottom:36px;border-bottom:1px solid var(--line)}
+.page-header::before{content:"";position:absolute;left:0;bottom:-1px;width:180px;height:2px;background:linear-gradient(90deg,var(--brand) 0,var(--brand) 64px,var(--gold-line) 64px,transparent)}
+.page-header::after{content:"";position:absolute;right:0;top:-18px;width:170px;height:186px;background:url(brand/black-wire-red.png) no-repeat center/contain;opacity:.07;pointer-events:none}
+.kicker{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:11px;font-weight:600;line-height:1;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.kicker-lead{width:18px;height:2px;border-radius:1px;background:var(--brand)}
+.kicker-sep{color:var(--line-strong)}
+.kicker>span:last-child{color:var(--ink-2)}
+h1{position:relative;max-width:820px;margin:0;font-size:clamp(28px,4vw,38px);line-height:1.18;letter-spacing:-.022em;font-weight:650}
+h2{font-size:20px;line-height:1.35;letter-spacing:-.012em;font-weight:620;margin:36px 0 12px}
+article section>h2{display:flex;align-items:center;gap:10px}
+article section>h2::before{content:"";flex-shrink:0;width:3px;height:17px;border-radius:1px;background:var(--brand)}
+.intro{position:relative;max-width:760px;margin:12px 0 0;font-size:17px;line-height:1.65;color:var(--muted)}
+article{max-width:780px}article section{margin:30px 0}
+article p,article li{color:var(--ink-2)}
+li{padding-left:4px;margin:8px 0}li::marker{color:var(--brand)}
+.source-link{font-size:14px;margin:8px 0}
+
+/* Cards and directories */
+.wiki-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:24px 0 32px}
+.wiki-card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:22px 24px;color:var(--ink);text-decoration:none!important;transition:border-color .15s}
+.wiki-card h2{display:flex;justify-content:space-between;gap:12px;margin:0 0 8px;font-size:17px}
+.wiki-card span{color:var(--muted);font-weight:400}
+.wiki-card p{margin:0;font-size:14px;line-height:1.6;color:var(--muted)}
+.wiki-card:hover{border-color:#ee1c2459}.wiki-card:hover span{color:var(--brand-hi)}
+main>h2{display:flex;align-items:center;gap:10px}
+main>h2::before{content:"";width:3px;height:17px;border-radius:1px;background:var(--brand)}
+.note,.next-link{margin-top:32px;padding:12px 16px;border:1px solid var(--line);border-left:2px solid var(--gold);border-radius:6px;background:linear-gradient(90deg,var(--gold-soft),transparent 60%),var(--panel);color:var(--ink-2);font-size:14px}
+.directory-search{display:flex;align-items:center;gap:14px;font-size:14px;color:var(--ink-2)}
+.directory-search input{flex:1;max-width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
+.directory-search input:focus{outline:0;border-color:var(--gold-line);box-shadow:0 0 0 3px var(--gold-soft)}
+.directory-count{margin:10px 0 14px;font:12px var(--mono);color:var(--muted)}
+.directory-table{overflow-x:auto;border:1px solid var(--line);border-radius:9px}
+table{width:100%;border-collapse:collapse;font-size:14px;text-align:left}
+th,td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--panel-2)}
+th{background:var(--panel-2);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+td:first-child{width:48%}
+td small{display:block;margin-top:5px;font-size:12px;color:var(--muted)}
+td a{font-weight:600}td:first-child>a{color:var(--ink)}td:first-child>a:hover{color:var(--gold-ink)}
+.status{font-size:13px;font-weight:550;color:var(--ink)}
+
+/* Colophon footer */
+footer{position:relative;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;max-width:1072px;margin:64px auto 0;padding:22px 0 36px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+footer::before{content:"";position:absolute;left:0;top:-1px;width:64px;height:2px;background:var(--brand)}
+.colophon-brand{display:flex;align-items:center;gap:12px;min-width:0}
+.colophon-brand img{width:24px;height:28px;object-fit:contain;flex-shrink:0}
+.colophon-brand b{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.colophon-brand span{display:block;margin-top:3px;font-size:12px}
+footer nav{display:flex;flex-wrap:wrap;gap:16px}
+
+@media(max-width:1170px){footer{margin-inline:24px}}
+@media(max-width:800px){
+ .wiki-header{flex-direction:column;align-items:flex-start;gap:12px;padding:14px 20px}
+ .wiki-header nav{gap:2px;font-size:13px}.wiki-header nav a{padding:6px 8px}
+ main{margin-top:32px;padding-inline:20px}
+ .page-header::after{width:110px;height:120px;opacity:.05}
+ .wiki-grid{grid-template-columns:1fr}
+ .directory-search{flex-direction:column;align-items:stretch}.directory-table table{min-width:620px}
+ footer{margin-inline:20px}
+}
