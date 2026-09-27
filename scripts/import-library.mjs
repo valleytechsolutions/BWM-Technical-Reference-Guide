@@ -14,6 +14,7 @@ if(!Array.isArray(previousPaths)||!previousPaths.every(safePath))throw new Error
 const catalog=JSON.parse(await fs.readFile(path.join(source,'catalog.json'),'utf8'));
 const hashes=new Map(catalog.boards.flatMap(b=>b.assets.map(a=>[a.file,a.hash])));
 for(const p of [...catalog.boards,...catalog.makerParts||[]])for(const a of p.assets||[]){hashes.set(a.file,a.hash);if(a.modelOriginal)hashes.set(a.modelOriginal,a.modelOriginalHash);}
+for(const g of catalog.wiringGuides||[])hashes.set(g.image.file,g.image.hash);
 for(const rel of [...new Set([...paths,'manifest.json'])]){
  if(!safePath(rel))throw new Error('Unsafe manifest path');
  const from=path.join(source,rel),to=path.join(output,rel);

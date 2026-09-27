@@ -1,8 +1,8 @@
 {
   "repository": "valleytechsolutions/black-wire-pinouts",
-  "commit": "12c8cffbc491b4b389fa3d6ca1c2b613c584f862",
+  "commit": "200744ee70c0033c82f9aa0c8bbed8697683f472",
   "edition": "First Edition / 2026",
-  "snapshot": "2026.09.11",
+  "snapshot": "2026.09.12",
   "references": 3538,
   "pinouts": 1550,
   "devicesWithFiles": 327,
@@ -11,5 +11,7 @@
   "makerWithImages": 549,
   "makerNewMedia": 509,
   "makerWithPinoutSources": 175,
-  "makerWithPinFunctions": 75
+  "makerWithPinFunctions": 75,
+  "wiringGuides": 15,
+  "wiringDiagrams": 15
 }

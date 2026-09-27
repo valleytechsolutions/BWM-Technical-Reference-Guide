@@ -13,7 +13,7 @@
 
 ## Open the reference workbench
 
-**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download Windows preview 0.11.0](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.11.1)**
+**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download Windows preview 0.11.0](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.12.0)**
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
@@ -161,3 +161,9 @@ First Edition is a growing digital collection for a lasting maker reference. The
 Created and curated by **—your pal kal** · [@valleytechsolutions on YouTube](https://www.youtube.com/@valleytechsolutions)
 
 Black Wire and Valleytech logos belong to their creator. Manufacturer names and trademarks identify the referenced hardware; they do not imply endorsement.
+
+## Wiring & protocols
+
+[Open the wiring desk](https://valleytech-black-wire-guide.pages.dev/?tab=wiring) · [Read the wiring wiki](https://valleytech-black-wire-guide.pages.dev/wiki/wiring/)
+
+Version 0.12.0 adds 15 original connection diagrams and guides for RJ45/8P8C Ethernet, telephone terminals, UART, RS-232, RS-485, CAN, I2C, SPI, SWD, JTAG and RFID/NFC. Search by protocol or module, zoom and save diagrams, and open exact module references. Scope, signal direction, source documents and untested status stay visible. These are separate from physical board pinout counts. [Release details](docs/RELEASE-0.12.0.md).

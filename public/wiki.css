@@ -97,3 +97,5 @@ footer nav{display:flex;flex-wrap:wrap;gap:16px}
  .directory-search{flex-direction:column;align-items:stretch}.directory-table table{min-width:620px}
  footer{margin-inline:20px}
 }
+
+.wiring-figure{margin:28px 0}.wiring-figure img{display:block;width:100%;height:auto;background:#fff;border-radius:10px}.wiring-figure figcaption{font-size:13px;color:var(--muted);padding:12px 0}details code{overflow-wrap:anywhere}

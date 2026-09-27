@@ -15,3 +15,5 @@ The original parts of `data/power-profiles.json` and catalog editorial records u
 See [NOTICE.md](NOTICE.md) for the credit statement and an example. These scope notes identify the applicable standard licenses; they do not add restrictions to them. Exceptions, public-domain material and uses not requiring permission remain unaffected. The license texts control; no guarantee of rights clearance is made for third-party material.
 
 Annotated Adafruit connector sheets and their previews are adaptations under **CC BY-SA 3.0**, as identified in their per-asset records. Their license is not replaced by the general MIT or CC BY 4.0 grants above. The unchanged manufacturer illustrations are retained separately with hashes and source links.
+
+Original Black Wire wiring/protocol guide text and SVG diagrams are CC BY 4.0, credited to Kal / Valleytech Solutions. Their sourced facts and links do not relicense manufacturer documents. Application code remains MIT.

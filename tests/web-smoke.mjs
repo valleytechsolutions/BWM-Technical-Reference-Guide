@@ -1,6 +1,7 @@
 import {chromium,expect} from '@playwright/test';
 import {spawn} from 'node:child_process';
 import fs from 'node:fs/promises';
+import {checkWiring} from './wiring-web-checks.mjs';
 const base=process.env.BLACKWIRE_BASE_PATH||'/';
 const url='http://127.0.0.1:5187'+base;
 const server=spawn(process.execPath,['scripts/preview-web.mjs'],{stdio:'pipe',env:process.env,windowsHide:true});
@@ -39,6 +40,7 @@ try{
  await expect(page.locator('.license-notices pre').first()).toContainText('Copyright (c) 2026 Kal (Your Pal Kal) / Valleytech Solutions');
  await page.getByText('Original guide material — CC BY 4.0',{exact:true}).click();
  await expect(page.locator('.license-notices pre').nth(1)).toContainText('Creative Commons Attribution 4.0 International Public License');
+ await checkWiring(page,url,catalog,expect);
  let embedURL=url;
  await page.route('**/embed-test',route=>route.fulfill({contentType:'text/html',body:`<h1>Store page integration test</h1><iframe title="BWM guide" src="${embedURL}" style="width:100%;height:900px" sandbox="allow-scripts allow-same-origin allow-downloads allow-popups allow-popups-to-escape-sandbox"></iframe>`}));
  await page.goto('http://127.0.0.1:5187/embed-test');const frame=page.frameLocator('iframe');

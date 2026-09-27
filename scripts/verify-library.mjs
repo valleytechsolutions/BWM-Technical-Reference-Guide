@@ -3,10 +3,14 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import {validatePowerProfiles} from '../src/power-profiles.mjs';
 import {safeSourceURL,safeLibraryPath,documentationSummary} from '../src/hardware-links.mjs';
+import {validateWiringGuides} from '../src/wiring-guides.mjs';
 const root=path.resolve(process.argv[2]||'library');
 const catalog=JSON.parse(await fs.readFile(path.join(root,'catalog.json'),'utf8'));
 const manifest=new Set(JSON.parse(await fs.readFile(path.join(root,'manifest.json'),'utf8')));
 const errors=[],media=new Map(),ids=new Set(),boards=new Set(catalog.boards.map(b=>b.id));
+errors.push(...validateWiringGuides(catalog.wiringGuides||[],new Set((catalog.makerParts||[]).map(p=>p.id))));
+for(const g of catalog.wiringGuides||[]){media.set(g.image.file,g.image.hash);if(!manifest.has(g.image.file))errors.push('Missing wiring diagram: '+g.id);}
+if(catalog.wiringGuides){const data=JSON.parse(await fs.readFile(path.join(root,'wiring-guides.json'),'utf8'));if(JSON.stringify(data.guides)!==JSON.stringify(catalog.wiringGuides))errors.push('Standalone wiring guides differ from catalog.');}
 errors.push(...validatePowerProfiles(catalog.power,boards));
 const curatedPower=JSON.parse(await fs.readFile(new URL('../data/power-profiles.json',import.meta.url),'utf8'));
 if(JSON.stringify(curatedPower)!==JSON.stringify(catalog.power))errors.push('Imported power profiles differ from the reviewed application data.');

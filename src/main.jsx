@@ -1,6 +1,7 @@
 import {AdapterTool,BatteryTool,BudgetTool,NumericField,PowerBasics} from './PowerTools.jsx';
 import HardwareLinks from './HardwareLinks.jsx';
 import MakersView from './MakersView.jsx';
+import WiringView from './WiringView.jsx';
 import {searchMakerParts} from './maker-search.mjs';
 import './makers.css';
 import DevicesView from './DevicesView.jsx';
@@ -33,9 +34,9 @@ const shortType=t=>({'pinout image':'Pinout','GPIO reference image':'GPIO refere
 const initialWorkbench={favorites:[],measurements:[]};
 function downloadJSON(data,name){const a=document.createElement('a');const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function App(){
- const [catalog,setCatalog]=useState(null),[loadError,setLoadError]=useState(''),[tab,setTab]=useState(()=>['devices','makers'].includes(new URLSearchParams(location.search).get('tab'))?new URLSearchParams(location.search).get('tab'):'library');
+ const [catalog,setCatalog]=useState(null),[loadError,setLoadError]=useState(''),[tab,setTab]=useState(()=>['devices','makers','wiring'].includes(new URLSearchParams(location.search).get('tab'))?new URLSearchParams(location.search).get('tab'):'library');
  const [query,setQuery]=useState(''),[brand,setBrand]=useState(''),[processor,setProcessor]=useState(''),[family,setFamily]=useState(''),[architecture,setArchitecture]=useState(''),[kind,setKind]=useState(''),[scope,setScope]=useState('all');
- const [globalPart,setGlobalPart]=useState(null);
+ const [globalPart,setGlobalPart]=useState(null),[globalGuide,setGlobalGuide]=useState(null);
  const [view,setView]=useState('grid'),[limit,setLimit]=useState(30),[selected,setSelected]=useState(null),[filters,setFilters]=useState(false),[sidebarOpen,setSidebarOpen]=useState(false);
  const [workbench,setWorkbench]=useState(initialWorkbench),[hydrated,setHydrated]=useState(false),[storageBlocked,setStorageBlocked]=useState(false),[toast,setToast]=useState(''),[powerSelection,setPowerSelection]=useState('');
  const searchRef=useRef(null);const deferredQuery=useDeferredValue(query);
@@ -57,11 +58,11 @@ function App(){
  const makerMatches=useMemo(()=>tab==='library'&&deferredQuery.trim()?searchMakerParts(catalog?.makerParts||[],{query:deferredQuery}):[],[catalog,deferredQuery,tab]);
  function clearFilters(){setQuery('');setBrand('');setProcessor('');setFamily('');setArchitecture('');setKind('');setScope('all');}
  function quickFilter(value){clearFilters();setTab('library');if(['CYD','SBC','FPGA','Expansion'].includes(value))setFamily(value);else setProcessor(value);}
- function navigate(value){setTab(value);setSidebarOpen(false);if(webEdition){const url=new URL(location.href);if(['devices','makers'].includes(value))url.searchParams.set('tab',value);else url.searchParams.delete('tab');if(value!=='makers')url.searchParams.delete('part');history.replaceState(null,'',url);}}
+ function navigate(value){setTab(value);setSidebarOpen(false);if(webEdition){const url=new URL(location.href);if(['devices','makers','wiring'].includes(value))url.searchParams.set('tab',value);else url.searchParams.delete('tab');if(value!=='makers')url.searchParams.delete('part');if(value!=='wiring')url.searchParams.delete('guide');history.replaceState(null,'',url);}}
  const activeFilters=[brand,processor,architecture,family&&familyLabel(family),kind&&shortType(kind),scope==='reviewed'?'Reviewed only':scope==='source'?'Source files only':''].filter(Boolean);
  if(loadError)return <div className="fatal"><BrandMark alt="Black Wire"/><h1>The reference library could not load.</h1><p>{loadError}</p><p>{webEdition?'Check your connection and reload the guide.':'Keep the library folder with the app, then reopen Black Wire.'}</p><button onClick={()=>location.reload()}>Try again</button></div>;
  if(!catalog)return <div className="loading-screen"><BrandMark alt="Black Wire"/><div className="loading-line"/><p>Opening your workbench…</p></div>;
- const sectionName=tab==='power'?'Power desk':tab==='devices'?'Devices & IoT':tab==='makers'?'Displays & modules':tab==='about'?'About':tab==='saved'?'Saved boards':'Board library';
+ const sectionName=tab==='wiring'?'Wiring & protocols':tab==='power'?'Power desk':tab==='devices'?'Devices & IoT':tab==='makers'?'Displays & modules':tab==='about'?'About':tab==='saved'?'Saved boards':'Board library';
  return <div className="app-shell">
   <aside className={'sidebar '+(sidebarOpen?'is-open':'')}>
    <button className="brand-block" onClick={()=>{clearFilters();navigate('library');}} aria-label="Black Wire home"><span className="logo-tile"><BrandMark/></span><span className="wordmark">Black Wire<span>Maker's Technical Reference</span></span></button>
@@ -70,6 +71,7 @@ function App(){
     <button className={tab==='library'?'active':''} onClick={()=>navigate('library')}><BookOpen size={19}/>Board library<span className="nav-count">{number(catalog.stats.boardsWithFiles)}</span></button>
     <button className={tab==='devices'?'active':''} onClick={()=>navigate('devices')}><Wifi size={19}/>Devices & IoT<span className="nav-count">{number(catalog.stats.devicesWithFiles||0)}</span></button>
     <button className={tab==='makers'?'active':''} onClick={()=>navigate('makers')}><Layers size={19}/>Displays & modules<span className="nav-count">{number(catalog.stats.makerRecords||0)}</span></button>
+    <button className={tab==='wiring'?'active':''} onClick={()=>navigate('wiring')}><BookOpen size={19}/>Wiring & protocols<span className="nav-count">{number(catalog.wiringGuides?.length||0)}</span></button>
     <button className={tab==='power'?'active':''} onClick={()=>navigate('power')}><Zap size={19}/>Power desk<span className="new-dot"/></button>
     <button className={tab==='saved'?'active':''} onClick={()=>navigate('saved')}><Bookmark size={19}/>Saved boards<span className="nav-count">{favorites.length}</span></button>
    </nav>
@@ -79,7 +81,7 @@ function App(){
   </aside>
   {sidebarOpen&&<button className="sidebar-scrim" aria-label="Close navigation" onClick={()=>setSidebarOpen(false)}/>}
   <div className="main-shell">
-   <header className="topbar"><button className="icon-button mobile-menu" aria-label="Open navigation" onClick={()=>setSidebarOpen(true)}><Menu size={21}/></button><span className="breadcrumb"><span className="guide-title">Black Wire</span><ChevronRight size={14} aria-hidden="true"/><b>{sectionName}</b></span><GlobalSearch catalog={catalog} query={query} setQuery={setQuery} inputRef={searchRef} openResult={({kind,record})=>{if(kind==='maker'){navigate('makers');setGlobalPart(record);}else{setSelected(record);}}}/><ThemeSwitch/></header>
+   <header className="topbar"><button className="icon-button mobile-menu" aria-label="Open navigation" onClick={()=>setSidebarOpen(true)}><Menu size={21}/></button><span className="breadcrumb"><span className="guide-title">Black Wire</span><ChevronRight size={14} aria-hidden="true"/><b>{sectionName}</b></span><GlobalSearch catalog={catalog} query={query} setQuery={setQuery} inputRef={searchRef} openResult={({kind,record})=>{if(kind==='wiring'){navigate('wiring');setGlobalGuide(record);}else if(kind==='maker'){navigate('makers');setGlobalPart(record);}else{setSelected(record);}}}/><ThemeSwitch/></header>
    <main>
     {(tab==='library'||tab==='saved')&&<>
      <header className="page-header"><Kicker>{tab==='saved'?'Workbench':'Boards'}</Kicker><h1>{tab==='saved'?'Saved boards':'Board library'}</h1><p>{tab==='saved'?'Boards you have bookmarked on this device, with their references and review status.':`Pinouts, GPIO diagrams and manufacturer source files for ${number(catalog.stats.boardsWithFiles)} development boards and devices. Every reference records its source, board revision and review status.`}</p><dl className="page-meta"><div><dt>References</dt><dd>{number(catalog.stats.referenceEntries)}</dd></div><div><dt>Pinout images</dt><dd>{number(catalog.stats.physicalPinouts)}</dd></div><div><dt>Brands</dt><dd>{number(catalog.stats.brands)}</dd></div><div><dt>Collection</dt><dd>{collectionId(catalog.edition)}</dd></div><div><dt>Availability</dt><dd>{webEdition?'Browser':'Offline'}</dd></div></dl>{tab==='library'&&<div className="page-shortcuts"><span>Jump to</span>{['ESP32-C5','RP2040','RP2350','CYD','SBC','FPGA'].map(p=><button key={p} onClick={()=>quickFilter(p)}>{p==='CYD'?'CYD displays':p==='SBC'?'Single-board computers':p==='Expansion'?'I/O & expansion':p}</button>)}</div>}</header>
@@ -93,6 +95,7 @@ function App(){
       {matches.length>limit&&<div className="load-more"><button className="secondary-button" onClick={()=>setLimit(limit+30)}>Show 30 more<ChevronDown size={17}/></button><span>Showing {limit} of {number(matches.length)}</span></div>}
      </section>
     </>}
+    {tab==='wiring'&&<WiringView catalog={catalog} query={deferredQuery} setQuery={setQuery} requestedGuide={globalGuide} onRequestedGuideHandled={()=>setGlobalGuide(null)} openPart={p=>{navigate('makers');setGlobalPart(p);}} SourceLink={SourceLink}/>}
     {tab==='makers'&&<MakersView requestedPart={globalPart} onRequestedPartHandled={()=>setGlobalPart(null)} catalog={catalog} query={deferredQuery} setQuery={setQuery} openBoard={setSelected} SourceLink={SourceLink}/>}
     {tab==='devices'&&<DevicesView catalog={catalog} query={deferredQuery} favorites={favorites} toggleFavorite={toggleFavorite} open={setSelected} BoardCard={BoardCard} SourceLink={SourceLink}/>}
     {tab==='power'&&<PowerDesk profiles={catalog.power} boards={catalog.boards} query={query} selectedId={powerSelection} setSelectedId={setPowerSelection} measurements={workbench.measurements} setMeasurements={next=>setWorkbench(s=>({...s,measurements:typeof next==='function'?next(s.measurements):next}))} openBoard={setSelected} notify={notify}/>}
