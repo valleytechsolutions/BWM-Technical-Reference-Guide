@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {hardwareLinks} from '../src/hardware-links.mjs';
+import {hardwareLinks,documentationSummary,safeLibraryPath} from '../src/hardware-links.mjs';
 import {searchBoards} from '../src/domain.mjs';
 test('verified specs lead and duplicate sources are removed',()=>{
  const links=hardwareLinks({specifications:[{url:'https://maker.example/board'}],sources:['https://maker.example/board','https://maker.example/reference','https://maker.example/reference']});
@@ -8,6 +8,35 @@ test('verified specs lead and duplicate sources are removed',()=>{
 });
 test('maker object sources work without promoting them to specifications',()=>assert.deepEqual(hardwareLinks({sources:[{url:'https://maker.example/docs'}]}).map(x=>x.kind),['source']));
 test('unsafe URLs and credentials never become external links',()=>assert.equal(hardwareLinks({specifications:[{url:'javascript:alert(1)'},{url:'https://user:password@maker.example'}],sources:['file:///private',null]}).length,0));
+
+test('component datasheets and unspecified legacy specs never count as board datasheets',()=>{
+ const record={specifications:[{url:'https://maker.example/datasheet.pdf'}],documentation:{resources:[{kind:'datasheet',scope:'component',url:'https://maker.example/chip.pdf'},{kind:'schematic',scope:'board',url:'https://maker.example/schematic.pdf'}]}};
+ assert.equal(documentationSummary(record).boardDatasheet,false);
+ record.documentation.resources.push({kind:'datasheet',scope:'board',url:'https://maker.example/board.pdf'});
+ assert.equal(documentationSummary(record).boardDatasheet,true);
+});
+
+test('HTML datasheets retain their document role alongside original website links',()=>{
+ const url='https://maker.example/model/datasheet';const links=hardwareLinks({documentation:{website:{url},resources:[{url,kind:'datasheet',scope:'board'}]},sources:[url]});
+ assert.deepEqual(links.map(x=>x.kind),['website','datasheet']);
+});
+
+test('all document links remain available, including late schematic revisions',()=>{
+ assert.equal(hardwareLinks({documentation:{resources:Array.from({length:12},(_,i)=>({url:'https://maker.example/revision/'+i,kind:'schematic'}))}}).length,12);
+});
+
+test('saved document navigation rejects traversal and uses linked visual coverage',()=>{
+ assert.equal(safeLibraryPath('../private.pdf'),false);assert.equal(safeLibraryPath('media/%2e%2e/private.pdf'),false);
+ assert.equal(safeLibraryPath('media/'+'a'.repeat(64)+'.pdf'),true);
+ assert.equal(documentationSummary({assets:[],documentationCoverage:{visualCount:3}}).visualCount,3);
+ assert.equal(documentationSummary({assets:[{type:'chip-package reference',thumb:'chip.png'}]}).visualCount,0);
+});
+
+test('dash-separated alphanumeric model codes match without widening numeric variants',()=>{
+ const boards=['RAK13002 WisBlock IO Module','RAK130020 Other Module','NanoPi M6V2'].map((name,i)=>({id:String(i),name,brand:'Maker',family:'Expansion',assets:[{type:'pinout image'}],aliases:[]}));
+ assert.deepEqual(searchBoards(boards,{query:'RAK-13002'}).map(b=>b.name),['RAK13002 WisBlock IO Module']);
+ assert.deepEqual(searchBoards(boards,{query:'Nano-Pi M6-V2'}).map(b=>b.name),['NanoPi M6V2']);
+});
 test('SBC and architecture filters preserve ARM, x86 and RISC-V identities',()=>{
  const boards=[['Pi 5','Raspberry Pi SBC','ARM'],['IOTA','Other SBC','x86'],['Mars','Other SBC','RISC-V'],['Pico 2','RP2350','ARM / RISC-V']].map(([name,family,architecture],i)=>({id:String(i),name,family,architecture,brand:'Test',assets:[{type:'pinout image'}],aliases:[]}));
  assert.deepEqual(searchBoards(boards,{family:'SBC'}).map(b=>b.name),['IOTA','Mars','Pi 5']);

@@ -4,6 +4,7 @@ Know your board. Make the connection.
 
 [Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://github.com/valleytechsolutions/black-wire-desktop/releases/latest)
 
+- [Datasheets, I/O boards and carrier revisions](datasheets-and-io-boards.md) — Find the original device documentation and understand which connector a reference actually covers.
 - [ARM, x86 and RISC-V computers](single-board-computers.md) — Find SBC references by architecture, manufacturer and exact model, including LattePanda and Milk-V.
 - [Start at the workbench](getting-started.md) — Find the exact board, open a useful pinout and keep its source and revision close.
 - [How to read a pinout reference](reading-pinouts.md) — Distinguish physical connector positions, GPIO names and alternate functions before wiring.

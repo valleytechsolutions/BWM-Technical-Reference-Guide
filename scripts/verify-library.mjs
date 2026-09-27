@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import {validatePowerProfiles} from '../src/power-profiles.mjs';
+import {safeSourceURL,safeLibraryPath,documentationSummary} from '../src/hardware-links.mjs';
 const root=path.resolve(process.argv[2]||'library');
 const catalog=JSON.parse(await fs.readFile(path.join(root,'catalog.json'),'utf8'));
 const manifest=new Set(JSON.parse(await fs.readFile(path.join(root,'manifest.json'),'utf8')));
@@ -31,6 +32,17 @@ for(const p of catalog.makerParts||[]){
 }
 if(makerIds.size!==catalog.stats.makerRecords)errors.push('Maker record count differs from catalog statistics.');
 const makerFile=JSON.parse(await fs.readFile(path.join(root,'maker-parts.json'),'utf8'));
+for(const r of [...catalog.boards,...catalog.makerParts||[]]){
+ if(!r.documentationCoverage)errors.push('Missing documentation coverage: '+r.id);
+ const d=r.documentation||{};
+ if(d.website&&!safeSourceURL(d.website.url))errors.push('Unsafe manufacturer URL: '+r.id);
+ for(const s of d.resources||[]){
+  if(!safeSourceURL(s.url))errors.push('Unsafe document URL: '+r.id);
+  if(s.file&&(!safeLibraryPath(s.file)||!manifest.has(s.file)||media.get(s.file)!==s.sha256))errors.push('Saved document missing or hash differs: '+r.id);
+  if(s.kind==='datasheet'&&!['board','component'].includes(s.scope))errors.push('Datasheet scope missing: '+r.id);
+ }
+ if(Boolean(r.documentationCoverage?.boardDatasheets)!==documentationSummary(r).boardDatasheet)errors.push('Datasheet coverage mismatch: '+r.id);
+}
 if(JSON.stringify(makerFile.parts)!==JSON.stringify(catalog.makerParts))errors.push('Maker data differs from catalog.');
 const report={checkedAt:new Date().toISOString(),root,manifestFiles:manifest.size,hashedMedia:media.size,referenceEntries:ids.size,pinouts:catalog.boards.flatMap(b=>b.assets).filter(a=>a.type==='pinout image').length,errors};
 await fs.mkdir('data/qa',{recursive:true});await fs.writeFile('data/qa/library-validation.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));if(errors.length)process.exitCode=1;

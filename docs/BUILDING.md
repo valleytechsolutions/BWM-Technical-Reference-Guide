@@ -1,6 +1,6 @@
 # Build and development
 
-Use Node.js 24 and pnpm 11.19.0. Clone the two repositories as siblings:
+Use Node.js 24 and pnpm 11.19.0. Windows packaging also requires Python 3 (standard library only), available as `python`. Clone the two repositories as siblings:
 
 ```sh
 git clone https://github.com/valleytechsolutions/black-wire-desktop.git
@@ -37,6 +37,8 @@ pnpm dist:mac
 ```
 
 The default Windows/Mac configuration is explicitly an **unsigned workshop preview**. Linux/macOS native validation is still required; source compatibility is not proof of platform testing. The CI workflow builds unsigned preview artifacts for native validation, not automatic public stable releases.
+
+Windows builds create a small installer and `release/<version>/Black-Wire-Library-<snapshot>.zip`. Distribute both together, with SHA256SUMS.txt. The generated `build/library-package.nsh` binds the installer to that exact archive hash; regenerate and rebuild the installer whenever the library changes. The archive contains only manifest-listed library files. For testing the unpacked Windows app, copy `library` to its `resources/library` directory after packaging; the distributed installer performs this extraction itself.
 
 On Windows, `node tests/electron-smoke.mjs --packaged` checks the packaged app using isolated test data. Set `BLACKWIRE_PACKAGED_DIR` for an output directory other than `release/win-unpacked`.
 

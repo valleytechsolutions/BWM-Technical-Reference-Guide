@@ -35,6 +35,9 @@ export function searchBoards(boards,{query='',brand='',processor='',family='',ar
   if(suffix&&!includesModel(idx.identity,suffix))return false;
   if(teensyRevision&&idx.name.includes('teensy')&&q.includes('++')!==idx.name.includes('++'))return false;
   if(q&&[idx.name,...idx.aliases].includes(q))return true;
+  // A printed alphanumeric model may omit the separator a person types (for
+  // example RAK13002 / RAK-13002). Keep numeric suffix boundaries intact.
+  if(q&&/[a-z]/.test(q)&&[idx.name,...idx.aliases].some(f=>includesModel(f,q)))return true;
   return terms.every(t=>idx.tokens.has(t)||(!/^\d+(?:\.\d+)*$/.test(t)&&idx.fields.some(f=>includesModel(f,normalize(t)))));
  }).map(b=>{
   const idx=searchIndex(b);let rank=b.pinouts?20:0;

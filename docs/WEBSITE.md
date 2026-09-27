@@ -10,7 +10,13 @@ Menu label: **BWM-Technical Reference Guide**
 
 The guide was initially published on September 25, 2026. The guide is linked from the store navigation and footer. Cloudflare Pages hosts the browser application and reference files.
 
-## Manufacturer, SBC and Power Desk update / 0.7.0
+## Jetson, NanoPi and I/O documentation update / 0.8.0
+
+Collection **2026.09.8** includes 2,589 board/device listings and 501 maker listings, with 3,354 board references and 1,511 physical pinout-image entries. Every listing exposes documentation coverage; missing board datasheets remain visible. Original model websites, hardware guides and schematics are distinct. I/O & expansion browsing and punctuation-aware model search support the new intake.
+
+The generated site has 38 wiki/directory pages and 7,781 files / approximately 2.37 GB. References load on demand. Its largest file remains 15.86 MB, within the checked direct-upload limits.
+
+## Previous manufacturer, SBC and Power Desk update / 0.7.0
 
 Collection **2026.09.7** includes 2,514 board/device listings and 501 maker listings, with 3,240 board references and 1,496 physical pinout-image entries. SBC architecture filters and direct hardware links support the expanded collection. The Power Desk displays reviewed input notes and source citations, resets adapter confirmations after rating changes, and includes battery derating and low-voltage current estimates. These are documented comparisons, not independent electrical certifications.
 

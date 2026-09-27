@@ -17,7 +17,16 @@
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
-## New in 0.7.0
+## New in 0.8.0
+
+- **Jetson, NanoPi and I/O boards:** 75 added listings, eight previously empty records populated, 114 new references and 15 physical pinout-image entries.
+- **Documentation on every listing:** separate board datasheet, original website and visual-reference status. Manuals, schematics and chip datasheets retain their own labels. Missing documents remain explicit.
+- **Better model search:** `RAK-13002` finds `RAK13002`; numeric suffixes still distinguish different models.
+- **I/O & expansion browsing** and a new documentation wiki guide. [Release details and limits](docs/RELEASE-0.8.0.md).
+
+![NanoPi NEO original pinout and linked manufacturer documentation](docs/screenshots/nanopi-reference.png)
+
+## Previous update / 0.7.0
 
 - **More manufacturer references:** 107 additional board/device listings, 229 reference entries and 15 linked maker records, including Adafruit, SparkFun, FPGA boards, H4M, LattePanda and Milk-V Mars.
 - **SBC and FPGA shortcuts:** browse single-board computers together, then filter ARM, x86 or RISC-V. Mixed-architecture boards appear under either matching architecture.
@@ -40,7 +49,7 @@ Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-pa
 - **Better discovery:** useful titles and descriptions, canonical links, social previews and a sitemap. GitHub wiki pages and issue templates make corrections and contributions easier.
 - **Useful edge-case fixes:** saved theme synchronization across tabs, a clear fallback when storage is blocked, and direct links to undocumented board records.
 
-The current collection is **2026.09.7**: 2,514 board/device listings and 501 maker listings, including families and shared records. A physical source is not an independently approved all-pin reference. [Coverage audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/PINOUT_COVERAGE.md).
+The current collection is **2026.09.8**: 2,589 board/device listings and 501 maker listings, including families and shared records. A physical source is not an independently approved all-pin reference. [Coverage audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/PINOUT_COVERAGE.md).
 
 ## Your board. Its pins. One place.
 
@@ -60,7 +69,7 @@ Built for a student's first breadboard, an educator's lab, a hobbyist's parts dr
 
 ### A growing library
 
-**3,240 reference entries · 1,496 board pinout source image entries · 64 brands/source groups.** There are 1,806 populated catalog records, including shared references and unreviewed source products. This is a collection snapshot, not a claim to cover every board ever made.
+**3,354 reference entries · 1,511 board pinout source image entries · 67 brands/source groups.** There are 1,889 populated catalog records, including shared references and unreviewed source products. This is a collection snapshot, not a claim to cover every board ever made.
 
 ESP32 variants including C5/C6/S3, RP2040/RP2350, CYD displays, Arduino, Teensy, Raspberry Pi, other SBCs, radio boards and GPIO devices are indexed separately where their identities are known. Chip-package references are labeled separately from board pinouts.
 
@@ -70,7 +79,7 @@ ESP32 variants including C5/C6/S3, RP2040/RP2350, CYD displays, Arduino, Teensy,
 
 Browse handhelds, radios, wearables, displays, cameras and controllers. Search T-Embed, T-Beam, Cardputer or Flipper Zero using the same dash-tolerant search. In-development documentation is labeled; missing pinout images stay in a documentation-watch list.
 
-The guide is **First Edition / 2026**, with digital collection snapshot **2026.09.7**. App updates and collection snapshots do not advance the annual book edition. See [publication workflow](docs/MAINTENANCE.md).
+The guide is **First Edition / 2026**, with digital collection snapshot **2026.09.8**. App updates and collection snapshots do not advance the annual book edition. See [publication workflow](docs/MAINTENANCE.md).
 
 ## Look closer
 
@@ -86,15 +95,15 @@ The power desk includes **13 sourced profiles and 22 published operating observa
 
 Check [Releases](https://github.com/valleytechsolutions/black-wire-desktop/releases) for the actual available assets and validation status. An absent platform asset means that platform has not been released.
 
-**Available now: [Windows x64 preview 0.7.0](https://github.com/valleytechsolutions/black-wire-desktop/releases/tag/v0.7.0).** Linux and macOS build targets are provided, but verified downloads for those systems have not been published. For images and PDFs without an application, use the separate [pinout collection releases](https://github.com/valleytechsolutions/black-wire-pinouts/releases); those ZIP files can be read on all three operating systems.
+**Available now: [Windows x64 preview 0.8.0](https://github.com/valleytechsolutions/black-wire-desktop/releases/tag/v0.8.0).** Linux and macOS build targets are provided, but verified downloads for those systems have not been published. For images and PDFs without an application, use the separate [pinout collection releases](https://github.com/valleytechsolutions/black-wire-pinouts/releases); those ZIP files can be read on all three operating systems.
 
 | Platform | Current status |
 |---|---|
-| Windows x64 | 0.7.0 unsigned preview. Browser and library checks cover this update; clean-machine installation and native launch validation of this build remain outstanding. |
+| Windows x64 | 0.8.0 unsigned preview, installer plus matching offline-library ZIP. Browser and library checks cover this update; clean-machine installation and native launch validation of this build remain outstanding. |
 | Linux x64 / ARM64 | Packaging supported; native launch validation remains outstanding. |
 | macOS Intel / Apple Silicon | Build targets provided; a Mac, Developer ID signing and notarization are needed for a distributable release. No verified Mac binary is claimed. |
 
-For Windows, download the complete installer from a release, then open it from File Explorer. It creates desktop and Start menu shortcuts and keeps the reference library with the app. Portable ZIP users must extract **all** files before opening the application. Do not move a lone EXE out of its folder.
+For Windows 0.8.0, download **both the setup EXE and `Black-Wire-Library-2026.09.8.zip`** into the same folder. Leave the library ZIP unextracted and run the setup EXE from File Explorer. Setup verifies the matching library before updating an existing installation, then installs the app and offline references together. The library ZIP alone is not a portable application.
 
 Read [DOWNLOADS.md](docs/DOWNLOADS.md) for checksums, signing status and security warnings. A checksum checks download integrity; it does not replace a trusted publisher signature. Preview builds may still trigger Windows warnings.
 

@@ -26,3 +26,4 @@ public/licenses/
 **/workbench.json
 Black-Wire-workbench*.json
 *.log
+build/library-package.nsh

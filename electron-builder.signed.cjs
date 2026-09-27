@@ -1,5 +1,9 @@
 // Release-only configuration for the pinned electron-builder 26.x API.
 const config = structuredClone(require('./package.json').build);
+if (process.platform === 'win32') {
+  const offline = require('./electron-builder.windows.cjs');
+  Object.assign(config, offline, { nsis: { ...config.nsis, ...offline.nsis } });
+}
 if (!process.env.CSC_LINK || !process.env.CSC_KEY_PASSWORD) {
   throw new Error('Signed release requires CSC_LINK and CSC_KEY_PASSWORD. Use the explicitly unsigned preview configuration for local builds.');
 }

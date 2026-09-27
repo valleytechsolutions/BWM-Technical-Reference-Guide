@@ -49,12 +49,33 @@ jobs:
       - run: node scripts/verify-library.mjs
       - run: pnpm test
       - run: pnpm build
+      - uses: actions/setup-python@v6
+        if: runner.os == 'Windows'
+        with:
+          python-version: '3.13'
+      - name: Package verified Windows library
+        if: runner.os == 'Windows'
+        run: python scripts/package-library.py
       - name: Package unsigned preview
         shell: bash
-        run: pnpm exec electron-builder --${{ matrix.target }} --${{ matrix.arch }} --publish never
+        run: |
+          if [ '${{ matrix.target }}' = 'win' ]; then
+            pnpm exec electron-builder --config electron-builder.windows.cjs --win --x64 --publish never
+          else
+            pnpm exec electron-builder --${{ matrix.target }} --${{ matrix.arch }} --publish never
+          fi
+      - name: Add library to unpacked Windows validation target
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          Copy-Item -LiteralPath library -Destination "release/$version/win-unpacked/resources/library" -Recurse
       - name: Native Windows app check
         if: runner.os == 'Windows'
-        run: node tests/electron-smoke.mjs --packaged
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          $env:BLACKWIRE_PACKAGED_DIR = "release/$version/win-unpacked"
+          node tests/electron-smoke.mjs --packaged
       - name: Save preview artifacts for manual validation
         uses: actions/upload-artifact@v7
         with:
@@ -68,3 +89,5 @@ jobs:
             release/*.tar.gz
             release/*.dmg
             release/*.zip
+            release/*/Black-Wire-Library-*.zip
+            release/*/Black-Wire-*-setup.exe
