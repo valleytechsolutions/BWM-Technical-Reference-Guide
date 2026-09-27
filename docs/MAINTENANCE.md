@@ -2,6 +2,8 @@
 
 Kal has requested that guide changes reach the Valleytech website and both public repositories. Keep these destinations synchronized when publishing an update; a local build alone does not finish a guide update.
 
+The [automatic website workflow](AUTOMATIC-DEPLOYMENT.md) builds and publishes merged `main` changes when `GUIDE_AUTO_DEPLOY_ENABLED` is `true` and the `guide-production` environment is configured. Check its successful run before doing a duplicate manual deployment. Desktop releases, local working copies, collection pins and the GitHub wiki remain separate maintenance steps.
+
 1. Add only reviewed source assets and provenance to `black-wire-pinouts`. Preserve exact model/revision distinctions, unknown rights, partial-map labels and the source image bytes. Record documentation gaps instead of substituting product photos or chip-package maps.
 2. Update the collection metadata, device index, attribution ledger and immutable snapshot number. Run `python tools/build-maker-index.py`, `python tools/audit-pinout-coverage.py`, `python tools/audit-documentation.py`, check document endpoints with `python tools/check-document-links.py --cache <private-cache.jsonl>` (requires requests), apply them with `python tools/publish-link-audit.py --cache <private-cache.jsonl>`, then `python tools/rebuild-indexes.py`. Keep board datasheets, component datasheets, manuals and schematics separate. Verify manifest paths and original SHA-256 hashes. Review private-data and secret scans before committing.
 3. Commit and push the collection. Pin that exact commit in the app's `data/library-source.json`, import with `pnpm library:import`, and run relevant tests and native/browser builds.

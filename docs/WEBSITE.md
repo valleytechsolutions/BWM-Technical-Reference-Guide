@@ -2,6 +2,8 @@
 
 The guide can be a normal navigation destination within the existing Shopify store. Visitors use the browser version without installing the Windows application.
 
+The [automatic publishing workflow](AUTOMATIC-DEPLOYMENT.md) can update the live guide whenever a change is merged into `main`. Pull requests run checks without changing the website.
+
 Live store page: [BWM-Technical Reference Guide](https://valleytechsolutions.tech/pages/bwm-technical-reference-guide)
 
 Full-screen guide: [valleytech-black-wire-guide.pages.dev](https://valleytech-black-wire-guide.pages.dev/)

@@ -1,0 +1,88 @@
+name: Check and publish the website guide
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Finish an active publication rather than interrupting its upload. A queued
+# run checks main again immediately before deploying, so stale builds skip it.
+concurrency:
+  group: website-guide-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Check browser guide
+    if: github.event_name == 'pull_request' || github.ref != 'refs/heads/main' || vars.GUIDE_AUTO_DEPLOY_ENABLED != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/build-guide
+
+  publish:
+    name: Publish website guide
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.GUIDE_AUTO_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: guide-production
+      url: https://valleytechsolutions.tech/pages/bwm-technical-reference-guide
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/build-guide
+      - name: Check this is still the newest main commit
+        id: current
+        shell: bash
+        run: |
+          latest="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [ "$latest" = "$GITHUB_SHA" ]; then
+            echo 'deploy=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'deploy=false' >> "$GITHUB_OUTPUT"
+            echo 'A newer main commit exists; this older build will not replace it.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Check deployment credentials are configured
+        if: steps.current.outputs.deploy == 'true'
+        shell: bash
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CF_TOKEN" ] || [ -z "$CF_ACCOUNT" ]; then
+            echo 'Missing guide-production secrets. See docs/AUTOMATIC-DEPLOYMENT.md.' >&2
+            exit 1
+          fi
+      - name: Publish only the generated browser guide
+        if: steps.current.outputs.deploy == 'true'
+        id: deployment
+        uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: '4.139.0'
+          packageManager: npm
+          command: pages deploy web-release --project-name valleytech-black-wire-guide --branch main --commit-hash=${{ github.sha }} --commit-dirty=true
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+      - name: Verify the deployed files and Shopify embed
+        if: steps.current.outputs.deploy == 'true'
+        env:
+          GUIDE_DEPLOYMENT_URL: ${{ steps.deployment.outputs.deployment-url }}
+        run: node scripts/verify-web-deployment.mjs
+      - name: Link to the updated guide
+        if: steps.current.outputs.deploy == 'true'
+        run: |
+          echo '### Website guide published' >> "$GITHUB_STEP_SUMMARY"
+          echo '[Open the guide on Valleytech](https://valleytechsolutions.tech/pages/bwm-technical-reference-guide)' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The desktop installers and local computer copies are updated separately.' >> "$GITHUB_STEP_SUMMARY"

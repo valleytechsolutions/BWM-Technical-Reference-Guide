@@ -1,0 +1,56 @@
+name: Build and check the browser guide
+description: Build the exact pinned reference collection without deployment credentials.
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+      with:
+        node-version: 24
+        package-manager-cache: false
+    - name: Read pinned collection revision
+      id: library
+      shell: bash
+      run: |
+        node --input-type=module <<'NODE'
+        import fs from 'node:fs';
+        const source=JSON.parse(fs.readFileSync('data/library-source.json','utf8'));
+        if(source.repository!=='valleytechsolutions/black-wire-pinouts'||!/^[a-f0-9]{40}$/.test(source.commit))throw Error('The reference collection must be pinned to a full commit.');
+        fs.appendFileSync(process.env.GITHUB_OUTPUT,`commit=${source.commit}\n`);
+        NODE
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      with:
+        repository: valleytechsolutions/black-wire-pinouts
+        ref: ${{ steps.library.outputs.commit }}
+        path: black-wire-pinouts
+        persist-credentials: false
+    - name: Install locked dependencies
+      shell: bash
+      env:
+        ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+      run: |
+        npm install --global pnpm@11.19.0
+        pnpm install --frozen-lockfile
+    - name: Test source and package handling
+      shell: bash
+      run: |
+        pnpm test
+        python3 -m unittest discover -s tests -p 'test_offline_packages.py'
+    - name: Import and verify the reference library
+      shell: bash
+      env:
+        BLACKWIRE_LIBRARY_ROOT: black-wire-pinouts/library
+      run: |
+        pnpm library:import
+        node scripts/verify-library.mjs
+        pnpm test:search-catalog
+    - name: Build browser app and static wiki
+      shell: bash
+      run: |
+        pnpm build:web
+        node scripts/write-web-build-info.mjs
+        node scripts/check-web-release.mjs
+    - name: Check browser behavior
+      shell: bash
+      run: |
+        pnpm exec playwright install --with-deps chromium
+        pnpm test:web
