@@ -67,3 +67,5 @@ On Windows, use a short checkout path (for example, `C:\src\black-wire-desktop`)
 Maker catalog maintenance: edit the collection repository's `catalog/maker-parts.json`, run `python tools/build-maker-index.py` and then `python tools/rebuild-indexes.py`. Pin the resulting collection commit before importing. Manufacturer documentation records are not complete physical pinout approvals.
 
 On Windows, NSIS may reject long pnpm template paths. Use a short checkout path for release builds; this is a build-path constraint, not a reason to change OS security settings.
+
+Run `node scripts/audit-search.mjs` after importing a catalog to check every listing name and separator variant. `node scripts/benchmark-search.mjs` measures search-function timing. Set `BLACKWIRE_PREVIEW_PORT` to use a separate local browser-storage origin for QA.

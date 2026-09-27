@@ -1,7 +1,7 @@
 {
   "name": "black-wire-technical-reference-guide",
   "productName": "Black Wire Technical Reference Guide",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "An offline workbench for board pinouts, manufacturer references and power data.",
   "author": {
     "name": "Kal / Valleytech Solutions",
@@ -30,7 +30,9 @@
     "test:makers": "node tests/maker-web-smoke.mjs",
     "test:theme": "node tests/theme-seo-smoke.mjs",
     "wiki:docs": "node --input-type=module -e \"import {buildWikiMarkdown} from './scripts/build-wiki.mjs'; await buildWikiMarkdown();\"",
-    "test:pdf": "node tests/pdf-regression.mjs"
+    "test:pdf": "node tests/pdf-regression.mjs",
+    "test:search-catalog": "node scripts/audit-search.mjs",
+    "bench:search": "node scripts/benchmark-search.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

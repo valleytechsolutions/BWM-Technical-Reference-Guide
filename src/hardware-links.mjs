@@ -1,4 +1,9 @@
 export const documentKinds={datasheet:'Datasheet','hardware-guide':'Hardware guide',schematic:'Schematic','connector-reference':'Connector reference','design-files':'Design files'};
+export function availabilityLabel(availability){
+ if(!availability)return '';
+ const labels={'reachable':'Link responded; document identity is a separate check','not-found':'Link returned not found','access-limited':'Automated access was restricted','connection-error':'Link could not be reached during the check','deferred-host-errors':'Not checked: publisher site repeatedly timed out','server-error':'Publisher server reported an error','unexpected-content':'Expected PDF was not returned','content-needs-review':'Response needs manual review'};
+ const text=labels[availability.status];return text?text+(availability.checked?' · '+String(availability.checked).slice(0,10):''):'';
+}
 export function safeSourceURL(url){try{const u=new URL(url);return ['https:','http:'].includes(u.protocol)&&!u.username&&!u.password;}catch{return false;}}
 export function safeLibraryPath(file){return typeof file==='string'&&/^media\/[a-f0-9]{64}\.(pdf|png|jpg|jpeg|svg|webp)$/i.test(file);}
 

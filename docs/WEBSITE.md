@@ -10,7 +10,11 @@ Menu label: **BWM-Technical Reference Guide**
 
 The guide was initially published on September 25, 2026. The guide is linked from the store navigation and footer. Cloudflare Pages hosts the browser application and reference files.
 
-## Jetson, NanoPi and I/O documentation update / 0.8.0
+## Search and source audit / 0.9.0
+
+Collection **2026.09.9** has 2,593 board/device listings and 501 maker listings. The update includes source availability, corrected chip classifications and search behavior, and new ESP-Mosaico/P4X/FPGA references. [Evidence and limitations](RELEASE-0.9.0.md). The generated web build has 39 wiki/directory pages and 7,823 files; references still load on demand.
+
+## Previous Jetson, NanoPi and I/O update / 0.8.0
 
 Collection **2026.09.8** includes 2,589 board/device listings and 501 maker listings, with 3,354 board references and 1,511 physical pinout-image entries. Every listing exposes documentation coverage; missing board datasheets remain visible. Original model websites, hardware guides and schematics are distinct. I/O & expansion browsing and punctuation-aware model search support the new intake.
 

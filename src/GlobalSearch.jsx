@@ -4,7 +4,7 @@ import {searchCatalog} from './global-search.mjs';
 import {CoverageBadge} from './PinReference.jsx';
 export default function GlobalSearch({catalog,query,setQuery,inputRef,openResult}){
  const [open,setOpen]=useState(false),[active,setActive]=useState(0),[scope,setScope]=useState('all'),[pinoutsOnly,setPinoutsOnly]=useState(false);const root=useRef(null);
- const all=useMemo(()=>searchCatalog(catalog,query,{scope,pinoutsOnly}),[catalog,query,scope,pinoutsOnly]);const results=all.slice(0,30);
+ const all=useMemo(()=>open&&query.trim()?searchCatalog(catalog,query,{scope,pinoutsOnly}):[],[catalog,query,scope,pinoutsOnly,open]);const results=all.slice(0,30);
  useEffect(()=>setActive(0),[query,scope,pinoutsOnly]);
  useEffect(()=>{if(open)root.current?.querySelector('#global-result-'+active)?.scrollIntoView({block:'nearest'});},[active,open]);
  useEffect(()=>{const handler=e=>{if(!root.current?.contains(e.target))setOpen(false);};document.addEventListener('pointerdown',handler);return()=>document.removeEventListener('pointerdown',handler);},[]);

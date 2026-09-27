@@ -17,3 +17,7 @@ test('Physical diagrams precede photos; functions remain searchable without clai
  assert.equal(searchCatalog(c,'serial data')[0].record.id,'m');
  assert.equal(searchCatalog(c,'SDA',{pinoutsOnly:true}).length,0);
 });
+test('A maker without pinouts cannot hide a linked board when pinout-only search is enabled',()=>{
+ const c={boards:[board('a','Example GPIO',{pinoutCoverage:{physicalCount:1}})],makerParts:[maker('m','Example GPIO',{boardIds:['a'],pinoutCoverage:{physicalCount:0}})]};
+ assert.deepEqual(searchCatalog(c,'Example GPIO',{pinoutsOnly:true}).map(x=>x.record.id),['a']);
+});

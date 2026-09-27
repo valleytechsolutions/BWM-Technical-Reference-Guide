@@ -1,8 +1,10 @@
+import {createSearchCache} from './search-cache.mjs';
+const cachedSearch=createSearchCache();
 // Search facts identify hardware; they never infer electrical compatibility.
 const cache=new WeakMap();
 const synonyms={modules:'module',screen:'display',screens:'display',displays:'display',epd:'epaper',eink:'epaper',iic:'i2c',twi:'i2c',buttons:'button',knob:'encoder',rotary:'encoder',pot:'potentiometer',sensors:'sensor',humidity:'humidity',temp:'temperature',stepup:'boost',stepdown:'buck',charger:'charging',chargers:'charging'};
 export function makerWords(value){
- const text=String(value??'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
+ const text=String(value??'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/\p{Pd}/gu,'-')
   .replace(/step[\s-]*up/g,'boost').replace(/step[\s-]*down/g,'buck')
   .replace(/e[\s-]*(?:paper|ink)/g,'epaper').replace(/i[\s-]*2[\s-]*c/g,'i2c')
   .replace(/(\d+)\s*(?:x|×|by)\s*(\d+)/g,'$1x$2')
@@ -31,7 +33,8 @@ function termMatch(idx,term){
 export function searchMakerParts(parts,{query='',category='',brand='',technology='',interface:bus='',size='',identityKind='',documentedOnly=false,imagesOnly=false,pinoutsOnly=false,savedOnly=false,favorites=[]}={}){
  const terms=makerWords(query),q=identity(query);
  if(query.trim()&&!terms.length)return [];
- return parts.filter(p=>{
+ const key=JSON.stringify([terms,category,brand,technology,bus,size,identityKind,documentedOnly,imagesOnly,pinoutsOnly,savedOnly,savedOnly?favorites:[]]);
+ return cachedSearch(parts,key,()=>parts.filter(p=>{
   if(category&&p.category!==category||brand&&p.brand!==brand||technology&&p.technology!==technology||bus&&!p.interfaces?.includes(bus)||size&&String(p.diagonalInches)!==size||identityKind&&p.identityKind!==identityKind)return false;
   if(documentedOnly&&p.documentationStatus!=='Manufacturer documentation recorded')return false;
   if(imagesOnly&&!p.imageCount)return false;
@@ -46,7 +49,7 @@ export function searchMakerParts(parts,{query='',category='',brand='',technology
   else if(q&&idx.controllers.includes(q))rank+=600;
   else if(q&&idx.name.includes(q))rank+=300;
   return {p,rank};
- }).sort((a,b)=>b.rank-a.rank||a.p.name.localeCompare(b.p.name)||a.p.id.localeCompare(b.p.id)).map(x=>x.p);
+ }).sort((a,b)=>b.rank-a.rank||a.p.name.localeCompare(b.p.name)||a.p.id.localeCompare(b.p.id)).map(x=>x.p));
 }
 export function makerSuggestions(parts,query){
  const terms=makerWords(query);if(!terms.length)return [];

@@ -1,14 +1,18 @@
+import {createSearchCache} from './search-cache.mjs';
+const cachedSearch=createSearchCache();
 export function normalize(text){return String(text||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9+]/g,'');}
 const fold=text=>String(text||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'');
 const words=text=>fold(text).match(/[a-z0-9]+(?:\.[0-9]+)*|\++/g)||[];
 const indexCache=new WeakMap();
+// Read the chip before removing separators: S3 + a 1.14-inch display is not S31.
+const espVariants=text=>[...fold(text).matchAll(/esp[\s\p{Pd}_]*32[\s\p{Pd}_]*(c61|s31|h21|c[2356]|s[23]|h[24]|p4)(?!\d)/gu)].map(m=>'esp32'+m[1]);
 function searchIndex(board){
  if(indexCache.has(board))return indexCache.get(board);
  const core=[board.name,board.brand,board.processor,board.architecture,board.family,board.device?.category,...(board.device?.tags||[])];
  const aliases=board.aliases||[];
  const references=(board.assets||[]).flatMap(a=>[a.label,a.type,...(a.aliases||[]),...(a.originals||[])]);
  const fields=[...core,...aliases,...references,...(board.pinReferences||[]).flatMap(r=>r.pins.flatMap(p=>[p.label,p.purpose])),board.searchText].filter(Boolean);
- const index={name:normalize(board.name),aliases:aliases.map(normalize),core:core.map(normalize),fields:fields.map(normalize),tokens:new Set(fields.flatMap(words)),identity:normalize([board.name,board.processor].join(' '))};
+ const index={name:normalize(board.name),aliases:aliases.map(normalize),core:core.map(normalize).join('\0'),fields:[...new Set(fields.map(normalize))].join('\0'),tokens:new Set(fields.flatMap(words)),identity:[board.name,board.processor].map(normalize).join('\0'),variants:new Set([board.name,board.processor].flatMap(espVariants))};
  indexCache.set(board,index);return index;
 }
 function includesModel(field,term){
@@ -17,37 +21,39 @@ function includesModel(field,term){
  return false;
 }
 export function searchBoards(boards,{query='',brand='',processor='',family='',architecture='',kind='',scope='all',savedOnly=false,favorites=[],devicesOnly=false,deviceCategory='',includeUndocumented=false}={}){
- const terms=words(query),q=normalize(query);
+ const terms=words(query),q=normalize(query),normalizedTerms=terms.map(normalize);
  // Processor suffixes and decimal revisions are identities, not fuzzy text.
- const variant=normalize(query).match(/esp32(c61|s31|c[2356]|s[23]|h2|p4)(?!\d)/)?.[0];
- const suffix=terms.find(t=>/^(c61|s31|c[2356]|s[23]|h2|p4)$/.test(t));
+ const variant=espVariants(query)[0];
+ const suffix=terms.find(t=>/^(c61|s31|h21|c[2356]|s[23]|h[24]|p4)$/.test(t));
  const teensyRevision=/teensy/i.test(query)&&terms.some(t=>/^\d+\.\d+$/.test(t));
  if(query.trim()&&!terms.some(t=>/[a-z0-9]/.test(t)))return [];
- return boards.filter(b=>{
-  if(!includeUndocumented&&!b.assets.length||brand&&b.brand!==brand||processor&&b.processor!==processor||family&&(family==='SBC'?!['Other SBC','Raspberry Pi SBC'].includes(b.family):b.family!==family)||architecture&&b.architecture!==architecture&&!(b.architecture||'').split(' / ').includes(architecture))return false;
+ const key=JSON.stringify([terms,variant,brand,processor,family,architecture,kind,scope,savedOnly,savedOnly?favorites:[],devicesOnly,deviceCategory,includeUndocumented]);
+ return cachedSearch(boards,key,()=>boards.filter(b=>{
+  if(!includeUndocumented&&!b.assets.length||brand&&b.brand!==brand||processor&&!(b.processor||'').split(' / ').includes(processor)||family&&(family==='SBC'?!['Other SBC','Raspberry Pi SBC'].includes(b.family):b.family!==family)||architecture&&b.architecture!==architecture&&!(b.architecture||'').split(' / ').includes(architecture))return false;
   if(devicesOnly&&!b.device||deviceCategory&&b.device?.category!==deviceCategory)return false;
   if(savedOnly&&!favorites.includes(b.id))return false;
   if(kind&&!b.assets.some(a=>a.type===kind))return false;
   if(scope==='reviewed'&&!b.assets.some(a=>a.review==='Reviewed source'))return false;
   if(scope==='source'&&!b.assets.some(a=>a.review==='Unreviewed source'))return false;
+  if(!q)return true;
   const idx=searchIndex(b);
-  if(variant&&!includesModel(idx.identity,variant))return false;
-  if(suffix&&!includesModel(idx.identity,suffix))return false;
+  if(variant&&!idx.variants.has(variant))return false;
+  if(suffix&&!idx.variants.has('esp32'+suffix)&&!includesModel(idx.identity,suffix))return false;
   if(teensyRevision&&idx.name.includes('teensy')&&q.includes('++')!==idx.name.includes('++'))return false;
   if(q&&[idx.name,...idx.aliases].includes(q))return true;
   // A printed alphanumeric model may omit the separator a person types (for
   // example RAK13002 / RAK-13002). Keep numeric suffix boundaries intact.
   if(q&&/[a-z]/.test(q)&&[idx.name,...idx.aliases].some(f=>includesModel(f,q)))return true;
-  return terms.every(t=>idx.tokens.has(t)||(!/^\d+(?:\.\d+)*$/.test(t)&&idx.fields.some(f=>includesModel(f,normalize(t)))));
+  return terms.every((t,i)=>idx.tokens.has(t)||(!/^\d+(?:\.\d+)*$/.test(t)&&includesModel(idx.fields,normalizedTerms[i])));
  }).map(b=>{
-  const idx=searchIndex(b);let rank=b.pinouts?20:0;
+  const idx=q?searchIndex(b):null;let rank=b.pinouts?20:0;
   if(q&&idx.name===q)rank+=1000;
   else if(q&&idx.aliases.includes(q))rank+=700;
   else if(q&&includesModel(idx.name,q))rank+=400;
-  if(terms.length&&terms.every(t=>idx.core.some(f=>includesModel(f,normalize(t)))))rank+=200;
+  if(terms.length&&normalizedTerms.every(t=>includesModel(idx.core,t)))rank+=200;
   if(!query.trim()&&b.featured)rank+=50;
   return {b,rank};
- }).sort((a,b)=>b.rank-a.rank||a.b.name.localeCompare(b.b.name)).map(x=>x.b);
+ }).sort((a,b)=>b.rank-a.rank||a.b.name.localeCompare(b.b.name)).map(x=>x.b));
 }
 export const finite=(n)=>typeof n==='number'&&Number.isFinite(n);
 export function adapterCheck({voltage,current,minVoltage,maxVoltage,loadCurrent,outputType,regulated,connectorConfirmed,polarityConfirmed,powerPathConfirmed,limitsConfirmed,loadConfirmed,profile}){
@@ -101,7 +107,12 @@ export function validateBackup(data,boardIds){
  if(!data||data.format!=='black-wire-backup'||data.version!==1||!Array.isArray(data.favorites)||!Array.isArray(data.measurements))throw new Error('This is not a supported Black Wire backup.');
  if(data.measurements.length>10000||data.favorites.length>10000)throw new Error('Backup exceeds the supported record limit.');
  for(const m of data.measurements){const error=validateMeasurement(m,boardIds);if(error)throw new Error('Invalid measurement: '+error);}
- const cleanMeasurements=data.measurements.map((m,i)=>Object.fromEntries(['id','boardId','revision','condition','instrument','date','input','voltage','currentMa','peakMa','notes'].map(k=>[k,k==='id'?String(m.id||'import-'+i):m[k]??(k==='peakMa'?null:'')])));
+ const usedIds=new Set();
+ for(const m of data.measurements){if(m.id==null||m.id==='')continue;if(typeof m.id!=='string'||m.id.length>200||usedIds.has(m.id))throw new Error('Measurement IDs must be unique text values. Your current workbench has not been changed.');usedIds.add(m.id);}
+ const cleanMeasurements=data.measurements.map((m,i)=>{
+  let id=m.id;if(!id){id='import-'+i;while(usedIds.has(id))id+='-copy';usedIds.add(id);}
+  return Object.fromEntries(['id','boardId','revision','condition','instrument','date','input','voltage','currentMa','peakMa','notes'].map(k=>[k,k==='id'?id:m[k]??(k==='peakMa'?null:'')]));
+ });
  return {favorites:[...new Set(data.favorites.filter(id=>typeof id==='string'&&boardIds.has(id)))],measurements:cleanMeasurements};
 }
 export function validateSavedWorkbench(data){

@@ -1,7 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {hardwareLinks,documentationSummary,safeLibraryPath} from '../src/hardware-links.mjs';
+import {hardwareLinks,documentationSummary,safeLibraryPath,availabilityLabel} from '../src/hardware-links.mjs';
 import {searchBoards} from '../src/domain.mjs';
+test('Link availability never claims document or electrical validation',()=>{
+ assert.match(availabilityLabel({status:'reachable',checked:'2026-09-26T00:00:00Z'}),/identity is a separate check.*2026-09-26/);
+ assert.match(availabilityLabel({status:'deferred-host-errors'}),/^Not checked/);
+ assert.match(availabilityLabel({status:'access-limited'}),/restricted/);
+ assert.equal(availabilityLabel({status:'unknown'}),'');
+});
 test('verified specs lead and duplicate sources are removed',()=>{
  const links=hardwareLinks({specifications:[{url:'https://maker.example/board'}],sources:['https://maker.example/board','https://maker.example/reference','https://maker.example/reference']});
  assert.equal(links.length,2);assert.equal(links[0].kind,'specification');assert.equal(links[1].kind,'source');

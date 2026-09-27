@@ -2,7 +2,7 @@ import {searchBoards,normalize} from './domain.mjs';
 import {searchMakerParts} from './maker-search.mjs';
 export function searchCatalog(catalog,query,{scope='all',pinoutsOnly=false}={}){
  if(!query.trim())return [];
- const makers=scope==='boards'?[]:searchMakerParts(catalog.makerParts||[],{query});
+ const makers=scope==='boards'?[]:searchMakerParts(catalog.makerParts||[],{query,pinoutsOnly});
  const linked=new Set(scope==='all'?makers.flatMap(p=>p.boardIds):[]);
  const boards=scope==='makers'?[]:searchBoards(catalog.boards||[],{query,includeUndocumented:true}).filter(b=>!linked.has(b.id));
  const q=normalize(query);
