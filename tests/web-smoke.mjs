@@ -63,8 +63,8 @@ try{
   await measurement.getByLabel('Power input point',{exact:true}).fill('Simulated test input');
   await measurement.getByLabel('Measured voltage',{exact:false}).fill('3.3');
   await measurement.getByLabel('Average current',{exact:false}).fill('100');
-  await measurement.getByLabel('Conditions / firmware / peripherals',{exact:true}).fill('Automated sandbox test '+method);
-  await measurement.getByLabel('Conditions / firmware / peripherals',{exact:true}).press('Enter');await expect(measurement).toBeVisible();
+  await measurement.getByRole('textbox',{name:'Conditions / firmware / peripherals',exact:true}).fill('Automated sandbox test '+method);
+  await measurement.getByRole('textbox',{name:'Conditions / firmware / peripherals',exact:true}).press('Enter');await expect(measurement).toBeVisible();
   await measurement.getByLabel('Instrument / measurement method',{exact:true}).fill('Simulated input; not a hardware measurement');
   if(method==='click')await measurement.getByRole('button',{name:'Save measurement',exact:true}).click();
   else await measurement.getByLabel('Instrument / measurement method',{exact:true}).press('Enter');
