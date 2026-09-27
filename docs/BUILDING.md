@@ -38,7 +38,7 @@ pnpm dist:mac
 
 The default Windows/Mac configuration is explicitly an **unsigned workshop preview**. Linux/macOS native validation is still required; source compatibility is not proof of platform testing. The CI workflow builds unsigned preview artifacts for native validation, not automatic public stable releases.
 
-Windows builds create a small installer and `release/<version>/Black-Wire-Library-<snapshot>.zip`. Distribute both together, with SHA256SUMS.txt. The generated `build/library-package.nsh` binds the installer to that exact archive hash; regenerate and rebuild the installer whenever the library changes. The archive contains only manifest-listed library files. For testing the unpacked Windows app, copy `library` to its `resources/library` directory after packaging; the distributed installer performs this extraction itself.
+Windows builds create a small installer and `release/<version>/Black-Wire-Library-<snapshot>-part-XX.zip`. Distribute the installer and every ZIP part together, with SHA256SUMS.txt. The generated `build/library-package.nsh` binds the installer to every exact archive hash; regenerate and rebuild the installer whenever the library changes. The archive contains only manifest-listed library files. For testing the unpacked Windows app, copy `library` to its `resources/library` directory after packaging; the distributed installer performs this extraction itself.
 
 On Windows, `node tests/electron-smoke.mjs --packaged` checks the packaged app using isolated test data. Set `BLACKWIRE_PACKAGED_DIR` for an output directory other than `release/win-unpacked`.
 
@@ -69,3 +69,5 @@ Maker catalog maintenance: edit the collection repository's `catalog/maker-parts
 On Windows, NSIS may reject long pnpm template paths. Use a short checkout path for release builds; this is a build-path constraint, not a reason to change OS security settings.
 
 Run `node scripts/audit-search.mjs` after importing a catalog to check every listing name and separator variant. `node scripts/benchmark-search.mjs` measures search-function timing. Set `BLACKWIRE_PREVIEW_PORT` to use a separate local browser-storage origin for QA.
+
+Multipart packaging regression tests: `python tests/test_offline_packages.py`. Each archive is independently extractable; no concatenation is required. Every member is included once. Native preflight must reject a missing or changed later part before changing an existing install.

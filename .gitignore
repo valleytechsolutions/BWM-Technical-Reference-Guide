@@ -27,3 +27,5 @@ public/licenses/
 Black-Wire-workbench*.json
 *.log
 build/library-package.nsh
+__pycache__/
+*.pyc

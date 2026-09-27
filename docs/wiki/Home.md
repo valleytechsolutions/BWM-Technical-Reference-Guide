@@ -2,8 +2,9 @@
 
 Know your board. Make the connection.
 
-[Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://github.com/valleytechsolutions/black-wire-desktop/releases/latest)
+[Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases)
 
+- [Inland and manufacturer coverage](inland-and-manufacturer-coverage.md) — Match Inland SKUs and DFRobot variants, inspect the original diagrams and see what remains missing.
 - [New hardware and source checks](new-hardware-and-source-checks.md) — Find ESP-Mosaico, P4X boards and FPGA references while keeping availability, revisions and unresolved evidence visible.
 - [Datasheets, I/O boards and carrier revisions](datasheets-and-io-boards.md) — Find the original device documentation and understand which connector a reference actually covers.
 - [ARM, x86 and RISC-V computers](single-board-computers.md) — Find SBC references by architecture, manufacturer and exact model, including LattePanda and Milk-V.

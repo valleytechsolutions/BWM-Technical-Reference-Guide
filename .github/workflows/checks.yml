@@ -14,3 +14,4 @@ jobs:
           node-version: 24
           package-manager-cache: false
       - run: node --test tests/*.test.mjs
+      - run: python3 -m unittest discover -s tests -p 'test_offline_packages.py'
