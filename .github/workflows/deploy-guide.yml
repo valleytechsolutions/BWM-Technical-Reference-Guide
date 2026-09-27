@@ -63,6 +63,12 @@ jobs:
             echo 'Missing guide-production secrets. See docs/AUTOMATIC-DEPLOYMENT.md.' >&2
             exit 1
           fi
+      - name: Prepare isolated publishing tools
+        if: steps.current.outputs.deploy == 'true'
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/black-wire-publisher"
+          printf '%s\n' '{"name":"black-wire-publisher","private":true}' > "$RUNNER_TEMP/black-wire-publisher/package.json"
       - name: Publish only the generated browser guide
         if: steps.current.outputs.deploy == 'true'
         id: deployment
@@ -71,8 +77,9 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           wranglerVersion: '4.139.0'
-          packageManager: pnpm
-          command: pages deploy web-release --project-name valleytech-black-wire-guide --branch main --commit-hash=${{ github.sha }} --commit-dirty=true
+          packageManager: npm
+          workingDirectory: ${{ runner.temp }}/black-wire-publisher
+          command: pages deploy "${{ github.workspace }}/web-release" --project-name valleytech-black-wire-guide --branch main --commit-hash=${{ github.sha }} --commit-dirty=true
         env:
           WRANGLER_SEND_METRICS: 'false'
       - name: Verify the deployed files and Shopify embed
