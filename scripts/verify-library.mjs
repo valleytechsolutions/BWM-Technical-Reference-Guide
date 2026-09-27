@@ -38,7 +38,9 @@ for(const r of [...catalog.boards,...catalog.makerParts||[]]){
  if(d.website&&!safeSourceURL(d.website.url))errors.push('Unsafe manufacturer URL: '+r.id);
  for(const s of d.resources||[]){
   if(!safeSourceURL(s.url))errors.push('Unsafe document URL: '+r.id);
-  if(s.file&&(!safeLibraryPath(s.file)||!manifest.has(s.file)||media.get(s.file)!==s.sha256))errors.push('Saved document missing or hash differs: '+r.id);
+  // Saved document links may reuse an asset's canonical hash. Its bytes were
+  // checked above; when a link also supplies a hash, it must agree with it.
+  if(s.file&&(!safeLibraryPath(s.file)||!manifest.has(s.file)||!media.has(s.file)||(s.sha256!==undefined&&media.get(s.file)!==s.sha256)))errors.push('Saved document missing or hash differs: '+r.id);
   if(s.kind==='datasheet'&&!['board','component'].includes(s.scope))errors.push('Datasheet scope missing: '+r.id);
  }
  if(Boolean(r.documentationCoverage?.boardDatasheets)!==documentationSummary(r).boardDatasheet)errors.push('Datasheet coverage mismatch: '+r.id);
