@@ -13,11 +13,13 @@
 
 ## Open the reference workbench
 
-**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download Windows preview 0.10.0](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.10.0)**
+**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download Windows preview 0.11.0](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.11.0)**
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
 ## New in 0.11.0
+
+- **HaleHound and Elechouse references:** 32 new listings, 106 reference attachments and 36 source-linked pin-purpose rows. Exact variants, original PDFs and unresolved source conflicts remain visible. [Coverage details](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.11.md).
 
 - **A Black Wire brand theme:** red and black with a light royal-gold undertone across the app, the reference wiki, the 404 page and the share card. Red marks where you are, primary actions and pinout availability; gold carries labels, links and focus. Reference images and PDFs keep their original colors.
 - **Reference-first pages:** each section opens with a plain title, a factual description and the collection figures instead of slogans and artwork. A wire underline, a faint Black Wire mark and a **BWM Reference** label identify every page.
@@ -72,7 +74,7 @@ Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-pa
 - **Better discovery:** useful titles and descriptions, canonical links, social previews and a sitemap. GitHub wiki pages and issue templates make corrections and contributions easier.
 - **Useful edge-case fixes:** saved theme synchronization across tabs, a clear fallback when storage is blocked, and direct links to undocumented board records.
 
-The current collection is **2026.09.10**: 2,661 board/device listings and 551 maker listings, including families and shared records. A physical source is not an independently approved all-pin reference. [Coverage audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/PINOUT_COVERAGE.md).
+The current collection is **2026.09.11**: 2,669 board/device listings and 575 maker listings, including families and shared records. A physical source is not an independently approved all-pin reference. [Coverage audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/PINOUT_COVERAGE.md).
 
 ## Your board. Its pins. One place.
 
