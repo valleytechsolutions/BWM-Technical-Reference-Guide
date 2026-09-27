@@ -1,0 +1,344 @@
+
+
+/* Black Wire brand theme: red and black, with a light royal-gold undertone.
+   Red is the brand signal (active, primary, the wire); gold is the quiet second voice
+   (links, focus, labels). Loaded last, so it refines the base styles before it. */
+:root{
+  --page:#0a0808; --surface:#110e0e; --surface-2:#191414; --surface-3:#231c1b;
+  --ink:#f4efe8; --ink-2:#d2c9bf; --muted:#978b81; --line:#271f1e; --line-strong:#3a2d2a;
+  --brand:#ee1c24; --brand-hi:#ff4a4f; --brand-soft:#ee1c241f; --brand-deep:#3a0b0d;
+  --gold:#d9b872; --gold-ink:#ecd49c; --gold-soft:#d9b87214; --gold-line:#d9b87238;
+  --accent:var(--gold); --accent-soft:var(--gold-soft); --accent-ink:var(--gold-ink); --shadow:#00000070;
+  --success-bg:#0f241a; --success-text:#79d3a2; --warning-bg:#2a2011; --warning-text:#e8bd6c; --danger-bg:#2c1114; --danger-text:#ff9d95;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono","SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  --dark:var(--page); --paper:var(--page); --lime:var(--brand); --green:var(--gold);
+  --hero-start:var(--page); --hero-end:var(--page);
+  --reference-bg:#f5f3f0;
+  scrollbar-color:#3a2d2a transparent;
+}
+:root[data-theme=light]{
+  --page:#fbfaf8; --surface:#ffffff; --surface-2:#f5f2ee; --surface-3:#ebe6df;
+  --ink:#1a1414; --ink-2:#3e3432; --muted:#6f645d; --line:#e8e1d9; --line-strong:#d6ccc1;
+  --brand:#d0101a; --brand-hi:#b00d16; --brand-soft:#d0101a14; --brand-deep:#fbe9e9;
+  --gold:#8f6a1c; --gold-ink:#76560f; --gold-soft:#8f6a1c12; --gold-line:#8f6a1c33; --shadow:#1a141414;
+  --success-bg:#ecf7f0; --success-text:#1d6b42; --warning-bg:#fbf3e3; --warning-text:#7a5412; --danger-bg:#fcecea; --danger-text:#9b3128;
+  --reference-bg:#f5f3f0;
+  scrollbar-color:#d6ccc1 transparent;
+}
+:root body{font-family:var(--sans);font-size:14px;line-height:1.55;background:var(--page);-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+:root :is(h1,h2,h3,h4){letter-spacing:-.018em;font-weight:600;color:var(--ink)}
+:root ::selection{background:var(--brand);color:#fff}
+:root :is(button,a,select,input,textarea):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Eyebrow labels read as quiet section captions rather than slogans. */
+:root .eyebrow{font:600 11px/1.4 var(--sans);letter-spacing:.06em;color:var(--muted);gap:6px}
+
+/* Sidebar */
+:root .sidebar{background:var(--page);border-right:1px solid var(--line);padding:18px 12px 16px;scrollbar-width:thin}
+:root .brand-block{flex-direction:row;align-items:center;gap:10px;padding:2px 8px}
+:root .sidebar .logo-tile{width:26px;height:30px;margin:0;padding:0;background:none;flex-shrink:0}
+:root .sidebar .wordmark{font-size:15px;font-weight:650;letter-spacing:-.01em;color:var(--ink);line-height:1.2}
+:root .sidebar .wordmark>span{font:400 12px/1.3 var(--sans);letter-spacing:0;margin-top:1px;color:var(--muted)}
+:root .web-store-link{display:inline-flex;margin:12px 8px 0;font-size:12px;color:var(--muted)}
+:root .sidebar-section-label{font:600 11px/1 var(--sans);letter-spacing:.02em;color:var(--muted);margin:26px 8px 8px}
+:root .sidebar nav{gap:1px}
+:root .sidebar nav button,:root .sidebar .about-nav{padding:6px 8px;gap:10px;font-size:13.5px;font-weight:450;color:var(--ink-2);border-radius:6px;min-height:32px;line-height:1.3}
+:root .sidebar nav button svg,:root .sidebar .about-nav svg{width:16px;height:16px;color:var(--muted)}
+:root .sidebar nav button:hover,:root .sidebar .about-nav:hover{background:var(--surface-2);color:var(--ink)}
+:root .sidebar nav button.active,:root .sidebar .about-nav.active{background:var(--surface-2)!important;color:var(--ink)!important;box-shadow:none;font-weight:550}
+:root .sidebar nav button.active svg,:root .sidebar .about-nav.active svg{color:var(--accent)}
+:root .sidebar .nav-count{font:11.5px var(--mono);font-variant-numeric:tabular-nums;color:var(--muted);opacity:1;background:none}
+:root .sidebar .new-dot{width:6px;height:6px;background:var(--accent)}
+:root .sidebar .quick-nav button{padding:5px 8px;min-height:28px;font:12.5px var(--mono);color:var(--muted)}
+:root .sidebar .quick-nav button:hover{color:var(--ink)}
+:root .sidebar .quick-nav .filter-active{background:var(--accent-soft)!important;color:var(--accent-ink)!important;box-shadow:none}
+:root .wiki-link{margin:18px 8px 0;font-size:13.5px;color:var(--ink-2);gap:10px}
+:root .wiki-link svg{color:var(--muted)}
+:root .wiki-link:hover{color:var(--ink)}
+:root .sidebar .sidebar-bottom{padding:14px 0 0;margin-top:auto;border-top:1px solid var(--line)}
+:root .sidebar .about-nav{display:flex;align-items:center;width:100%;margin:0 0 12px}
+:root .sidebar-valleytech{padding:0 8px;gap:8px;align-items:center}
+:root .sidebar-valleytech img{width:22px;height:22px;padding:2px;border-radius:4px}
+:root .sidebar-valleytech span{font-size:11px;letter-spacing:0;line-height:1.35;color:var(--muted)}
+:root .sidebar .version{font:11px var(--mono);letter-spacing:0;color:var(--muted);margin:12px 8px 0}
+
+/* Top bar */
+:root .topbar{height:56px;padding:0 28px;gap:14px;background:color-mix(in srgb,var(--page) 88%,transparent);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--line)}
+:root .breadcrumb{flex-direction:row;align-items:center;gap:6px;max-width:none;min-width:0;white-space:nowrap;font-size:13px;color:var(--muted)}
+:root .breadcrumb .guide-title{font-size:13px;font-weight:450;color:var(--muted);line-height:1}
+:root .breadcrumb b{font:550 13px var(--sans);letter-spacing:0;color:var(--ink)}
+:root .global-search-wrap{max-width:560px}
+:root .global-search{height:34px;border-radius:7px;background:var(--surface);border:1px solid var(--line);padding:0 10px;gap:8px;color:var(--muted)}
+:root .global-search>svg{width:16px;height:16px}
+:root .global-search:hover{border-color:var(--line-strong)}
+:root .global-search:focus-within{border-color:var(--line-strong);outline:0;box-shadow:0 0 0 3px var(--accent-soft)}
+:root .global-search input{font-size:13.5px}
+:root .global-search kbd{font:11px var(--mono);padding:1px 5px;border-radius:4px;border-color:var(--line-strong);background:var(--surface-2)}
+:root .global-search-panel{top:42px;border-radius:10px;border-color:var(--line-strong);box-shadow:0 20px 60px var(--shadow)}
+:root .global-search-result{padding:10px 14px}
+:root .global-search-result b{font-size:14px;font-weight:550}
+:root .global-search-result small{font-size:12px}
+:root .global-search-result[aria-selected=true]{background:var(--surface-2);box-shadow:inset 2px 0 var(--accent)}
+:root .theme-switch{padding:2px;border-radius:7px;border-color:var(--line);background:var(--surface);gap:2px}
+:root .theme-switch button{padding:5px 8px;font-size:12px;border-radius:5px;gap:6px}
+:root .theme-switch button svg{width:14px;height:14px}
+:root .theme-switch button[aria-pressed=true]{background:var(--surface-3);color:var(--ink);box-shadow:none}
+
+/* Page body */
+:root main{max-width:1360px;padding:40px 48px 0}
+:root .page-header{padding-bottom:28px;margin-bottom:36px;border-bottom:1px solid var(--line)}
+:root .page-header h1,:root :is(.makers-hero,.devices-hero,.power-hero,.about-brand) h1{font-size:30px;line-height:1.2;letter-spacing:-.022em;font-weight:620;margin:0}
+:root .page-header>p,:root :is(.makers-hero,.devices-hero,.power-hero,.about-brand)>div>p,:root :is(.power-hero,.about-brand)>p{font-size:15px;line-height:1.65;color:var(--muted);max-width:720px;margin-top:10px}
+:root .page-meta{display:flex;flex-wrap:wrap;margin:26px 0 0;row-gap:14px}
+:root .page-meta>div{padding:0 26px;border-left:1px solid var(--line)}
+:root .page-meta>div:first-child{padding-left:0;border-left:0}
+:root .page-meta dt{font-size:12px;color:var(--muted)}
+:root .page-meta dd{margin:3px 0 0;font-size:16px;font-weight:560;color:var(--ink);font-variant-numeric:tabular-nums}
+:root .page-shortcuts{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:22px}
+:root .page-shortcuts>span{font-size:12px;color:var(--muted);margin-right:6px}
+:root .page-shortcuts button,:root :is(.maker-examples,.device-examples) button{font:12px var(--mono);padding:4px 8px;border:1px solid var(--line);border-radius:5px;background:var(--surface);color:var(--ink-2)}
+:root .page-shortcuts button:hover,:root :is(.maker-examples,.device-examples) button:hover{border-color:var(--line-strong);background:var(--surface-2);color:var(--ink)}
+:root :is(.maker-examples,.device-examples) button svg{display:none}
+
+:root .section-heading{margin-bottom:16px;align-items:flex-end}
+:root .section-heading h2{font-size:19px;line-height:1.3}
+:root .section-heading .eyebrow{font-size:11px;margin-bottom:6px}
+:root .section-heading>div>p{font-size:13.5px;margin-top:4px}
+:root .text-link{font-size:13px;font-weight:500;color:var(--accent);gap:6px}
+:root .text-link:hover{color:var(--accent-ink)}
+:root .text-link svg{width:14px;height:14px}
+
+/* Filters and controls */
+:root .filter-bar{gap:8px}
+:root .select-field{padding:6px 30px 7px 11px;border-radius:7px;border-color:var(--line);background:var(--surface)}
+:root .select-field:hover{border-color:var(--line-strong)}
+:root .select-field>span{font-size:11.5px;letter-spacing:0;margin-bottom:1px;color:var(--muted)}
+:root .select-field select{font-size:13.5px;font-weight:500}
+:root .select-field svg{top:50%;transform:translateY(-50%);right:10px}
+:root .filter-button{font-size:13px;padding:0 12px;border-radius:7px;white-space:nowrap}
+:root .filter-button>span{font:11px var(--mono)}
+:root .extra-filters p,:root .search-hint{font-size:13px;color:var(--muted);line-height:1.6}
+:root .search-hint{margin-top:10px}
+:root .result-toolbar{font-size:13px;margin:22px 0 14px}
+:root .result-toolbar b{font-variant-numeric:tabular-nums;font-weight:600}
+:root .clear-filters{font-size:12.5px}
+:root .view-toggle{border-radius:7px;border-color:var(--line)}
+:root .active-filter-tags span{font:12px var(--mono);border-radius:5px}
+:root .maker-search-crosslink{background:var(--surface);border:1px solid var(--line);border-left:2px solid var(--accent);border-radius:6px;padding:10px 14px;margin:16px 0;font-size:13.5px;color:var(--ink-2)}
+:root .maker-search-crosslink button{font-size:13px;font-weight:500;color:var(--accent)}
+
+/* Buttons */
+:root :is(.primary-button,.secondary-button){font-size:13px;font-weight:550;padding:7px 12px;border-radius:7px;gap:7px}
+:root .primary-button{background:var(--ink);color:var(--page);border:1px solid var(--ink)}
+:root .primary-button:hover{background:#fff;color:#000}
+:root[data-theme=light] .primary-button:hover{background:#000;color:#fff}
+:root .secondary-button{background:var(--surface);border:1px solid var(--line-strong);color:var(--ink)}
+:root .secondary-button:hover{background:var(--surface-2);color:var(--ink)}
+:root .icon-button{border-radius:6px}
+:root .icon-button:hover{background:var(--surface-2);color:var(--ink)}
+:root .tag-outline{font:11.5px var(--mono);letter-spacing:0;border:1px solid var(--line);border-radius:5px;padding:3px 7px;color:var(--muted)}
+
+/* Cards */
+:root .board-grid{grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:16px}
+:root .board-grid.list-view{grid-template-columns:1fr;gap:8px}
+:root :is(.board-card,.maker-card){border-radius:9px;border-color:var(--line);background:var(--surface);box-shadow:none}
+:root :is(.board-card,.maker-card):hover{border-color:var(--line-strong);box-shadow:none}
+:root .board-image{height:176px;background:var(--reference-bg);border-bottom:1px solid var(--line);padding:14px 18px 30px}
+:root .maker-preview{background:var(--reference-bg);border-color:var(--line);border-radius:6px}
+:root .image-badge{font:600 10px/1.2 var(--sans);letter-spacing:.04em;padding:3px 6px;border-radius:4px;background:#fff;color:#3f3f46;border-color:#e4e4e7}
+:root .image-badge>span{width:5px;height:5px;background:#16a34a}
+:root .image-badge.subtle{background:#fff;color:#71717a;border-color:#e4e4e7}
+:root .image-badge.subtle>span{background:#a1a1aa}
+:root .bookmark-button{border-radius:6px;background:#ffffffe6;color:#52525b;border-color:#e4e4e7}
+:root .bookmark-button:hover{color:#18181b;border-color:#d4d4d8}
+:root .bookmark-button.bookmarked{background:#18181b;color:var(--accent);border-color:#18181b}
+:root .board-card-body{padding:14px 16px 0}
+:root .card-brand{font:500 12px var(--sans);letter-spacing:0;text-transform:none;color:var(--muted);margin-bottom:3px}
+:root .card-title,:root .maker-card h3{font-size:15px;font-weight:600;letter-spacing:-.01em;color:var(--ink);line-height:1.35}
+:root .card-title svg{width:15px;height:15px}
+:root .board-card:hover .card-title svg{color:var(--accent)}
+:root .card-description{font:12px var(--mono);margin-top:5px}
+:root .card-meta{font-size:12px;margin-top:14px;padding:10px 0 12px}
+:root .reviewed-label{color:var(--success-text)}
+:root .partial-label{color:var(--warning-text)}
+:root .load-more{font-size:13px;color:var(--muted)}
+
+/* Section heroes on the other tabs become plain page headers. */
+:root :is(.makers-hero,.devices-hero){padding:0 0 28px;margin-bottom:36px;border-bottom:1px solid var(--line);gap:40px;align-items:start}
+:root :is(.maker-examples,.device-examples){margin-top:20px;gap:6px;font:12px var(--mono);color:var(--muted)}
+:root :is(.maker-coverage,.device-hero-card){background:var(--surface);border:1px solid var(--line);border-radius:9px;box-shadow:none}
+:root :is(.maker-categories,.device-categories) button{font-size:13px;border-radius:6px;border-color:var(--line)}
+:root :is(.maker-categories button[aria-pressed=true],.device-categories button.selected){background:var(--surface-3);color:var(--ink);border-color:var(--line-strong)}
+:root .edition-note{border-radius:7px;border-color:var(--line);background:var(--surface);font-size:13px}
+:root .power-hero{padding:0 0 28px;margin-bottom:32px;border-bottom:1px solid var(--line);max-width:none}
+:root .power-hero-note{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-left:2px solid var(--accent);border-radius:6px;padding:12px 14px;font-size:13.5px;max-width:760px}
+:root :is(.power-hero-note,.inline-note,.tool-tip)>svg{color:var(--accent);width:18px;height:18px}
+:root :is(.inline-note,.tool-tip){background:var(--surface);border:1px solid var(--line);border-left:2px solid var(--accent);border-radius:6px;font-size:13.5px}
+:root .power-basics{border-radius:8px;border-color:var(--line);background:var(--surface)}
+:root .desk-tabs{gap:4px;margin-bottom:28px}
+:root .desk-tabs button{font-size:13.5px;font-weight:500;padding:10px 12px;color:var(--muted)}
+:root .desk-tabs button:hover{color:var(--ink)}
+:root .desk-tabs button.active{color:var(--ink);border-color:var(--accent)}
+:root :is(.power-table,.observations) th{font:600 11px var(--sans);letter-spacing:.05em;color:var(--muted);background:var(--surface-2)}
+:root :is(.power-table,.observations) td{font-size:13.5px}
+:root .power-table tbody tr:hover{background:var(--surface-2)}
+:root .chart-table-wrap{border-radius:8px;border-color:var(--line)}
+:root .about-cards>section,:root .about-valleytech{background:var(--surface);border:1px solid var(--line);border-radius:9px;box-shadow:none}
+:root .about-cards h2,:root .about-valleytech h2{font-size:18px}
+:root .main-footer{font-size:12px;margin-top:64px;padding:20px 0 28px}
+:root .main-footer b{font:600 12px var(--sans);color:var(--ink-2)}
+
+/* Reference viewer */
+:root :is(.board-dialog,.maker-dialog,.measurement-dialog){border-radius:12px;border-color:var(--line-strong);background:var(--surface);box-shadow:0 30px 90px #000000b3}
+:root .dialog-header{padding:16px 20px;background:var(--surface)}
+:root .dialog-header h2{font-size:21px;margin-top:3px}
+:root .dialog-header .eyebrow{font:500 12.5px var(--sans);letter-spacing:0;color:var(--muted)}
+:root .asset-list{background:var(--page)}
+:root .asset-list-heading{font:600 11px var(--sans);letter-spacing:.06em;color:var(--muted)}
+:root .asset-item{border-radius:7px}
+:root .asset-item b{font-size:13px;font-weight:550}
+:root .asset-item small{font:11.5px var(--mono);color:var(--muted)}
+:root .asset-item.active{background:var(--surface-2);box-shadow:inset 2px 0 var(--accent)}
+:root .board-facts b{font-weight:550;color:var(--ink)}
+:root .board-facts p{font-size:13px;color:var(--muted)}
+:root .power-shortcut{border:1px solid var(--line);border-radius:7px;background:var(--surface)}
+:root .viewer-toolbar{font-size:12.5px;padding-block:6px}
+:root .zoom-value{font:12px var(--mono);font-variant-numeric:tabular-nums}
+:root .download-button{font-size:12.5px;font-weight:500}
+:root .viewer-caption{font:12px var(--mono);color:var(--muted)}
+:root .source-panel{font-size:13px}
+:root .source-details code,:root .hash{font:12px var(--mono)}
+:root .coverage-summary{border-radius:7px}
+:root .coverage-badge{font-weight:550;border-radius:5px}
+:root :is(.pin-table-scroll th){font:600 11px var(--sans);letter-spacing:.05em}
+:root .pin-table-scroll td{font-size:13px}
+:root .pin-table-scroll code{font:12.5px var(--mono)}
+:root dialog::backdrop{background:#000000b8;backdrop-filter:blur(2px)}
+
+/* Consistent page gutters and restrained stat cards on the section pages. */
+:root .makers-page,:root .about-page{padding:0;max-width:none}
+:root :is(.maker-library,.device-library){padding-top:0;border-top:0}
+:root :is(.maker-coverage,.device-hero-card){padding:18px 20px}
+:root :is(.maker-coverage,.device-hero-card)>svg,:root .device-hero-card>div{display:none}
+:root :is(.maker-coverage,.device-hero-card)>span,:root .maker-coverage .eyebrow{font:600 11px var(--sans);letter-spacing:.06em;color:var(--muted)}
+:root :is(.maker-coverage,.device-hero-card) strong{font:600 30px/1.1 var(--sans);letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums;margin-top:6px}
+:root :is(.maker-coverage,.device-hero-card) p{font-size:13px;color:var(--muted)}
+:root .edition-note{padding:10px 14px;margin-bottom:32px}
+:root .edition-note>svg{color:var(--muted)}
+:root .power-hero-note b{font-size:13.5px;font-weight:600}
+:root .power-hero-note span{font-size:13px;color:var(--muted)}
+:root .power-table td b.mono{font-weight:500;font-size:13px}
+:root .power-table td span{font-size:12px}
+:root .measurement-badge{font-size:12px;border-radius:5px}
+:root .about-brand{align-items:flex-start;text-align:left;padding:0 0 28px;margin-bottom:32px;border-bottom:1px solid var(--line)}
+:root .about-brand>p{margin-inline:0}
+:root .about-cards>section>svg{width:20px;height:20px;color:var(--muted)}
+:root .about-valleytech>img{width:52px;height:auto;background:#fff;padding:5px;border-radius:6px;mix-blend-mode:normal}
+:root .hardware-links h3{font-size:14px;font-weight:600}
+:root :is(.hardware-links,.source-details,.profile-sources) a{text-decoration:none;font-size:13px;font-weight:500}
+:root :is(.hardware-links,.source-details,.profile-sources) a:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* ── BWM brand layer ───────────────────────────────────────────────
+   The signature is the wire: a red lead that runs into a gold hairline.
+   It appears across the top of the app, under each page title and on the viewer. */
+:root body::before{content:"";position:fixed;inset:0 0 auto;height:2px;z-index:90;pointer-events:none;background:linear-gradient(90deg,var(--brand) 0,var(--brand) 55%,var(--gold) 100%)}
+:root body{background:radial-gradient(900px 420px at 100% -80px,var(--gold-soft),transparent 70%) no-repeat,var(--page)}
+
+/* Sidebar: the mark and wordmark carry the brand; red marks where you are. */
+:root .sidebar{background:#070606;border-right-color:var(--line)}
+:root[data-theme=light] .sidebar{background:var(--surface)}
+:root .brand-block{gap:11px;padding:4px 8px 2px}
+:root .sidebar .logo-tile{width:34px;height:38px}
+:root .sidebar .wordmark{font-size:17px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1.1}
+:root .sidebar .wordmark>span{font:600 9.5px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-top:4px}
+:root .sidebar-section-label{color:var(--gold);opacity:.85;letter-spacing:.1em;text-transform:uppercase;font-size:10.5px}
+:root .sidebar nav button.active,:root .sidebar .about-nav.active{background:linear-gradient(90deg,var(--brand-soft),transparent 85%)!important;box-shadow:inset 2px 0 var(--brand)!important;border-radius:0 6px 6px 0}
+:root .sidebar nav button.active svg,:root .sidebar .about-nav.active svg{color:var(--brand-hi)}
+:root .sidebar .new-dot{background:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+:root .sidebar .quick-nav .filter-active{background:var(--brand-soft)!important;color:var(--ink)!important;box-shadow:inset 2px 0 var(--brand)!important}
+:root .sidebar .version{color:var(--gold);opacity:.75}
+:root .sidebar .version>span{display:block;line-height:1.6}
+
+/* Top bar */
+:root .topbar{top:2px;background:color-mix(in srgb,var(--page) 90%,transparent)}
+:root .breadcrumb .guide-title{color:var(--gold);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:11.5px}
+:root .breadcrumb svg{color:var(--line-strong)}
+:root .global-search:focus-within{border-color:var(--gold-line);box-shadow:0 0 0 3px var(--gold-soft)}
+:root .global-search-result[aria-selected=true]{background:var(--surface-2);box-shadow:inset 2px 0 var(--brand)}
+
+/* Page headers: kicker, title, the wire underline and a faint mark on the right. */
+:root :is(.page-header,.power-hero,.about-brand,.makers-hero,.devices-hero){position:relative;border-bottom:1px solid var(--line)}
+:root :is(.page-header,.power-hero,.about-brand,.makers-hero,.devices-hero)::before{content:"";position:absolute;left:0;bottom:-1px;width:180px;height:2px;background:linear-gradient(90deg,var(--brand) 0,var(--brand) 64px,var(--gold-line) 64px,transparent)}
+:root[data-theme=light] :is(.page-header,.power-hero,.about-brand)::after{opacity:.045;filter:saturate(.6)}
+:root :is(.page-header,.power-hero,.about-brand)::after{content:"";position:absolute;right:0;top:-12px;width:190px;height:208px;background:var(--bw-mark) no-repeat center/contain;opacity:.07;pointer-events:none;filter:saturate(.9)}
+:root .page-kicker{display:flex;align-items:center;gap:8px;margin-bottom:12px;font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+:root .kicker-lead{width:18px;height:2px;background:var(--brand);border-radius:1px}
+:root .kicker-sep{color:var(--line-strong)}
+:root .page-kicker>span:last-child{color:var(--ink-2)}
+:root .page-meta dt{color:var(--gold);opacity:.8;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+:root .page-meta dd{font-size:18px;font-weight:620;letter-spacing:-.01em}
+:root .page-meta>div{border-left-color:var(--line-strong)}
+:root .page-shortcuts>span{color:var(--gold);opacity:.8;text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:600}
+:root .page-shortcuts button:hover,:root .maker-examples button:hover{border-color:#ee1c2466;background:var(--brand-soft);color:var(--ink)}
+
+/* Section headings get a short red tick. */
+:root .section-heading h2{display:flex;align-items:center;gap:10px}
+:root .section-heading h2::before{content:"";width:3px;height:16px;border-radius:1px;background:var(--brand)}
+
+/* Controls */
+:root .primary-button{background:var(--brand);border-color:var(--brand);color:#fff}
+:root .primary-button:hover,:root[data-theme=light] .primary-button:hover{background:var(--brand-hi);border-color:var(--brand-hi);color:#fff}
+:root .secondary-button:hover{border-color:var(--gold-line)}
+:root .secondary-button.is-saved{border-color:#ee1c2466;background:var(--brand-soft)}
+:root .secondary-button.is-saved svg{color:var(--brand-hi)}
+:root .filter-button.selected,:root .view-toggle button.selected{background:var(--surface-3);color:var(--ink)}
+:root .filter-button>span{background:var(--brand);color:#fff}
+:root .theme-switch button[aria-pressed=true]{background:var(--surface-3);color:var(--ink);box-shadow:inset 0 -2px var(--brand)}
+:root :is(.maker-categories button[aria-pressed=true],.device-categories button.selected){background:var(--brand-soft);border-color:#ee1c2466;color:var(--ink)}
+:root .reference-groups button[aria-pressed=true]{background:var(--brand-soft);border-color:#ee1c2466;color:var(--ink)}
+:root .maker-image-strip button[aria-pressed=true]{outline:2px solid var(--brand);border-color:transparent}
+:root .desk-tabs button.active{border-color:var(--brand)}
+:root .desk-tabs button.active svg{color:var(--brand-hi)}
+:root :is(.maker-search-crosslink,.power-hero-note,.inline-note,.tool-tip){border-left-color:var(--gold);background:linear-gradient(90deg,var(--gold-soft),transparent 60%),var(--surface)}
+
+/* Cards: black-and-red status chips over the white reference plate. */
+:root :is(.board-card,.maker-card):hover{border-color:#ee1c2459}
+:root .board-card:hover .card-title svg{color:var(--brand-hi)}
+:root .card-brand{color:var(--gold);opacity:.85;font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+:root .image-badge{background:#0a0808;color:#f4efe8;border-color:#0a0808}
+:root .image-badge>span{background:var(--brand);width:5px;height:5px;box-shadow:0 0 0 2px #ee1c2440}
+:root .image-badge.subtle{background:#fff;color:#6f645d;border-color:#e8e1d9}
+:root .image-badge.subtle>span{background:#b8ada3;box-shadow:none}
+:root .bookmark-button.bookmarked{background:var(--brand);border-color:var(--brand);color:#fff}
+
+/* Reference viewer */
+:root :is(.board-dialog,.maker-dialog,.measurement-dialog){border-top:2px solid var(--brand)}
+:root .dialog-header .eyebrow{color:var(--gold);font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+:root .asset-list{background:#070606}
+:root[data-theme=light] .asset-list{background:var(--surface-2)}
+:root .asset-list-heading,:root .board-facts .eyebrow{color:var(--gold);opacity:.85}
+:root .asset-item.active{background:linear-gradient(90deg,var(--brand-soft),transparent 90%);box-shadow:inset 2px 0 var(--brand)}
+:root .power-shortcut:hover{border-color:#ee1c2466}
+:root .power-table tbody tr.expanded{box-shadow:inset 2px 0 var(--brand)}
+
+/* Colophon footer */
+:root .colophon{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;position:relative;border-top:1px solid var(--line);padding:22px 0 30px}
+:root .colophon::before{content:"";position:absolute;left:0;top:-1px;width:64px;height:2px;background:var(--brand)}
+:root .colophon-brand{display:flex;align-items:center;gap:12px;min-width:0}
+:root .colophon-brand .brand-mark{width:26px;height:30px;flex-shrink:0}
+:root .colophon-brand b{display:block;font:700 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+:root .colophon-brand span{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+:root .colophon-meta{display:flex;gap:14px;align-items:center;font-size:12px;color:var(--gold)}
+:root .colophon-meta a{color:var(--ink-2);font-size:12px}
+:root .loading-line{background:linear-gradient(90deg,var(--brand),var(--gold))}
+@media(max-width:1000px){:root :is(.page-header,.power-hero,.about-brand)::after{width:120px;height:132px;opacity:.05}}
+
+@media(max-width:1000px){:root main{padding:32px 24px 0}:root .topbar{padding-inline:16px}}
+@media(max-width:760px){
+  :root .topbar{height:56px;padding:0 12px;gap:8px}
+  :root .page-header h1,:root :is(.makers-hero,.devices-hero,.power-hero,.about-brand) h1{font-size:25px}
+  :root .page-meta>div{padding:0 16px}
+  :root .global-search-panel{top:42px}
+}
+@media(max-width:430px){:root main{padding:24px 16px 0}:root .page-meta>div:nth-child(n+4){display:none}}

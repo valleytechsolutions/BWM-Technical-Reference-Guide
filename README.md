@@ -3,11 +3,11 @@
   <img src="docs/brand/valleytech.png" width="80" alt="Valleytech Solutions logo">
 </p>
 <h1 align="center">The Black Wire Maker's<br>Technical Reference Guide</h1>
-<p align="center"><strong>Know your board. Make the connection.</strong><br>A Valleytech Solutions project, made for the workbench.</p>
+<p align="center"><strong>Board pinouts, manufacturer source files and power data.</strong><br>Every reference keeps its source, revision and review status. A Valleytech Solutions project, made for the workbench.</p>
 <p align="center">Makers · Educators · Students · Hobbyists · Engineers</p>
 
 <p align="center"><a href="https://github.com/valleytechsolutions/black-wire-desktop/releases">Downloads & release status</a> · <a href="https://github.com/valleytechsolutions/black-wire-pinouts">Browse the pinout collection</a> · <a href="docs/BUILDING.md">Build the app</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
-<p align="center"><img alt="Edition" src="https://img.shields.io/badge/edition-First_Edition_2026-d5f58a?style=flat-square&labelColor=17211f"> <img alt="Offline" src="https://img.shields.io/badge/reference_library-offline-d5f58a?style=flat-square&labelColor=17211f"> <img alt="Platforms" src="https://img.shields.io/badge/targets-Windows_%7C_Linux_%7C_macOS-d5f58a?style=flat-square&labelColor=17211f"></p>
+<p align="center"><img alt="Edition" src="https://img.shields.io/badge/edition-First_Edition_2026-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Offline" src="https://img.shields.io/badge/reference_library-offline-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Platforms" src="https://img.shields.io/badge/targets-Windows_%7C_Linux_%7C_macOS-d9b872?style=flat-square&labelColor=0a0808"></p>
 
 ![Inland ESP32 original pinout in the Black Wire guide](docs/screenshots/inland-reference.png)
 
@@ -17,7 +17,13 @@
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
-## New in 0.10.0
+## New in 0.11.0
+
+- **A Black Wire brand theme:** red and black with a light royal-gold undertone across the app, the reference wiki, the 404 page and the share card. Red marks where you are, primary actions and pinout availability; gold carries labels, links and focus. Reference images and PDFs keep their original colors.
+- **Reference-first pages:** each section opens with a plain title, a factual description and the collection figures instead of slogans and artwork. A wire underline, a faint Black Wire mark and a **BWM Reference** label identify every page.
+- [Release notes](docs/RELEASE-0.11.0.md).
+
+## Previous update / 0.10.0
 
 - 67 Inland records with exact SKU/revision distinctions, original images and visible gaps.
 - All 50 DFRobot MCU-category SKUs reviewed; additional TI, Microchip and Silicon Labs GPIO references.

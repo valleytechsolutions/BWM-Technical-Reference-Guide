@@ -1,6 +1,7 @@
 import {chromium,expect} from '@playwright/test';
 import {spawn} from 'node:child_process';
 import fs from 'node:fs/promises';
+import {articles} from '../data/wiki.mjs';
 const live=process.env.BLACKWIRE_TEST_URL;
 const base=process.env.BLACKWIRE_BASE_PATH||'/';
 const url=live||'http://127.0.0.1:5187'+base;
@@ -11,15 +12,15 @@ try{
  await fs.mkdir(qa,{recursive:true});
  browser=await chromium.launch();const context=await browser.newContext({viewport:{width:1440,height:1000}});const page=await context.newPage();
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(url);await expect(page.getByRole('heading',{name:/Know your board/})).toBeVisible();
+ await page.goto(url);await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();
  await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
  await expect(page.getByRole('button',{name:'Dark mode',exact:true})).toHaveAttribute('aria-pressed','true');
  await expect(page.locator('.logo-tile .brand-dark')).toBeVisible();await expect(page.locator('.logo-tile .brand-light')).toBeHidden();
- await expect(page.locator('.guide-title')).toHaveText("The Black Wire Maker's Technical Reference Guide");
+ await expect(page.locator('.guide-title')).toHaveText('Black Wire');
  await expect(page.locator('body')).not.toContainText('THE MAKER’S FIELD GUIDE');
  await page.screenshot({path:`${qa}/${live?'live-':''}dark-library.png`});
  await page.getByRole('button',{name:'Light mode',exact:true}).click();await page.reload();
- await expect(page.getByRole('heading',{name:/Know your board/})).toBeVisible();await expect(page.locator('html')).toHaveAttribute('data-theme','light');
+ await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();await expect(page.locator('html')).toHaveAttribute('data-theme','light');
  await expect(page.locator('.logo-tile .brand-light')).toBeVisible();await expect(page.locator('.logo-tile .brand-dark')).toBeHidden();
  await page.screenshot({path:`${qa}/light-library.png`});
  const second=await context.newPage();await second.goto(url);await second.getByRole('button',{name:'Dark mode',exact:true}).click();
@@ -45,7 +46,10 @@ try{
  await expect(staticPage.getByRole('heading',{level:1})).toHaveText("The Black Wire Maker's Technical Reference Guide");
  await staticPage.goto(url+'wiki/');await expect(staticPage.getByRole('heading',{level:1})).toHaveText('The maker reference wiki');
  await staticPage.screenshot({path:`${qa}/wiki-no-js.png`});
- const xml=await(await page.request.get(url+'sitemap.xml')).text();const urls=[...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);expect(urls.length).toBe(33);expect(new Set(urls).size).toBe(urls.length);
+ const xml=await(await page.request.get(url+'sitemap.xml')).text();const urls=[...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
+ // Root, wiki index, articles, two directory indexes, then one page per board family and maker category.
+ const sitemapCatalog=await(await page.request.get(url+'catalog.json')).json();
+ expect(urls.length).toBe(2+articles.length+2+new Set(sitemapCatalog.boards.map(b=>b.family)).size+new Set(sitemapCatalog.makerParts.map(p=>p.category)).size);expect(new Set(urls).size).toBe(urls.length);
  const titles=new Set();
  for(const canonical of urls){
   const local=url+new URL(canonical).pathname.slice(base.length);const response=await page.request.get(local);expect(response.ok(),local).toBe(true);

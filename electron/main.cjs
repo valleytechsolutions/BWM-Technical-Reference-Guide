@@ -24,7 +24,7 @@ function installIPC(){
  ipcMain.handle('bw:export',async(e,data)=>{verify(e);if(typeof data!=='string'||data.length>5000000)throw new Error('Invalid backup');JSON.parse(data);const result=await dialog.showSaveDialog(window,{title:'Export your Black Wire workbench',defaultPath:'Black-Wire-workbench.json',filters:[{name:'JSON backup',extensions:['json']}]});if(result.canceled)return false;await fs.writeFile(result.filePath,data);return true;});
 }
 async function createWindow(){
- window=new BrowserWindow({width:1440,height:960,minWidth:860,minHeight:620,title:'Black Wire Technical Reference Guide',backgroundColor:'#151514',icon:path.join(appRoot,'dist/brand/black-wire.png'),show:false,webPreferences:{preload:path.join(__dirname,'preload.cjs'),sandbox:true,contextIsolation:true,nodeIntegration:false,webSecurity:true}});
+ window=new BrowserWindow({width:1440,height:960,minWidth:860,minHeight:620,title:'Black Wire Technical Reference Guide',backgroundColor:'#0a0808',icon:path.join(appRoot,'dist/brand/black-wire.png'),show:false,webPreferences:{preload:path.join(__dirname,'preload.cjs'),sandbox:true,contextIsolation:true,nodeIntegration:false,webSecurity:true}});
  window.webContents.setWindowOpenHandler(({url})=>{const u=externalURL(url);if(u)shell.openExternal(u);return {action:'deny'};});
  window.webContents.on('will-navigate',(e,url)=>{if(!url.startsWith('blackwire://app/')){e.preventDefault();const u=externalURL(url);if(u)shell.openExternal(u);}});
  window.webContents.on('will-attach-webview',e=>e.preventDefault());

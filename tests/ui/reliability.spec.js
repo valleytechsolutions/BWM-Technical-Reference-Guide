@@ -12,7 +12,7 @@ test('Rotated and zoomed pinout corners remain reachable',async({page})=>{
 test('Malformed stored measurements cannot crash or overwrite the workbench',async({page})=>{
  const broken=JSON.stringify({favorites:[],measurements:[null]});
  await page.addInitScript(value=>localStorage.setItem('blackwire-workbench',value),broken);
- await page.goto('/');await expect(page.getByRole('heading',{name:/Know your board/})).toBeVisible();
+ await page.goto('/');await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();
  await page.getByRole('button',{name:'Power desk',exact:false}).first().click();await page.getByRole('tab',{name:'My measurements'}).click();
  expect(await page.evaluate(()=>localStorage.getItem('blackwire-workbench'))).toBe(broken);
  await expect(page.getByRole('heading',{name:'Something interrupted the workbench.'})).toHaveCount(0);

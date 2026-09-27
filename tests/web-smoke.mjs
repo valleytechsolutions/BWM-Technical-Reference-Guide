@@ -10,8 +10,8 @@ try{
  browser=await chromium.launch();const context=await browser.newContext({viewport:{width:1440,height:1000}});const page=await context.newPage();
  const errors=[],failed=[],requests=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)failed.push([r.status(),r.url()]);});page.on('request',r=>requests.push(r.url()));
- await page.goto(url);await expect(page.getByRole('heading',{name:/Know your board/})).toBeVisible();
- await expect(page.getByText('No installation needed',{exact:true})).toBeVisible();
+ await page.goto(url);await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();
+ await expect(page.locator('.page-meta').getByText('Browser',{exact:true})).toBeVisible();
  await page.waitForLoadState('networkidle');
  expect(requests.filter(u=>u.includes('/library/media/'))).toHaveLength(0);
  const initialBytes=await page.evaluate(()=>performance.getEntriesByType('resource').reduce((n,r)=>n+(r.decodedBodySize||0),0));
@@ -41,8 +41,8 @@ try{
  await expect(page.locator('.license-notices pre').nth(1)).toContainText('Creative Commons Attribution 4.0 International Public License');
  await page.route('**/embed-test',route=>route.fulfill({contentType:'text/html',body:`<h1>Store page integration test</h1><iframe title="BWM guide" src="${url}" style="width:100%;height:900px" sandbox="allow-scripts allow-same-origin allow-downloads allow-popups allow-popups-to-escape-sandbox"></iframe>`}));
  await page.goto('http://127.0.0.1:5187/embed-test');const frame=page.frameLocator('iframe');
- await expect(frame.getByRole('heading',{name:/Know your board/})).toBeVisible();await frame.getByRole('combobox',{name:'Search boards and references'}).fill('ESP32-C5');await expect(frame.locator('.board-card').first()).toBeVisible();
- await page.goto(url);await page.setViewportSize({width:390,height:844});await expect(page.getByRole('heading',{name:/Know your board/})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await expect(frame.getByRole('heading',{name:/Board library/})).toBeVisible();await frame.getByRole('combobox',{name:'Search boards and references'}).fill('ESP32-C5');await expect(frame.locator('.board-card').first()).toBeVisible();
+ await page.goto(url);await page.setViewportSize({width:390,height:844});await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  expect(errors).toEqual([]);expect(failed).toEqual([]);
  const report={passed:true,base,initialDecodedBytes:initialBytes,references:catalog.stats.referenceEntries,checks:['subpath assets','on-demand originals','dash search','image rendering','original download','browser bookmarks','direct board links','PDF pages','power desk','sandboxed embed','mobile layout','production CSP']};
  await fs.writeFile('data/qa/web/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));

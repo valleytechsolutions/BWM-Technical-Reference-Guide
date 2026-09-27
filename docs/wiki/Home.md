@@ -1,6 +1,6 @@
 # The Black Wire Maker's Technical Reference Guide
 
-Know your board. Make the connection.
+Board pinouts, manufacturer source files and power data. Every reference keeps its source, revision and review status.
 
 [Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases)
 
