@@ -26,6 +26,8 @@ Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-pa
 
 Windows packages remain unsigned. Users of 0.13 or earlier need this installer once to gain the updater. Download all originals inside the app before relying on complete offline access. No new verified macOS package is claimed.
 
+![Desktop application updates and persistent offline library](docs/screenshots/desktop-updates.png)
+
 ## Previous update / 0.13.0
 
 - Pinch, drag, double-tap, trackpad and keyboard controls for images and PDF pages, alongside the existing zoom buttons.

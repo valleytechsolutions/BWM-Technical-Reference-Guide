@@ -20,12 +20,13 @@ let executable=win?path.join(qa,'Installed app','Black Wire Technical Reference 
 async function install(file){if(win)await run(file,['/S',`/D=${path.dirname(executable)}`]);else if(mode==='deb')await run('sudo',['apt-get','install','-y','--allow-downgrades',file]);else{await fs.copyFile(file,executable);await fs.chmod(executable,0o755);}}
 const env={...process.env,BLACKWIRE_TEST_DATA:data};
 async function launch(expected){
- const app=await electron.launch({executablePath:executable,env,timeout:90000});
+ const app=await electron.launch({executablePath:executable,env,chromiumSandbox:true,timeout:90000});
  app.process().stdout?.on('data',b=>process.stdout.write(b));app.process().stderr?.on('data',b=>process.stderr.write(b));
  const page=await app.firstWindow();
  await expect(page.getByRole('heading',{name:'Board library',exact:true})).toBeVisible({timeout:90000});
  expect(await app.evaluate(({app})=>app.getVersion())).toBe(expected);
  expect(await page.evaluate(()=>typeof window.require)).toBe('undefined');
+ expect(await app.evaluate(({app})=>app.commandLine.hasSwitch('no-sandbox'))).toBe(false);
  await page.getByRole('button',{name:'Updates & offline library',exact:true}).click();
  await expect(page.getByRole('heading',{name:'Updates & offline library',exact:true})).toBeVisible();
  await expect.poll(()=>page.evaluate(()=>window.blackwire.maintenance().then(s=>s.library.scanning)),{timeout:120000}).toBe(false);
@@ -77,11 +78,15 @@ await expect(active.page.getByRole('button',{name:'Download update',exact:true})
 await active.page.getByRole('button',{name:'Download update',exact:true}).click();
 await expect(active.page.getByRole('button',{name:'Restart & update',exact:true})).toBeVisible({timeout:180000});
 await active.page.screenshot({path:`data/qa/${mode}-update-ready.png`});
+// The AppImage runtime wraps Electron. Explicitly detach the test inspector
+// when the app really quits so it cannot hold that wrapper open after update.
+// This observer does not request a quit or alter the installed updater.
+if(mode==='appimage')await active.app.evaluate(({app})=>app.once('will-quit',()=>process.getBuiltinModule('inspector').close()));
 const exited=new Promise(resolve=>active.app.once('close',resolve));
 await active.page.getByRole('button',{name:'Restart & update',exact:true}).click();
 let exitTimeout;
 try{await Promise.race([exited,new Promise((_,reject)=>{exitTimeout=setTimeout(()=>reject(Error('Updater did not close the previous app')),120000);})]);}
-catch(e){await active.page.screenshot({path:`data/qa/${mode}-install-failure.png`});console.log(await active.page.evaluate(()=>window.blackwire.maintenance()));throw e;}
+catch(e){if(!active.page.isClosed()){await active.page.screenshot({path:`data/qa/${mode}-install-failure.png`});console.log(await active.page.evaluate(()=>window.blackwire.maintenance()));}throw e;}
 finally{clearTimeout(exitTimeout);}
 // Allow the real installer and automatic relaunch to finish. Then reconnect
 // with Playwright by closing only this disposable runner's Black Wire process.
