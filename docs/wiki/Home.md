@@ -5,6 +5,8 @@ Board pinouts, manufacturer source files and power data. Every reference keeps i
 [Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases)
 
 - [Wiring & protocols](Wiring.md) — Original connection diagrams and practical guides.
+- [Zoom and pan a reference](reference-viewer.md) — Pinch, drag and use keyboard controls on original images and PDF pages.
+- [LoRa radios and GPIO devices](radio-and-gpio-references.md) — Match the radio module, carrier, region and board revision before using a connector reference.
 - [HaleHound and Elechouse hardware references](halehound-and-elechouse-hardware.md) — Find CYD assembly diagrams, exact NFC module variants and original connector documentation.
 - [Inland and manufacturer coverage](inland-and-manufacturer-coverage.md) — Match Inland SKUs and DFRobot variants, inspect the original diagrams and see what remains missing.
 - [New hardware and source checks](new-hardware-and-source-checks.md) — Find ESP-Mosaico, P4X boards and FPGA references while keeping availability, revisions and unresolved evidence visible.

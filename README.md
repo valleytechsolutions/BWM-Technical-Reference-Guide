@@ -13,11 +13,21 @@
 
 ## Open the reference workbench
 
-**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download Windows preview 0.11.0](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.12.0)**
+**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download Windows preview 0.13.0](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.13.0)**
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
-## New in 0.11.0
+## New in 0.13.0
+
+- Pinch, drag, double-tap, trackpad and keyboard controls for images and PDF pages, alongside the existing zoom buttons.
+- 34 additional board/module records, 12 enriched records and 104 reference attachments across RAKwireless, Heltec, Elecrow, Seeed, H4M Pro, ESP32-MDK, Hat Labs, LOLIN and REYAX.
+- Exact model/revision notes, 164 sourced pin-function rows and explicit documentation gaps. [Release notes and platform status](docs/RELEASE-0.13.0.md).
+
+## Previous update / 0.12.0
+
+Fifteen original connection guides cover RJ45 and telephone connectors, serial buses, debug interfaces and RFID/NFC, with SVG diagrams and matching wiki pages. [Wiring release notes](docs/RELEASE-0.12.0.md).
+
+## Previous update / 0.11.0
 
 - **HaleHound and Elechouse references:** 32 new listings, 106 reference attachments and 36 source-linked pin-purpose rows. Exact variants, original PDFs and unresolved source conflicts remain visible. [Coverage details](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.11.md).
 
