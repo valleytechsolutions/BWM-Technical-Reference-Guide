@@ -139,17 +139,15 @@ The power desk includes **13 sourced profiles and 22 published operating observa
 
 Check [Releases](https://github.com/valleytechsolutions/black-wire-desktop/releases) for the actual available assets and validation status. An absent platform asset means that platform has not been released.
 
-**Available now: [Windows x64 preview 0.10.0](https://github.com/valleytechsolutions/black-wire-desktop/releases/tag/v0.10.0).** Linux and macOS build targets are provided, but verified downloads for those systems have not been published. For images and PDFs without an application, use the separate [pinout collection releases](https://github.com/valleytechsolutions/black-wire-pinouts/releases); those ZIP files can be read on all three operating systems.
+**[Download release 0.14.0](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.14.0)**. For original images and PDFs without an application, use the separate [collection downloads](https://github.com/valleytechsolutions/black-wire-pinouts/releases).
 
-| Platform | Current status |
+| Platform | Package |
 |---|---|
-| Windows x64 | 0.10.0 unsigned preview, installer plus all matching offline-library ZIP parts. Browser and library checks cover this update; clean-machine installation and native launch validation of this build remain outstanding. |
-| Linux x64 / ARM64 | Packaging supported; native launch validation remains outstanding. |
-| macOS Intel / Apple Silicon | Build targets provided; a Mac, Developer ID signing and notarization are needed for a distributable release. No verified Mac binary is claimed. |
+| Windows x64 | Single setup EXE. Unsigned; operating-system reputation warnings remain possible. |
+| Linux x64 | DEB for Ubuntu/Debian desktops, plus AppImage. See release reports for tested environments. |
+| macOS Intel / Apple Silicon | Source/build targets remain available; no new verified Mac binary is included. |
 
-For Windows 0.10.0, download **the setup EXE and every `Black-Wire-Library-2026.09.10-part-XX.zip`** into the same folder. Leave all library ZIP parts unextracted and run the setup EXE from File Explorer. Setup verifies the matching library before updating an existing installation, then installs the app and offline references together. The library ZIP alone is not a portable application.
-
-Read [DOWNLOADS.md](docs/DOWNLOADS.md) for checksums, signing status and security warnings. A checksum checks download integrity; it does not replace a trusted publisher signature. Preview builds may still trigger Windows warnings.
+Install once, then use **Updates & offline library** for software updates and the complete offline collection. There are no separate library ZIP parts to place beside Windows setup. Bookmarks, measurements and downloaded references persist across updates. [Instructions, checksums and requirements](docs/DOWNLOADS.md).
 
 ## Browser edition for the Valleytech store
 

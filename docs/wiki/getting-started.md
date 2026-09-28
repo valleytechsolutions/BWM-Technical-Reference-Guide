@@ -25,7 +25,7 @@ Bookmark boards with Save board. The browser keeps favorites and measurements on
 
 ## Choose where to work
 
-The browser edition loads references as needed and requires an internet connection. The desktop edition bundles its library for offline use. Source links and this public wiki open online. Windows x64 is the currently published desktop platform; Linux and macOS downloads are not yet verified.
+The browser edition loads references as needed and requires an internet connection. The desktop edition includes search and previews; download the original references in Updates & offline library before relying on complete offline use. Source links and this public wiki open online. Windows x64 and Linux x64 packages are provided in release 0.14. macOS source remains available, without a new verified installer.
 
 
 

@@ -23,8 +23,8 @@ The package installs dependencies and an application-menu entry. In-app updates 
 **AppImage:** keep it in a writable folder, make it executable, then open it:
 
 ```sh
-chmod +x Black-Wire-0.14.0-linux-x64.AppImage
-./Black-Wire-0.14.0-linux-x64.AppImage
+chmod +x Black-Wire-0.14.0-linux-x86_64.AppImage
+./Black-Wire-0.14.0-linux-x86_64.AppImage
 ```
 
 AppImage needs FUSE 2 compatibility and a working Chromium sandbox. Prefer the DEB on Ubuntu 24.04, where AppArmor can restrict unregistered AppImages. Do not disable the sandbox or change system security settings to make it run. Other distributions need their own validation.

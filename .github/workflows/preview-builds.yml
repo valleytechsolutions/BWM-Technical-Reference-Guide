@@ -1,6 +1,12 @@
 name: Validate desktop installers and updates
 on:
   workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'Runner list as JSON; use the default for release validation'
+        default: '["windows-2022","windows-2025","ubuntu-22.04","ubuntu-24.04"]'
+        required: true
+        type: string
 permissions:
   contents: read
 jobs:
@@ -8,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2022, windows-2025, ubuntu-22.04, ubuntu-24.04]
+        os: ${{ fromJSON(inputs.platforms) }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 45
     env:
@@ -33,7 +39,14 @@ jobs:
           persist-credentials: false
       - run: npm install --global pnpm@11.19.0
       - run: pnpm install --frozen-lockfile
-      - run: node node_modules/electron/install.js
+      - name: Fetch Electron with bounded retries
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            node node_modules/electron/install.js && exit 0
+            sleep 5
+          done
+          exit 1
       - run: pnpm library:import
         env:
           BLACKWIRE_LIBRARY_ROOT: black-wire-pinouts/library
@@ -83,3 +96,11 @@ jobs:
             data/qa/installer-*.json
             data/qa/*-updates.png
             data/qa/*-ready.png
+      - name: Save native diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: desktop-diagnostics-${{ matrix.os }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: data/qa/
