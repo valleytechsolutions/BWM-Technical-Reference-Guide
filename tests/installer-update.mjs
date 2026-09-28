@@ -81,7 +81,7 @@ await active.page.screenshot({path:`data/qa/${mode}-update-ready.png`});
 // The AppImage runtime wraps Electron. Explicitly detach the test inspector
 // when the app really quits so it cannot hold that wrapper open after update.
 // This observer does not request a quit or alter the installed updater.
-if(mode==='appimage')await active.app.evaluate(({app})=>app.once('will-quit',()=>process.getBuiltinModule('inspector').close()));
+if(mode==='appimage')await active.app.evaluate(({app})=>{app.once('will-quit',()=>process.getBuiltinModule('inspector').close());});
 const exited=new Promise(resolve=>active.app.once('close',resolve));
 await active.page.getByRole('button',{name:'Restart & update',exact:true}).click();
 let exitTimeout;

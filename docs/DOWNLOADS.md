@@ -6,6 +6,8 @@ Download from the [official releases](https://github.com/valleytechsolutions/BWM
 
 Run **Black-Wire-0.14.0-windows-x64-setup.exe**. This is the only installer file you need; it creates Start menu and desktop shortcuts. Windows 10/11 x64 is the intended platform; release notes identify the exact native test environments.
 
+An installation for all users can request administrator approval during setup and future updates. Use your normal Windows account and your organization's installation policy.
+
 **Do not download old library ZIP parts for this installer.** Version 0.14 replaces their extraction step. Search, previews and wiring guides are included. Original diagrams and PDFs download inside the app.
 
 Users of 0.13 or earlier must install this version once to gain the updater. Setup preserves an older installed reference library before replacing the app. This first migration may need another 2.6 GB free while the library is copied. If preservation fails, setup stops before removing the old installation. Saved workbench data is separate.

@@ -16,7 +16,12 @@ class SafeAppImageUpdater extends AppImageUpdater{
    const fd=fs.openSync(temporary,'r');try{fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
    fs.renameSync(temporary,target);
   }finally{fs.rmSync(temporary,{force:true});}
-  if(options.isForceRunAfter)this.spawnLog(target,[],{...process.env,APPIMAGE_SILENT_INSTALL:'true'}).catch(e=>this.dispatchError(e));
+  if(options.isForceRunAfter){
+   // Launch after Electron has exited, releasing its single-instance lock and
+   // the old AppImage mount. Do not spawn a second mounted image during quit.
+   process.chdir(path.dirname(target));
+   require('electron').app.relaunch({execPath:target,args:[]});
+  }
   return true;
  }
 }
