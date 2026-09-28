@@ -7,6 +7,9 @@ const source=JSON.parse(await fs.readFile('data/library-source.json','utf8'));
 if(!/^[a-f0-9]{40}$/.test(source.commit))throw Error('A pinned collection commit is required');
 const names=JSON.parse(await fs.readFile('library/manifest.json','utf8'));
 const output=path.resolve('build/desktop-library');
+const expected=path.join(process.cwd(),'build','desktop-library');
+if(output!==expected)throw Error('Unexpected generated-library directory');
+await fs.rm(output,{recursive:true,force:true});
 await fs.mkdir(output,{recursive:true});
 const files=[];
 for(const name of names){

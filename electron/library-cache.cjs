@@ -28,7 +28,7 @@ class LibraryCache extends EventEmitter{
   return null;
  }
  async initialize(){
-  await fs.mkdir(this.root,{recursive:true});
+  try{await fs.mkdir(this.root,{recursive:true});}catch(e){this.scanning=false;throw e;}
   // Interrupted writes are never presented as available references.
   for(const n of await fs.readdir(this.root))if(/^[a-f0-9-]+\.partial$/.test(n))await fs.rm(path.join(this.root,n),{force:true});
   try{let n=0;for(const f of this.entries.values()){if(this.stopped)break;if(!this.ready.has(f.path))await this.local(f);if(++n%100===0)this.changed();}}
@@ -68,8 +68,9 @@ class LibraryCache extends EventEmitter{
   }
  }
  start(){
-  if(this.batch||this.scanning||this.stopped)return;
+  if(this.scanning||this.stopped)return;
   this.running=true;this.error='';this.changed();
+  if(this.batch)return;
   const todo=this.index.files.filter(f=>!this.ready.has(f.path));let cursor=0;
   const worker=async()=>{while(this.running&&cursor<todo.length){const f=todo[cursor++];try{await this.get(f.path);}catch(e){this.error=e.message;this.running=false;}}};
   this.batch=Promise.all(Array.from({length:4},worker)).finally(()=>{this.batch=null;this.running=false;this.changed();});

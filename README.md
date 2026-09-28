@@ -13,11 +13,20 @@
 
 ## Open the reference workbench
 
-**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download Windows preview 0.13.0](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.13.0)**
+**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download desktop release 0.14.0](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.14.0)**
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
-## New in 0.13.0
+## New in 0.14.0
+
+- **One Windows installer**, plus Linux DEB and AppImage packages. No separate library ZIP parts beside Windows setup.
+- **Updates inside Black Wire:** check, download, then restart when ready. Saved boards, measurements and downloaded references survive updates.
+- **A persistent offline library:** search and previews are included; original files download on demand or through Download offline library, with checksum verification and retry.
+- [Installation and offline setup](docs/DOWNLOADS.md) · [Release notes and native validation](docs/RELEASE-0.14.0.md).
+
+Windows packages remain unsigned. Users of 0.13 or earlier need this installer once to gain the updater. Download all originals inside the app before relying on complete offline access. No new verified macOS package is claimed.
+
+## Previous update / 0.13.0
 
 - Pinch, drag, double-tap, trackpad and keyboard controls for images and PDF pages, alongside the existing zoom buttons.
 - 34 additional board/module records, 12 enriched records and 104 reference attachments across RAKwireless, Heltec, Elecrow, Seeed, H4M Pro, ESP32-MDK, Hat Labs, LOLIN and REYAX.
@@ -84,7 +93,7 @@ Fifteen original connection guides cover RJ45 and telephone connectors, serial b
 - **Better discovery:** useful titles and descriptions, canonical links, social previews and a sitemap. GitHub wiki pages and issue templates make corrections and contributions easier.
 - **Useful edge-case fixes:** saved theme synchronization across tabs, a clear fallback when storage is blocked, and direct links to undocumented board records.
 
-The current collection is **2026.09.11**: 2,669 board/device listings and 575 maker listings, including families and shared records. A physical source is not an independently approved all-pin reference. [Coverage audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/PINOUT_COVERAGE.md).
+The current collection is **2026.09.13**: 2,703 board/device listings and 575 maker listings, including families and shared records. A physical source is not an independently approved all-pin reference. [Coverage audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/PINOUT_COVERAGE.md).
 
 ## Your board. Its pins. One place.
 

@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import {Download,RefreshCw,HardDrive,CheckCircle} from 'lucide-react';
 import './desktop-maintenance.css';
-const bytes=n=>`${(n/1024**3).toFixed(2)} GB`;
+const bytes=n=>`${(n/1024**3).toFixed(2)} GiB`;
 export default function DesktopMaintenance({status,refresh}){
  const [busy,setBusy]=useState(false),[error,setError]=useState('');
  if(!status)return <p role="status">Checking this installation…</p>;

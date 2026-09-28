@@ -1,73 +1,39 @@
-# Build and development
+# Build and validate Black Wire
 
-Use Node.js 24 and pnpm 11.19.0. Windows packaging also requires Python 3 (standard library only), available as `python`. Clone the two repositories as siblings:
+Use Node.js 24 and pnpm 11.19.0. Clone the app and collection as siblings. Release builds must use the collection commit in data/library-source.json.
 
 ```sh
-git clone https://github.com/valleytechsolutions/black-wire-desktop.git
-git clone https://github.com/valleytechsolutions/black-wire-pinouts.git
-cd black-wire-desktop
 pnpm install --frozen-lockfile
 node node_modules/electron/install.js
 pnpm library:import
+pnpm test
 pnpm build
+pnpm desktop:prepare
 pnpm start
 ```
 
-The importer checks each original reference against the catalog SHA-256 before copying it. `BLACKWIRE_LIBRARY_ROOT` can point to a different collection's `library` directory. Building and using the finished application does not fetch board references from the internet. The snapshot commit used by release builds is recorded in `data/library-source.json`.
+BLACKWIRE_LIBRARY_ROOT can select the pinned collection's library directory. Import verifies original hashes. desktop:prepare creates a SHA-256/size index and bundles browsing assets. Originals are served from the persistent cache, an existing local library, or a verified download. The fallback source is an exact pinned Git commit.
 
-```sh
-pnpm test
-pnpm exec playwright install chromium
-pnpm test:ui
-pnpm build:web
-pnpm test:makers
-node scripts/verify-library.mjs
-```
+## Native packages
 
-For renderer development, `pnpm dev` runs Vite on localhost. Browser workbench storage is separate from desktop storage.
+Run pnpm dist:win, pnpm dist:linux or pnpm dist:mac on the corresponding OS. Windows produces one NSIS installer, without external ZIP parts. Linux produces x64 DEB and AppImage packages. macOS targets require separate signing, notarization and native validation. Use a short Windows checkout path to avoid NSIS/pnpm include-path limits.
 
-## Native preview packages
+The Windows customInit hook preserves a legacy resources/library before the old uninstaller runs. Current references live outside the installation directory. AppImage replacement flushes a same-directory temporary file before atomic replacement. DEB updates call the package manager with argument arrays and normal repository signature checks.
 
-Run on the matching OS. Windows supports the NSIS installer, Linux AppImage/tar.gz, and macOS DMG/ZIP for Intel and Apple Silicon.
+electron-updater is a locked production dependency. Packaged app-update.yml selects this project's GitHub feed. Renderer IPC cannot supply update URLs, paths or arbitrary commands. Do not disable signature checks or enable development feeds in published builds.
 
-```sh
-pnpm dist:win
-pnpm dist:linux
-pnpm dist:mac
-```
+## Native release gate
 
-The default Windows/Mac configuration is explicitly an **unsigned workshop preview**. Linux/macOS native validation is still required; source compatibility is not proof of platform testing. The CI workflow builds unsigned preview artifacts for native validation, not automatic public stable releases.
+Run **Validate desktop installers and updates** (preview-builds.yml) on the candidate branch. It installs real packages on disposable native runners, tests a lower QA-only build upgrading to the candidate, and retains tested release artifacts. Never upload the lower QA package to Releases.
 
-Windows builds create a small installer and `release/<version>/Black-Wire-Library-<snapshot>-part-XX.zip`. Distribute the installer and every ZIP part together, with SHA256SUMS.txt. The generated `build/library-package.nsh` binds the installer to every exact archive hash; regenerate and rebuild the installer whenever the library changes. The archive contains only manifest-listed library files. For testing the unpacked Windows app, copy `library` to its `resources/library` directory after packaging; the distributed installer performs this extraction itself.
+tests/installer-update.mjs refuses to run outside CI because it installs packages. Tests cover fresh install, native launch, image/PDF checksums, failed checks, real updater download/install/relaunch, saved data, cache reuse and Windows legacy migration. Source tests cover corruption, truncation, pinned fallback, restart reuse and updater state transitions. Browser regression is separate.
 
-On Windows, `node tests/electron-smoke.mjs --packaged` checks the packaged app using isolated test data. Set `BLACKWIRE_PACKAGED_DIR` for an output directory other than `release/win-unpacked`.
+Publish the exact successful artifacts, not a later rebuild. Attach the Windows installer and blockmap, Linux DEB/AppImage, latest.yml, latest-linux.yml and SHA256SUMS.txt. Both Linux packages must appear in Linux metadata. Verify uploaded hashes before publishing the draft as a normal release. Future releases need the metadata files or installed clients cannot update. Keep older releases immutable.
 
-## Signed distribution
+## Signing and other destinations
 
-The separate `electron-builder.signed.cjs` configuration enables required signing and fails if signing credentials are absent. Supply `CSC_LINK` and `CSC_KEY_PASSWORD` securely through the local environment or CI secrets. The Windows publisher identity must match the certificate.
+Default Windows builds are unsigned; disclose this. The requested normal-release designation does not imply signing. electron-builder.signed.cjs requires CSC_LINK and CSC_KEY_PASSWORD; macOS additionally requires the Apple variables named there. Do not commit certificates, tokens, secrets or workbench backups. Real-certificate signing is not yet validated.
 
-```sh
-pnpm dist:signed:win
-pnpm dist:signed:mac
-```
+pnpm build:web generates the browser app and wiki, without desktop updater/cache files. Publish only web-release through the existing workflow. pnpm wiki:docs generates GitHub wiki material. See [maintenance](MAINTENANCE.md) and [website integration](WEBSITE.md).
 
-Mac builds also require `APPLE_API_KEY`, `APPLE_API_KEY_ID` and `APPLE_API_ISSUER`, an appropriate Developer ID certificate and notarization access. Never commit a PFX/P12, API key, certificate password, token or personal workbench backup. Signed configuration is prepared but has not been validated with real certificates.
-
-Verify Authenticode signatures on the Windows app and installer; on macOS verify codesign, notarization and stapling, then test a downloaded build on clean systems. See DOWNLOADS.md. Do not publish a stable release until native launch and signing/notarization checks pass.
-
-The older `catalog` and `create-power-data` scripts support the original collection workspace layout. For these separated repositories, use `library:import`; the full original research workspace is not required.
-
-## Browser / Shopify edition
-
-Use `pnpm build:web` and `pnpm test:web` for the browser edition. [Website integration](WEBSITE.md) explains static hosting and embedding the guide in the Valleytech store. The browser build is independent of the native Windows installer.
-
-On Windows, use a short checkout path (for example, `C:\src\black-wire-desktop`). NSIS can reject long template include paths inside pnpm's dependency store even when Node can read those files.
-
-
-Maker catalog maintenance: edit the collection repository's `catalog/maker-parts.json`, run `python tools/build-maker-index.py` and then `python tools/rebuild-indexes.py`. Pin the resulting collection commit before importing. Manufacturer documentation records are not complete physical pinout approvals.
-
-On Windows, NSIS may reject long pnpm template paths. Use a short checkout path for release builds; this is a build-path constraint, not a reason to change OS security settings.
-
-Run `node scripts/audit-search.mjs` after importing a catalog to check every listing name and separator variant. `node scripts/benchmark-search.mjs` measures search-function timing. Set `BLACKWIRE_PREVIEW_PORT` to use a separate local browser-storage origin for QA.
-
-Multipart packaging regression tests: `python tests/test_offline_packages.py`. Each archive is independently extractable; no concatenation is required. Every member is included once. Native preflight must reject a missing or changed later part before changing an existing install.
+The older package-library.py and ZIP NSIS scripts remain for historical/collection regression; they are not in the current Windows installer path. Never regenerate older published releases.

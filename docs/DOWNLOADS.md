@@ -1,44 +1,64 @@
-# Downloads, integrity and security warnings
+# Install and update Black Wire
 
-Use the assets attached to a tagged [GitHub release](https://github.com/valleytechsolutions/black-wire-desktop/releases), not the automatic source ZIP as an installer. Match your OS and CPU architecture. Release notes must state the tested platforms and whether each artifact is signed.
+Download from the [official releases](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/latest). GitHub's automatic source ZIP is not an installer.
 
-## Current workbench preview / 0.10.0
+## Windows x64
 
-Windows x64 installer, **unsigned**, with collection snapshot 2026.09.10 and 551 maker intake records. Library integrity and browser checks passed. Native launch and clean-machine installation of this build, code signing and new Linux/macOS binaries are not claimed for this preview.
+Run **Black-Wire-0.14.0-windows-x64-setup.exe**. This is the only installer file you need; it creates Start menu and desktop shortcuts. Windows 10/11 x64 is the intended platform; release notes identify the exact native test environments.
 
-## Windows
+**Do not download old library ZIP parts for this installer.** Version 0.14 replaces their extraction step. Search, previews and wiring guides are included. Original diagrams and PDFs download inside the app.
 
-Download the setup EXE and **every Black-Wire-Library-2026.09.10-part-XX.zip** from the same release into the same folder. Keep all ZIP parts unextracted. Run the setup EXE; it checks the SHA-256 of every part before replacing an existing app, then extracts the library locally. Setup creates per-user Start menu/desktop shortcuts. Missing or changed archives stop installation with a clear error. Allow approximately 6 GB of free space for the downloads, installed files and temporary installer data. The library ZIP is content, not a portable app. Launch from File Explorer or the installed shortcut; a browser's local directory page is not an application launcher.
+Users of 0.13 or earlier must install this version once to gain the updater. Setup preserves an older installed reference library before replacing the app. This first migration may need another 2.6 GB free while the library is copied. If preservation fails, setup stops before removing the old installation. Saved workbench data is separate.
 
-Workshop previews are unsigned. Packaging and HTTPS downloads cannot guarantee that Windows will trust a new executable. For public distribution, use a trusted Authenticode certificate/cloud signing service and a consistent publisher identity, timestamp signatures, and verify both the installer and application. New signed builds can still receive SmartScreen reputation warnings. A Microsoft Store distribution is another route to evaluate; it is not configured here.
+## Linux x64
 
-Do not disable Defender, SmartScreen, Internet security zones or organizational policies to install this guide. If Windows blocks a download, record the exact dialog and verify its origin, signature and checksum before deciding what to do. The prior local browser/Explorer warning has not been conclusively diagnosed.
+**Ubuntu/Debian desktop: prefer the DEB.** Open it with your package manager, or run:
 
-## macOS and Linux
+```sh
+sudo apt install ./Black-Wire-0.14.0-linux-amd64.deb
+```
 
-macOS distribution requires Developer ID signing and Apple notarization. A local unsigned build is not equivalent to a signed/notarized release. Linux packages need correct executable permissions, desktop runtime dependencies and native testing on supported distributions.
+The package installs dependencies and an application-menu entry. In-app updates use the system package manager and may request administrator authentication through PolicyKit. A desktop PolicyKit authentication agent is required unless the account has passwordless sudo. Do not run the app as root.
 
-## Verify the download
+**AppImage:** keep it in a writable folder, make it executable, then open it:
 
-Compare the downloaded file's SHA-256 to the `SHA256SUMS.txt` attached to the **same release**:
+```sh
+chmod +x Black-Wire-0.14.0-linux-x64.AppImage
+./Black-Wire-0.14.0-linux-x64.AppImage
+```
+
+AppImage needs FUSE 2 compatibility and a working Chromium sandbox. Prefer the DEB on Ubuntu 24.04, where AppArmor can restrict unregistered AppImages. Do not disable the sandbox or change system security settings to make it run. Other distributions need their own validation.
+
+## Prepare for offline use
+
+Open **Updates & offline library → Download offline library**. The complete collection occupies about 2.6 GB; allow at least 4 GB free for the app, references and update workspace, plus space for the installer download and any legacy migration.
+
+Browse while it downloads. Pause or close the app at any time; completed files remain available and are reused on retry. **Wait for “Ready for offline use” before relying on the complete collection without internet.** Individual originals also download when opened online. Manufacturer website links still require internet.
+
+## Updates inside Black Wire
+
+1. Open **Updates & offline library → Check for updates**.
+2. Choose **Download update**.
+3. Choose **Restart & update** when ready.
+
+The app also checks after launch and periodically while open. It never installs merely because you close it. Bookmarks, measurements and verified originals live outside the app installation and survive updates. Changed collection snapshots download missing/changed files; unchanged files are reused. Old cached references are retained, so disk usage can grow.
+
+If a download fails, check connectivity, disk space and permissions, then retry. If Linux authentication is cancelled, retry the update. Export a workbench backup from About before moving computers.
+
+## Signing and checksums
+
+This normal release's Windows package is **unsigned**. A normal GitHub release does not establish publisher trust; Windows may still show a reputation warning. No signing certificate has been purchased or configured. Do not disable Defender, SmartScreen or organizational security policies.
+
+Compare the download to SHA256SUMS.txt from the same release:
 
 ```powershell
-Get-FileHash -Algorithm SHA256 -LiteralPath '.\Black-Wire-0.10.0-windows-x64-setup.exe'
+Get-FileHash -Algorithm SHA256 -LiteralPath '.\Black-Wire-0.14.0-windows-x64-setup.exe'
 ```
 
 ```sh
-sha256sum -c SHA256SUMS.txt
-# macOS: shasum -a 256 <downloaded-file>
+sha256sum -c SHA256SUMS.txt --ignore-missing
 ```
 
-Checksums detect changed bytes; they do not establish publisher identity. Never mark an unsigned file as signed based on a matching hash.
+Update files have checksum verification; references are verified against the app's pinned SHA-256 index. Checksums do not substitute for publisher signing. macOS source remains available, but **no newly validated macOS installer is included**. Earlier releases remain unchanged.
 
-## Maintainer release checklist
-
-1. Pin the collection commit and run library integrity checks, unit tests, browser tests and native desktop checks.
-2. Build on native hosts. Use the signed configuration for public signed Windows/macOS releases.
-3. Verify signatures and notarization; test downloaded installers/archives on clean systems.
-4. Generate SHA-256 checksums from the final distributable bytes, after signing.
-5. Attach binaries and checksums to a tagged release with truthful platform/signing status. Keep each GitHub release asset below 2 GiB; publish every matching ZIP part together.
-
-Sources checked September 2026: [Microsoft SmartScreen reputation for developers](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation), [Electron code signing](https://www.electronjs.org/docs/latest/tutorial/code-signing), [Apple notarization](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution), [GitHub release limits](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases).
+[Release notes](RELEASE-0.14.0.md) · [Build instructions](BUILDING.md) · [Updater supported targets](https://www.electron.build/v26/docs/features/auto-update/)

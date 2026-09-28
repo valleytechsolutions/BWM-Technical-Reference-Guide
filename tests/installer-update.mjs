@@ -12,6 +12,7 @@ const mode=process.argv.includes('--appimage')?'appimage':win?'windows':'deb';
 const output=path.resolve(win?`release/${version}`:'release');
 const qa=path.join(os.tmpdir(),`blackwire-native-${mode}`),data=path.join(qa,'user-data');
 await fs.mkdir(qa,{recursive:true});
+await fs.mkdir('data/qa',{recursive:true});
 const suffix=mode==='windows'?'-setup.exe':mode==='deb'?'.deb':'.AppImage';
 async function asset(dir){const names=(await fs.readdir(dir)).filter(n=>n.endsWith(suffix));if(names.length!==1)throw Error(`Expected one ${suffix} package in ${dir}`);return path.join(dir,names[0]);}
 function run(command,args=[]){return new Promise((resolve,reject)=>{const child=spawn(command,args,{stdio:'inherit',windowsHide:true});child.on('error',reject);child.on('exit',code=>code===0?resolve():reject(Error(`${path.basename(command)} exited ${code}`)));});}
@@ -42,7 +43,7 @@ for(const ref of [image,pdf]){
 }
 const before=await fs.readdir(path.join(data,'reference-cache'));
 expect(before.length).toBeGreaterThan(0);
-await active.page.screenshot({path:path.join(qa,'installed-updates.png')});
+await active.page.screenshot({path:`data/qa/${mode}-installed-updates.png`});
 await active.app.close();
 
 // The baseline is the same code packaged as a lower QA-only version. It is
@@ -65,7 +66,7 @@ const server=http.createServer(async(req,res)=>{
 });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const feed=`http://127.0.0.1:${server.address().port}/`;
-await active.app.evaluate(({app},url)=>{const updater=require(require('node:path').join(app.getAppPath(),'electron/desktop-updater.cjs')).desktopUpdater();updater.setFeedURL({provider:'generic',url});},feed);
+await active.app.evaluate(({app},url)=>{const require=process.getBuiltinModule('module').createRequire(app.getAppPath()+'/package.json');const updater=require(require('node:path').join(app.getAppPath(),'electron/desktop-updater.cjs')).desktopUpdater();updater.setFeedURL({provider:'generic',url});},feed);
 await active.page.getByRole('button',{name:'Check for updates',exact:true}).click();
 await expect(active.page.getByRole('alert')).toContainText('could not complete',{timeout:60000});
 failFeed=false;
@@ -73,7 +74,7 @@ await active.page.getByRole('button',{name:'Check for updates',exact:true}).clic
 await expect(active.page.getByRole('button',{name:'Download update',exact:true})).toBeVisible({timeout:60000});
 await active.page.getByRole('button',{name:'Download update',exact:true}).click();
 await expect(active.page.getByRole('button',{name:'Restart & update',exact:true})).toBeVisible({timeout:180000});
-await active.page.screenshot({path:path.join(qa,'update-ready.png')});
+await active.page.screenshot({path:`data/qa/${mode}-update-ready.png`});
 const exited=new Promise(resolve=>active.app.once('close',resolve));
 await active.page.getByRole('button',{name:'Restart & update',exact:true}).click();
 await Promise.race([exited,new Promise((_,reject)=>setTimeout(()=>reject(Error('Updater did not close the previous app')),120000))]);
@@ -87,7 +88,7 @@ expect(await active.page.evaluate(()=>window.blackwire.loadState())).toEqual(sav
 for(const name of before)expect(await fs.stat(path.join(data,'reference-cache',name)).then(s=>s.size)).toBeGreaterThan(0);
 if(win){const preserved=path.join(process.env.LOCALAPPDATA,'BlackWire','legacy-library',image.file);expect(createHash('sha256').update(await fs.readFile(preserved)).digest('hex')).toBe(image.hash);}
 // The cached original remains usable with network downloads refused.
-await active.app.evaluate(({app})=>{const mod=require(require('node:path').join(app.getAppPath(),'electron/library-cache.cjs'));mod.LibraryCache.prototype.download=async()=>{throw Error('Offline test');};});
+await active.app.evaluate(({app})=>{const require=process.getBuiltinModule('module').createRequire(app.getAppPath()+'/package.json');const mod=require(require('node:path').join(app.getAppPath(),'electron/library-cache.cjs'));mod.LibraryCache.prototype.download=async()=>{throw Error('Offline test');};});
 const cached=await active.page.evaluate(async file=>Array.from(new Uint8Array(await (await fetch('/library/'+file)).arrayBuffer())),image.file);
 expect(createHash('sha256').update(Buffer.from(cached)).digest('hex')).toBe(image.hash);
 await active.app.close();server.close();
