@@ -19,7 +19,7 @@
     "test:ui": "playwright test",
     "desktop:prepare": "node scripts/prepare-desktop-library.mjs",
     "dist:win": "pnpm build && pnpm desktop:prepare && electron-builder --config electron-builder.windows.cjs --win nsis --x64",
-    "dist:linux": "pnpm build && pnpm desktop:prepare && electron-builder --linux AppImage deb --x64",
+    "dist:linux": "pnpm build && pnpm desktop:prepare && electron-builder --linux deb --x64",
     "dist:mac": "pnpm build && pnpm desktop:prepare && electron-builder --mac zip dmg --x64 --arm64",
     "test:desktop": "node tests/electron-smoke.mjs",
     "library:import": "node scripts/import-library.mjs",
@@ -78,7 +78,6 @@
     },
     "linux": {
       "target": [
-        "AppImage",
         "deb"
       ],
       "category": "Education",
@@ -94,7 +93,14 @@
       "icon": "build/icon.icns",
       "identity": null
     },
-    "publish": [{"provider":"github","owner":"valleytechsolutions","repo":"BWM-Technical-Reference-Guide","releaseType":"release"}],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "valleytechsolutions",
+        "repo": "BWM-Technical-Reference-Guide",
+        "releaseType": "release"
+      }
+    ],
     "artifactName": "Black-Wire-${version}-${os}-${arch}.${ext}",
     "nsis": {
       "oneClick": false,

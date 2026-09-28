@@ -8,16 +8,16 @@ import {spawn} from 'node:child_process';
 import {createHash} from 'node:crypto';
 if(process.env.CI!=='true')throw Error('Installer integration tests require a disposable CI runner');
 const win=process.platform==='win32',version=JSON.parse(await fs.readFile('package.json','utf8')).version;
-const mode=process.argv.includes('--appimage')?'appimage':win?'windows':'deb';
+const mode=win?'windows':'deb';
 const output=path.resolve(win?`release/${version}`:'release');
 const qa=path.join(os.tmpdir(),`blackwire-native-${mode}`),data=path.join(qa,'user-data');
 await fs.mkdir(qa,{recursive:true});
 await fs.mkdir('data/qa',{recursive:true});
-const suffix=mode==='windows'?'-setup.exe':mode==='deb'?'.deb':'.AppImage';
+const suffix=win?'-setup.exe':'.deb';
 async function asset(dir){const names=(await fs.readdir(dir)).filter(n=>n.endsWith(suffix));if(names.length!==1)throw Error(`Expected one ${suffix} package in ${dir}`);return path.join(dir,names[0]);}
 function run(command,args=[]){return new Promise((resolve,reject)=>{const child=spawn(command,args,{stdio:'inherit',windowsHide:true});child.on('error',reject);child.on('exit',code=>code===0?resolve():reject(Error(`${path.basename(command)} exited ${code}`)));});}
-let executable=win?path.join(qa,'Installed app','Black Wire Technical Reference Guide.exe'):mode==='deb'?'/usr/bin/black-wire-technical-reference-guide':path.join(qa,'Black-Wire.AppImage');
-async function install(file){if(win)await run(file,['/S',`/D=${path.dirname(executable)}`]);else if(mode==='deb')await run('sudo',['apt-get','install','-y','--allow-downgrades',file]);else{await fs.copyFile(file,executable);await fs.chmod(executable,0o755);}}
+let executable=win?path.join(qa,'Installed app','Black Wire Technical Reference Guide.exe'):'/usr/bin/black-wire-technical-reference-guide';
+async function install(file){if(win)await run(file,['/S',`/D=${path.dirname(executable)}`]);else await run('sudo',['apt-get','install','-y','--allow-downgrades',file]);}
 const env={...process.env,BLACKWIRE_TEST_DATA:data};
 async function launch(expected){
  const app=await electron.launch({executablePath:executable,env,chromiumSandbox:true,timeout:90000});
@@ -78,10 +78,6 @@ await expect(active.page.getByRole('button',{name:'Download update',exact:true})
 await active.page.getByRole('button',{name:'Download update',exact:true}).click();
 await expect(active.page.getByRole('button',{name:'Restart & update',exact:true})).toBeVisible({timeout:180000});
 await active.page.screenshot({path:`data/qa/${mode}-update-ready.png`});
-// The AppImage runtime wraps Electron. Explicitly detach the test inspector
-// when the app really quits so it cannot hold that wrapper open after update.
-// This observer does not request a quit or alter the installed updater.
-if(mode==='appimage')await active.app.evaluate(({app})=>{app.once('will-quit',()=>process.getBuiltinModule('inspector').close());});
 const exited=new Promise(resolve=>active.app.once('close',resolve));
 await active.page.getByRole('button',{name:'Restart & update',exact:true}).click();
 let exitTimeout;
@@ -92,7 +88,7 @@ finally{clearTimeout(exitTimeout);}
 // with Playwright by closing only this disposable runner's Black Wire process.
 await new Promise(r=>setTimeout(r,45000));
 if(win)await run('taskkill',['/F','/IM','Black Wire Technical Reference Guide.exe']);
-else await run('pkill',['-f',mode==='deb'?'^/opt/Black Wire Technical Reference Guide/black-wire-technical-reference-guide':'^/tmp/\.mount_.*/black-wire-technical-reference-guide']);
+else await run('pkill',['-f','^/opt/Black Wire Technical Reference Guide/black-wire-technical-reference-guide']);
 active=await launch(version);
 expect(await active.page.evaluate(()=>window.blackwire.loadState())).toEqual(saved);
 for(const name of before)expect(await fs.stat(path.join(data,'reference-cache',name)).then(s=>s.size)).toBeGreaterThan(0);

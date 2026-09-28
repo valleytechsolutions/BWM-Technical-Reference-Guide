@@ -59,7 +59,7 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb libnss3 libgtk-3-0 libgbm1 libfuse2
+          sudo apt-get install -y xvfb libnss3 libgtk-3-0 libgbm1
       - name: Build release and older updater fixture
         shell: bash
         run: |
@@ -67,8 +67,8 @@ jobs:
             pnpm exec electron-builder --config electron-builder.windows.cjs --win nsis --x64 --publish never
             pnpm exec electron-builder --config electron-builder.windows.cjs --win nsis --x64 --config.extraMetadata.version=0.13.99 --config.directories.output=qa-build --publish never
           else
-            pnpm exec electron-builder --linux deb AppImage --x64 --publish never
-            pnpm exec electron-builder --linux deb AppImage --x64 --config.extraMetadata.version=0.13.99 --config.directories.output=qa-build --publish never
+            pnpm exec electron-builder --linux deb --x64 --publish never
+            pnpm exec electron-builder --linux deb --x64 --config.extraMetadata.version=0.13.99 --config.directories.output=qa-build --publish never
           fi
       - name: Windows fresh install and in-app upgrade
         if: runner.os == 'Windows'
@@ -76,9 +76,6 @@ jobs:
       - name: Linux DEB fresh install and in-app upgrade
         if: runner.os == 'Linux'
         run: xvfb-run -a node tests/installer-update.mjs
-      - name: Linux AppImage launch and in-app upgrade
-        if: matrix.os == 'ubuntu-22.04'
-        run: xvfb-run -a node tests/installer-update.mjs --appimage
       - name: Save tested release assets
         uses: actions/upload-artifact@v7
         with:
@@ -91,7 +88,6 @@ jobs:
             release/*/*.blockmap
             release/*/latest.yml
             release/*.deb
-            release/*.AppImage
             release/latest-linux.yml
             data/qa/installer-*.json
             data/qa/*-updates.png

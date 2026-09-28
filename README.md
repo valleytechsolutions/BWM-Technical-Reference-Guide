@@ -19,7 +19,7 @@ Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-pa
 
 ## New in 0.14.0
 
-- **One Windows installer**, plus Linux DEB and AppImage packages. No separate library ZIP parts beside Windows setup.
+- **One Windows installer**, plus Linux DEB packages. No separate library ZIP parts beside Windows setup.
 - **Updates inside Black Wire:** check, download, then restart when ready. Saved boards, measurements and downloaded references survive updates.
 - **A persistent offline library:** search and previews are included; original files download on demand or through Download offline library, with checksum verification and retry.
 - [Installation and offline setup](docs/DOWNLOADS.md) · [Release notes and native validation](docs/RELEASE-0.14.0.md).
@@ -146,7 +146,7 @@ Check [Releases](https://github.com/valleytechsolutions/black-wire-desktop/relea
 | Platform | Package |
 |---|---|
 | Windows x64 | Single setup EXE. Unsigned; operating-system reputation warnings remain possible. |
-| Linux x64 | DEB for Ubuntu/Debian desktops, plus AppImage. See release reports for tested environments. |
+| Linux x64 | DEB for Ubuntu/Debian desktops. See release reports for tested environments. |
 | macOS Intel / Apple Silicon | Source/build targets remain available; no new verified Mac binary is included. |
 
 Install once, then use **Updates & offline library** for software updates and the complete offline collection. There are no separate library ZIP parts to place beside Windows setup. Bookmarks, measurements and downloaded references persist across updates. [Instructions, checksums and requirements](docs/DOWNLOADS.md).

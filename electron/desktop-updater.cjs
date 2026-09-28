@@ -1,30 +1,8 @@
 const fs=require('node:fs');
 const path=require('node:path');
-const {randomUUID}=require('node:crypto');
 const {spawnSync}=require('node:child_process');
-const {AppImageUpdater,DebUpdater}=require('electron-updater');
+const {DebUpdater}=require('electron-updater');
 
-// Keep replacement on the same filesystem, and retain the working AppImage
-// until the complete replacement has been flushed. Upstream uses unlink + mv.
-class SafeAppImageUpdater extends AppImageUpdater{
- doInstall(options){
-  const target=process.env.APPIMAGE;
-  if(!target||!path.isAbsolute(target)||!this.installerPath)throw Error('An installed AppImage is required');
-  const temporary=path.join(path.dirname(target),`.blackwire-update-${randomUUID()}`);
-  try{
-   fs.copyFileSync(this.installerPath,temporary,fs.constants.COPYFILE_EXCL);fs.chmodSync(temporary,0o755);
-   const fd=fs.openSync(temporary,'r');try{fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
-   fs.renameSync(temporary,target);
-  }finally{fs.rmSync(temporary,{force:true});}
-  if(options.isForceRunAfter){
-   // Launch after Electron has exited, releasing its single-instance lock and
-   // the old AppImage mount. Do not spawn a second mounted image during quit.
-   process.chdir(path.dirname(target));
-   require('electron').app.relaunch({execPath:target,args:[]});
-  }
-  return true;
- }
-}
 class SafeDebUpdater extends DebUpdater{
  get installerPath(){return this.downloadedUpdateHelper?.file||null;}
  doInstall(options){
@@ -53,8 +31,7 @@ let singleton;
 function desktopUpdater(){
  if(singleton)return singleton;
  if(process.platform==='linux'){
-  if(process.env.APPIMAGE)singleton=new SafeAppImageUpdater();
-  else if(fs.existsSync(path.join(process.resourcesPath,'package-type')))singleton=new SafeDebUpdater();
+  if(!process.env.APPIMAGE&&fs.existsSync(path.join(process.resourcesPath,'package-type')))singleton=new SafeDebUpdater();
  }
  return singleton||(singleton=require('electron-updater').autoUpdater);
 }

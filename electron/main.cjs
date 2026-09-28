@@ -43,7 +43,7 @@ app.whenReady().then(async()=>{
  cache=new LibraryCache({index,root:path.join(app.getPath('userData'),'reference-cache'),seed:path.join(bundle,'seed'),legacy:[library,...(process.platform==='win32'&&process.env.LOCALAPPDATA?[path.join(process.env.LOCALAPPDATA,'BlackWire','legacy-library')]:[])]});
  cache.initialize().catch(()=>{cache.error='The offline library could not be scanned. Check disk space and permissions, then reopen the app.';cache.changed();});
  const autoUpdater=require('./desktop-updater.cjs').desktopUpdater();
- const supported=app.isPackaged&&(process.platform==='win32'||(process.platform==='linux'&&(process.env.APPIMAGE||await fs.access(path.join(process.resourcesPath,'package-type')).then(()=>true,()=>false))));
+ const supported=app.isPackaged&&(process.platform==='win32'||(process.platform==='linux'&&(!process.env.APPIMAGE&&await fs.access(path.join(process.resourcesPath,'package-type')).then(()=>true,()=>false))));
  updates=new Updates({updater:autoUpdater,version:app.getVersion(),supported:!!supported,beforeInstall:async()=>{await writeQueue;if(saveFailure)throw Error('The workbench must be saved before installing an update');cache.pause();}});
  protocol.handle('blackwire',async request=>{
    try{

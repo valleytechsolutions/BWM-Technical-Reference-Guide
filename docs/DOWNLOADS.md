@@ -22,14 +22,7 @@ sudo apt install ./Black-Wire-0.14.0-linux-amd64.deb
 
 The package installs dependencies and an application-menu entry. In-app updates use the system package manager and may request administrator authentication through PolicyKit. A desktop PolicyKit authentication agent is required unless the account has passwordless sudo. Do not run the app as root.
 
-**AppImage:** keep it in a writable folder, make it executable, then open it:
-
-```sh
-chmod +x Black-Wire-0.14.0-linux-x86_64.AppImage
-./Black-Wire-0.14.0-linux-x86_64.AppImage
-```
-
-AppImage needs FUSE 2 compatibility and a working Chromium sandbox. Prefer the DEB on Ubuntu 24.04, where AppArmor can restrict unregistered AppImages. Do not disable the sandbox or change system security settings to make it run. Other distributions need their own validation.
+AppImage is not included in 0.14.0: its automatic restart did not pass validation. Other Linux distributions and package types need separate native testing. Do not disable the Chromium sandbox or change system security settings.
 
 ## Prepare for offline use
 
