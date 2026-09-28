@@ -7,7 +7,7 @@
 <p align="center">Makers · Educators · Students · Hobbyists · Engineers</p>
 
 <p align="center"><a href="https://github.com/valleytechsolutions/black-wire-desktop/releases">Downloads & release status</a> · <a href="https://github.com/valleytechsolutions/black-wire-pinouts">Browse the pinout collection</a> · <a href="docs/BUILDING.md">Build the app</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
-<p align="center"><img alt="Edition" src="https://img.shields.io/badge/edition-First_Edition_2026-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Offline" src="https://img.shields.io/badge/reference_library-offline-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Platforms" src="https://img.shields.io/badge/targets-Windows_%7C_Linux_%7C_macOS-d9b872?style=flat-square&labelColor=0a0808"></p>
+<p align="center"><img alt="Edition" src="https://img.shields.io/badge/edition-First_Edition_2026-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Offline" src="https://img.shields.io/badge/reference_library-offline-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Platforms" src="https://img.shields.io/badge/packages-Windows_%7C_Linux_DEB-d9b872?style=flat-square&labelColor=0a0808"></p>
 
 ![Inland ESP32 original pinout in the Black Wire guide](docs/screenshots/inland-reference.png)
 
