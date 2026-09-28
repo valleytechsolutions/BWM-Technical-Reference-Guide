@@ -29,3 +29,5 @@ Black-Wire-workbench*.json
 build/library-package.nsh
 __pycache__/
 *.pyc
+build/desktop-library/
+qa-build/

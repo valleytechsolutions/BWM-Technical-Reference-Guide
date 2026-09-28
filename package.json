@@ -1,7 +1,7 @@
 {
   "name": "black-wire-technical-reference-guide",
   "productName": "Black Wire Technical Reference Guide",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "An offline workbench for board pinouts, manufacturer references and power data.",
   "author": {
     "name": "Kal / Valleytech Solutions",
@@ -17,13 +17,14 @@
     "start": "electron .",
     "test": "node --test tests/*.test.mjs",
     "test:ui": "playwright test",
-    "dist:win": "pnpm build && python scripts/package-library.py && electron-builder --config electron-builder.windows.cjs --win nsis --x64",
-    "dist:linux": "pnpm build && electron-builder --linux AppImage tar.gz",
-    "dist:mac": "pnpm build && electron-builder --mac zip dmg --x64 --arm64",
+    "desktop:prepare": "node scripts/prepare-desktop-library.mjs",
+    "dist:win": "pnpm build && pnpm desktop:prepare && electron-builder --config electron-builder.windows.cjs --win nsis --x64",
+    "dist:linux": "pnpm build && pnpm desktop:prepare && electron-builder --linux AppImage deb --x64",
+    "dist:mac": "pnpm build && pnpm desktop:prepare && electron-builder --mac zip dmg --x64 --arm64",
     "test:desktop": "node tests/electron-smoke.mjs",
     "library:import": "node scripts/import-library.mjs",
-    "dist:signed:win": "pnpm build && python scripts/package-library.py && electron-builder --config electron-builder.signed.cjs --win nsis --x64",
-    "dist:signed:mac": "pnpm build && electron-builder --config electron-builder.signed.cjs --mac dmg zip --x64 --arm64",
+    "dist:signed:win": "pnpm build && pnpm desktop:prepare && electron-builder --config electron-builder.signed.cjs --win nsis --x64",
+    "dist:signed:mac": "pnpm build && pnpm desktop:prepare && electron-builder --config electron-builder.signed.cjs --mac dmg zip --x64 --arm64",
     "build:web": "node scripts/build-web.mjs",
     "preview:web": "node scripts/preview-web.mjs",
     "test:web": "node tests/web-smoke.mjs",
@@ -39,12 +40,12 @@
     "@playwright/test": "1.63.0",
     "electron": "44.4.5",
     "electron-builder": "26.15.3",
-    "sharp": "0.35.4",
-    "vite": "8.3.1",
     "lucide-react": "1.48.0",
     "pdfjs-dist": "6.3.289",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "sharp": "0.35.4",
+    "vite": "8.3.1"
   },
   "build": {
     "appId": "studio.blackwire.reference",
@@ -60,8 +61,8 @@
     ],
     "extraResources": [
       {
-        "from": "library",
-        "to": "library",
+        "from": "build/desktop-library",
+        "to": "desktop-library",
         "filter": [
           "**/*"
         ]
@@ -78,10 +79,11 @@
     "linux": {
       "target": [
         "AppImage",
-        "tar.gz"
+        "deb"
       ],
       "category": "Education",
-      "icon": "build/icon.png"
+      "icon": "build/icon.png",
+      "maintainer": "Kal / Valleytech Solutions <valleytechsolutions@users.noreply.github.com>"
     },
     "mac": {
       "target": [
@@ -92,6 +94,7 @@
       "icon": "build/icon.icns",
       "identity": null
     },
+    "publish": [{"provider":"github","owner":"valleytechsolutions","repo":"BWM-Technical-Reference-Guide","releaseType":"release"}],
     "artifactName": "Black-Wire-${version}-${os}-${arch}.${ext}",
     "nsis": {
       "oneClick": false,
@@ -109,5 +112,8 @@
     "type": "git",
     "url": "https://github.com/valleytechsolutions/black-wire-desktop.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "electron-updater": "6.8.9"
+  }
 }

@@ -1,40 +1,31 @@
-name: Build unsigned workshop previews
+name: Validate desktop installers and updates
 on:
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  package:
+  native:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: windows-latest
-            target: win
-            arch: x64
-          - os: ubuntu-latest
-            target: linux
-            arch: x64
-          - os: macos-latest
-            target: mac
-            arch: arm64
+        os: [windows-2022, ubuntu-22.04, ubuntu-24.04]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
-      ELECTRON_BUILDER_COMPRESSION_LEVEL: '1'
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 24
           package-manager-cache: false
-      - name: Read pinned collection revision
+      - name: Read pinned collection
         id: library
         shell: bash
-        run: node -e "const fs=require('fs'); const r=require('./data/library-source.json'); if(!/^[a-f0-9]{40}$/.test(r.commit))throw Error('Unpinned collection'); fs.appendFileSync(process.env.GITHUB_OUTPUT,'commit='+r.commit+'\n')"
-      - uses: actions/checkout@v7
+        run: node -e "const fs=require('fs'),r=require('./data/library-source.json');if(!/^[a-f0-9]{40}$/.test(r.commit))throw Error('Unpinned collection');fs.appendFileSync(process.env.GITHUB_OUTPUT,'commit='+r.commit+'\n')"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: valleytechsolutions/black-wire-pinouts
           ref: ${{ steps.library.outputs.commit }}
@@ -49,45 +40,44 @@ jobs:
       - run: node scripts/verify-library.mjs
       - run: pnpm test
       - run: pnpm build
-      - uses: actions/setup-python@v6
-        if: runner.os == 'Windows'
-        with:
-          python-version: '3.13'
-      - name: Package verified Windows library
-        if: runner.os == 'Windows'
-        run: python scripts/package-library.py
-      - name: Package unsigned preview
+      - run: pnpm desktop:prepare
+      - name: Linux runtime dependencies
+        if: runner.os == 'Linux'
         shell: bash
         run: |
-          if [ '${{ matrix.target }}' = 'win' ]; then
-            pnpm exec electron-builder --config electron-builder.windows.cjs --win --x64 --publish never
+          sudo apt-get update
+          sudo apt-get install -y xvfb libnss3 libgtk-3-0 libgbm1 libfuse2
+      - name: Build release and older updater fixture
+        shell: bash
+        run: |
+          if [ '${{ runner.os }}' = 'Windows' ]; then
+            pnpm exec electron-builder --config electron-builder.windows.cjs --win nsis --x64 --publish never
+            pnpm exec electron-builder --config electron-builder.windows.cjs --win nsis --x64 --config.extraMetadata.version=0.13.99 --config.directories.output=qa-build --publish never
           else
-            pnpm exec electron-builder --${{ matrix.target }} --${{ matrix.arch }} --publish never
+            pnpm exec electron-builder --linux deb AppImage --x64 --publish never
+            pnpm exec electron-builder --linux deb AppImage --x64 --config.extraMetadata.version=0.13.99 --config.directories.output=qa-build --publish never
           fi
-      - name: Add library to unpacked Windows validation target
+      - name: Windows fresh install and in-app upgrade
         if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $version = (Get-Content package.json | ConvertFrom-Json).version
-          Copy-Item -LiteralPath library -Destination "release/$version/win-unpacked/resources/library" -Recurse
-      - name: Native Windows app check
-        if: runner.os == 'Windows'
-        run: |
-          $version = (Get-Content package.json | ConvertFrom-Json).version
-          $env:BLACKWIRE_PACKAGED_DIR = "release/$version/win-unpacked"
-          node tests/electron-smoke.mjs --packaged
-      - name: Save preview artifacts for manual validation
+        run: node tests/installer-update.mjs
+      - name: Linux DEB fresh install and in-app upgrade
+        if: runner.os == 'Linux'
+        run: xvfb-run -a node tests/installer-update.mjs
+      - name: Linux AppImage launch and in-app upgrade
+        if: matrix.os == 'ubuntu-22.04'
+        run: xvfb-run -a node tests/installer-update.mjs --appimage
+      - name: Save tested release assets
         uses: actions/upload-artifact@v7
         with:
-          name: unsigned-preview-${{ matrix.target }}-${{ matrix.arch }}
+          name: tested-desktop-${{ matrix.os }}
+          retention-days: 14
           compression-level: 0
-          retention-days: 7
           if-no-files-found: error
           path: |
-            release/*.exe
-            release/*.AppImage
-            release/*.tar.gz
-            release/*.dmg
-            release/*.zip
-            release/*/Black-Wire-Library-*.zip
             release/*/Black-Wire-*-setup.exe
+            release/*/*.blockmap
+            release/*/latest.yml
+            release/*.deb
+            release/*.AppImage
+            release/latest-linux.yml
+            data/qa/installer-*.json
