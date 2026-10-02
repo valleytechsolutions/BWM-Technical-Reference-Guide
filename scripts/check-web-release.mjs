@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-const allowed=new Set(['assets','brand','library','licenses','pdf','wiki','_headers','404.html','catalog.json','index.html','robots.txt','sitemap.xml','theme-init.js','THIRD_PARTY_NOTICES.txt','wiki.css','wiki.js','build-info.json']);
+const allowed=new Set(['assets','brand','library','licenses','pdf','wiki','pinout','_headers','404.html','catalog.json','index.html','robots.txt','sitemap.xml','theme-init.js','THIRD_PARTY_NOTICES.txt','wiki.css','wiki.js','build-info.json']);
 export async function checkWebRelease(root,{maxFiles=20000,maxFileBytes=25*1024*1024}={}){
   root=path.resolve(root);let count=0,total=0;
   async function walk(dir){
