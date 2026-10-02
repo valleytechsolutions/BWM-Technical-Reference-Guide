@@ -99,3 +99,5 @@ footer nav{display:flex;flex-wrap:wrap;gap:16px}
 }
 
 .wiring-figure{margin:28px 0}.wiring-figure img{display:block;width:100%;height:auto;background:#fff;border-radius:10px}.wiring-figure figcaption{font-size:13px;color:var(--muted);padding:12px 0}details code{overflow-wrap:anywhere}
+.breadcrumbs{font-size:13px;color:var(--muted);margin:0 0 18px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}.breadcrumbs a{color:inherit}.breadcrumbs [aria-current]{color:var(--ink)}th[scope=row]{text-align:left;white-space:nowrap;vertical-align:top;width:1%}
+.pinout-figure img{width:auto;max-width:min(100%,760px);margin:0 auto;padding:12px}
