@@ -17,17 +17,25 @@ for(let attempt=0;attempt<12;attempt++){
   await new Promise(resolve=>setTimeout(resolve,5000));
 }
 if(!current)throw Error('Production did not reach the new build; inspect Cloudflare before retrying.');
+// Edge copies of large files can trail build-info.json by a few seconds, so bypass caches and retry.
+async function published(rel,expectedHash){
+  const url=new URL(rel,production);url.searchParams.set('commit',JSON.parse(expected).appCommit);
+  for(let attempt=0;attempt<12;attempt++){
+    try{if(hash(await(await get(url)).arrayBuffer())===expectedHash)return true;}catch{}
+    await new Promise(resolve=>setTimeout(resolve,5000));
+  }
+  return false;
+}
 const catalog=await fs.readFile('web-release/catalog.json');
 for(const rel of ['catalog.json','pin-connectors.json','wiki/index.html','wiki.css']){
-  const remote=await(await get(new URL(rel,production))).arrayBuffer();
-  if(hash(remote)!==hash(await fs.readFile('web-release/'+rel)))throw Error('Published bytes differ: '+rel);
+  if(!await published(rel,hash(await fs.readFile('web-release/'+rel))))throw Error('Published bytes differ: '+rel);
 }
 const html=await(await get(production)).text();
 const localHTML=await fs.readFile('web-release/index.html','utf8');
 for(const m of localHTML.matchAll(/(?:src|href)="([^\"]*assets\/[^\"]+)"/g)){
   if(!html.includes(m[1]))throw Error('Production entry page references old assets.');
   const rel=m[1].replace(/^\//,'');
-  if(hash(await(await get(new URL(rel,production))).arrayBuffer())!==hash(await fs.readFile('web-release/'+rel)))throw Error('Published app asset differs.');
+  if(!await published(rel,hash(await fs.readFile('web-release/'+rel))))throw Error('Published app asset differs: '+rel);
 }
 const boards=JSON.parse(catalog).boards;
 const sample=boards.flatMap(b=>b.assets).find(a=>a.type==='pinout image'&&a.hash);
