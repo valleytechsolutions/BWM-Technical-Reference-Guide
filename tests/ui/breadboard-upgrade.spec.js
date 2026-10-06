@@ -79,3 +79,17 @@ test('boards resize, split, multiply and stay protected from stranded connection
   await page.getByRole('tab', {name: 'Build guide'}).click();
   await expect(page.locator('.bb-materials')).toContainText('Full breadboard · split rails'); await expect(page.locator('.bb-materials')).toContainText('Mini breadboard');
 });
+
+test('meter tool works from the toolbar with inline run and stop', async ({page}) => {
+  await page.goto('/?tab=breadboard'); await page.getByRole('button', {name: 'Load LED example', exact: true}).click();
+  await page.getByRole('button', {name: 'Meter', exact: true}).click();
+  await expect(page.getByRole('button', {name: 'Meter', exact: true})).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.bb-live-hint')).toContainText('red (V) lead');
+  await page.getByRole('button', {name: 'Breadboard TP20', exact: true}).click(); await page.getByRole('button', {name: 'Breadboard TN20', exact: true}).click();
+  await page.getByRole('button', {name: 'Run the DC test to read the meter'}).click();
+  await expect(page.locator('.bb-live-meter strong')).toHaveText('5.000 V');
+  await page.getByRole('button', {name: 'Meter mode: continuity'}).click();
+  await page.getByRole('button', {name: 'Stop the DC test to check continuity'}).click();
+  await expect(page.locator('.bb-live-meter strong')).toHaveText('No direct connection');
+  expect(await page.locator('.bb-wire').count()).toBe(9);
+});

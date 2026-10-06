@@ -27,7 +27,7 @@ export function loadLibrary(storage) {
 export function saveTemplate(library, part) {
   const existing = library.devices.find(d => d.id === part.templateId);
   if (!existing && library.devices.length >= LIBRARY_LIMIT) throw new Error(`Your device library holds up to ${LIBRARY_LIMIT} devices. Delete one first.`);
-  const template = validateTemplate({id: existing?.id || uid(), name: part.name, revision: part.revision, recordId: part.recordId, recordKind: part.recordKind, pins: part.pins, footprint: part.footprint, power: part.power, pinSource: part.pinSource, updatedAt: new Date().toISOString()});
+  const template = validateTemplate({id: existing?.id || uid(), name: part.name, revision: part.revision, recordId: part.recordId, recordKind: part.recordKind, pins: part.pins, footprint: part.footprint, power: part.power, powerOut: part.powerOut, pinSource: part.pinSource, updatedAt: new Date().toISOString()});
   return {library: {...library, devices: existing ? library.devices.map(d => d.id === template.id ? template : d) : [...library.devices, template]}, id: template.id};
 }
 export const removeTemplate = (library, id) => ({...library, devices: library.devices.filter(d => d.id !== id)});
@@ -61,4 +61,13 @@ export function suggestRole(label) {
 }
 export function suggestRoles(pins) {
   return pins.map(pin => pin.role ? pin : (role => role ? {...pin, role} : pin)(suggestRole(pin.label)));
+}
+
+// USB power output from pin labels or roles: every ground pin, 3V3 pins at 3.3 V and 5V/VBUS pins at 5 V.
+// A suggestion only: the builder confirms it against the board, and can edit it in the device maker.
+const RAIL_LABELS = [[3.3, /^\+?(3V3|3\.3 ?V|3V3_OUT|3V3\(OUT\))$/i], [5, /^\+?(5V|5V0|VBUS|VUSB|USB 5V)$/i]];
+export function suggestPowerOut(pins) {
+  const ground = pins.filter(p => p.role === 'ground' || /^(GND|G|VSS|AGND|DGND)$/i.test(p.label.trim())).map(p => p.id);
+  const rails = RAIL_LABELS.map(([voltage, pattern]) => ({voltage, pins: pins.filter(p => pattern.test(p.label.trim()) && !ground.includes(p.id)).map(p => p.id)})).filter(r => r.pins.length);
+  return ground.length && rails.length ? {ground, rails} : null;
 }

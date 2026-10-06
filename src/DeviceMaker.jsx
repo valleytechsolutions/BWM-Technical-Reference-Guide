@@ -4,6 +4,7 @@ import {FOOTPRINT_SPREADS, LIMITS, PIN_ROLES, uid} from './breadboard.mjs';
 import {footprintOffsets} from './breadboard-placement.mjs';
 import {parsePinLabels, suggestRoles} from './device-library.mjs';
 import PinSourceNote from './PinSourceNote.jsx';
+import PowerOutputToggle from './PowerOutputToggle.jsx';
 
 function NumberField({label, value, min, max, step = 'any', onCommit, hint}) {
   const [draft, setDraft] = useState(String(value));
@@ -61,6 +62,9 @@ export default function DeviceMaker({part, library, librarySaved, onChange, onRe
         {!part.footprint && /^(\S+) \((\d+)\), (\S+) \(\2\)$/.test(part.pinSource?.connectors || '') && <p className="bb-muted">Two equal headers were loaded in order. For a breadboard, choose <b>Dual row</b> with <b>Row by row</b> numbering and the row spacing that matches your board.</p>}
         {part.footprint && pins.length > 0 && <FootprintPreview part={part}/>}
         {part.footprint && !pins.length && <p className="bb-muted">Add terminals to define the package.</p>}
+        <h3>USB power output</h3>
+        <PowerOutputToggle part={part} onChange={powerOut => onChange({powerOut})} onMissing={() => setPowerError('Give the board terminals labelled GND and 3V3 or 5V, or set their roles to Ground and Power in, first.')}/>
+        {part.powerOut && <div className="bb-pin-coordinates">{part.powerOut.rails.map((rail, i) => <NumberField key={rail.pins[0]} label={`${pins.find(p => p.id === rail.pins[0])?.label || 'Rail'} output (V)`} value={rail.voltage} min={.1} max={48} onCommit={voltage => onChange({powerOut: {...part.powerOut, rails: part.powerOut.rails.map((r, j) => j === i ? {...r, voltage} : r)}})}/>)}</div>}
         <h3>Power profile</h3>
         <label className="bb-image-toggle"><input type="checkbox" disabled={pins.length < 2} checked={Boolean(part.power)} onChange={e => enablePower(e.target.checked)}/>Model its supply current and voltage limits</label>
         {part.power ? <>

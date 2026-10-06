@@ -13,7 +13,8 @@ test('single-read provenance and all large-board terminals survive save and relo
   await page.getByRole('button', {name: 'Add Pin import fixture to circuit', exact: true}).click();
   await page.getByRole('tab', {name: 'Device maker', exact: true}).click();
   await expect(page.getByLabel('Terminal 273 label', {exact: true})).toHaveValue('GPIO272');
-  await expect(page.locator('.bb-pin-source').first()).toContainText('transcribed once');
+  await expect(page.locator('.bb-pin-source').first()).toContainText('Terminals transcribed from the manufacturer pinout image');
+  await expect(page.locator('.bb-pin-source').first()).not.toContainText(/once|twice|OCR/);
   await page.getByRole('button', {name: 'Save to My devices', exact: true}).click();
   await page.reload();
   const saved = await page.evaluate(() => ({projects: JSON.parse(localStorage.getItem('blackwire-circuit-projects-v1')), devices: JSON.parse(localStorage.getItem('blackwire-device-library-v1'))}));

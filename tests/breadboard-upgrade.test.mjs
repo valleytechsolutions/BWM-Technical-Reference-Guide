@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createPart, emptyProject, ledExample, validateProject, simulateCircuit, circuitNets, endpointPosition, endpointLabel, WIRE_COLORS, PIN_SOURCE_REVIEWS} from '../src/breadboard.mjs';
+import {createPart, emptyProject, ledExample, validateProject, simulateCircuit, circuitNets, endpointPosition, endpointLabel, WIRE_COLORS, PIN_SOURCE_REVIEWS, removeTerminal} from '../src/breadboard.mjs';
 import {boardLayout, findHole, projectHoles} from '../src/breadboard-boards.mjs';
 import {addBoard, updateBoard, removeBoard, mountPart, footprintHoles, footprintOffsets, rotateMountedPart, shiftMountedPart, dragMountedPart, transistorExample, insertedLedExample} from '../src/breadboard-placement.mjs';
-import {inspectWiring, buildEndpointLabel, buildSheetHtml, billOfMaterials, partReferences} from '../src/circuit-bench.mjs';
+import {measureCircuit, inspectWiring, buildEndpointLabel, buildSheetHtml, billOfMaterials, partReferences} from '../src/circuit-bench.mjs';
 import {emptyLibrary, saveTemplate, partFromTemplate, validateLibrary, mergeLibrary, loadLibrary, suggestRoles, parsePinLabels, LIBRARY_KEY} from '../src/device-library.mjs';
 
 const approx = (actual, expected, tolerance = 1e-6) => assert.ok(Math.abs(actual - expected) < tolerance, `${actual} should be near ${expected}`);
@@ -243,4 +243,25 @@ test('catalog records are split by whether they arrive with terminals', async ()
   assert.deepEqual([ready.length, missing.length], [2, 1]);
   // Every "ready" record really produces that many terminals when added.
   for (const record of [transcribed, sourced, {pinLabels: ['A', 'B']}]) assert.equal(createPart('device', 0, record).pins.length, pinStatus(record).count);
+});
+test('a USB-powered board drives its 3V3 and 5V pins and ties its ground pins together', async () => {
+  const {suggestPowerOut} = await import('../src/device-library.mjs');
+  const board = device(['GND', '3V3', 'GPIO4', '5V', 'GND', '3V3']);
+  const powerOut = suggestPowerOut(board.pins);
+  assert.deepEqual(powerOut, {ground: ['p0', 'p4'], rails: [{voltage: 3.3, pins: ['p1', 'p5']}, {voltage: 5, pins: ['p3']}]});
+  const alone = circuit([{...board, powerOut}]), result = simulateCircuit(alone);
+  assert.equal(measureCircuit(alone, {red: 'u:p1', black: 'u:p0', mode: 'voltage'}, result).text, '3.300 V');
+  assert.equal(measureCircuit(alone, {red: 'u:p3', black: 'u:p4', mode: 'voltage'}, result).text, '5.000 V');
+  assert.equal(measureCircuit(alone, {red: 'u:p5', black: 'u:p4', mode: 'continuity'}, null).text, 'No direct connection');
+  assert.equal(measureCircuit(alone, {red: 'u:p0', black: 'u:p4', mode: 'continuity'}, null).text, 'Connected');
+  assert.ok(!result.diagnostics.some(d => /No closed load path|Add a DC supply/.test(d.message)));
+  assert.match(result.diagnostics.map(d => d.message).join(' '), /powered over USB in this model \(3V3 3.3 V, 5V 5 V\)/);
+  // The board's 3V3 lights an LED through 330 Ω.
+  const lit = simulateCircuit(circuit([{...board, powerOut}, part('resistor', 'r', {value: 330}), part('led', 'l')], [['u:p1', 'r:a'], ['r:b', 'l:a'], ['l:b', 'u:p4']]));
+  assert.ok(lit.readings.l.current > .003 && lit.readings.l.current < .005);
+  // An external supply forced onto the same rail is a conflict, not a silent override.
+  assert.equal(simulateCircuit(circuit([{...board, powerOut}, part('supply', 's', {value: 5})], [['s:a', 'u:p1'], ['s:b', 'u:p0']])).status, 'error');
+  assert.equal(removeTerminal(circuit([{...board, powerOut}]), 'u', 'p0').parts[0].powerOut, undefined);
+  for (const bad of [{ground: [], rails: powerOut.rails}, {ground: ['p0'], rails: [{voltage: 0, pins: ['p1']}]}, {ground: ['p0'], rails: [{voltage: 3.3, pins: ['p0']}]}, {ground: ['zz'], rails: powerOut.rails}]) assert.throws(() => validateProject(circuit([{...board, powerOut: bad}])), /board power output/);
+  assert.equal(suggestPowerOut(device(['GPIO1', 'GPIO2']).pins), null);
 });

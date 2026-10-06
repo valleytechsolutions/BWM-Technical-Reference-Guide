@@ -12,7 +12,7 @@ export function measureCircuit(project, {red, black, mode}, result) {
     return {state: connected ? 'connected' : 'open', text: connected ? 'Connected' : 'No direct connection'};
   }
   if (!result) return {state: 'paused', text: 'Run DC test to measure'};
-  if (!Number.isFinite(result.voltages[red]) || !Number.isFinite(result.voltages[black])) return {state: 'unknown', text: 'Floating / unsolved'};
+  if (!Number.isFinite(result.voltages[red]) || !Number.isFinite(result.voltages[black])) return {state: 'unknown', text: 'Not powered: no supply reaches this point'};
   if (!result.references[red] || result.references[red] !== result.references[black]) return {state: 'unknown', text: 'Separate floating circuits'};
   const value = result.voltages[red] - result.voltages[black];
   return {state: 'voltage', value, text: `${Math.abs(value) < .0005 ? '0.000' : value.toFixed(3)} V`};

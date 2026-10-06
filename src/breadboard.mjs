@@ -102,12 +102,19 @@ export function validateDeviceProfile(p, pinIds, fail) {
   if (p.footprint != null && (typeof p.footprint !== 'object' || !['sip', 'dual'].includes(p.footprint.kind) || (p.footprint.kind === 'dual' && (!Object.hasOwn(FOOTPRINT_SPREADS, p.footprint.spread) || !['ccw', 'rows'].includes(p.footprint.numbering))))) fail('Invalid device package.');
   const power = p.power;
   if (power != null && (typeof power !== 'object' || !pinIds.includes(power.vcc) || !pinIds.includes(power.gnd) || power.vcc === power.gnd || !inRange(power.min, 0, 48) || !inRange(power.max, power.min, 48) || !inRange(power.voltage, power.min, power.max) || !inRange(power.current, 0, 2000))) fail('Invalid device power profile. Choose distinct supply and ground terminals and a voltage range of 0–48 V.');
+  // A board powered over USB: its ground pins and each output rail's pins are tied together, and each rail is a fixed voltage above ground.
+  const out = p.powerOut;
+  if (out != null) {
+    const used = [...(Array.isArray(out.ground) ? out.ground : []), ...(Array.isArray(out.rails) ? out.rails.flatMap(r => Array.isArray(r?.pins) ? r.pins : []) : [])];
+    if (typeof out !== 'object' || !Array.isArray(out.ground) || !out.ground.length || !Array.isArray(out.rails) || !out.rails.length || out.rails.length > 4 || out.rails.some(r => !r || !Array.isArray(r.pins) || !r.pins.length || !inRange(r.voltage, .1, 48)) || used.some(id => !pinIds.includes(id)) || new Set(used).size !== used.length) fail('Invalid board power output. Choose ground terminals and at least one output rail of 0.1–48 V.');
+  }
   const source = p.pinSource;
   if (source != null && (typeof source !== 'object' || source.method !== 'image-transcription' || !PIN_SOURCE_REVIEWS[source.review] || !/^(media\/[a-f0-9]{64}\.[a-z0-9]{2,5})?$/.test(source.image || '') || !text(source.connectors || '', 300) || !text(source.caveats || '', 300) || [source.pending, source.alternatives].some(n => n != null && !(Number.isInteger(n) && inRange(n, 1, 100))))) fail('Invalid terminal source note.');
   return {
     ...(source ? {pinSource: {method: source.method, review: source.review, image: source.image || '', connectors: source.connectors || '', ...(source.pending ? {pending: source.pending} : {}), ...(source.alternatives ? {alternatives: source.alternatives} : {}), ...(source.caveats ? {caveats: source.caveats} : {})}} : {}),
     ...(p.footprint ? {footprint: p.footprint.kind === 'dual' ? {kind: 'dual', spread: Number(p.footprint.spread), numbering: p.footprint.numbering} : {kind: 'sip'}} : {}),
     ...(power ? {power: {vcc: power.vcc, gnd: power.gnd, voltage: power.voltage, min: power.min, max: power.max, current: power.current}} : {}),
+    ...(out ? {powerOut: {ground: [...out.ground], rails: out.rails.map(r => ({voltage: r.voltage, pins: [...r.pins]}))}} : {}),
   };
 }
 export function validatePins(pins, device, fail, seen = new Set()) {
@@ -182,7 +189,8 @@ export function removeTerminal(project, partId, pinId) {
   const endpoint = partId + ':' + pinId, part = project.parts.find(p => p.id === partId);
   if (part?.mount) throw new Error('Lift the device from the breadboard before removing a terminal.');
   const power = part?.power && [part.power.vcc, part.power.gnd].includes(pinId);
-  return {...project, parts: project.parts.map(p => { if (p.id !== partId || p.type !== 'device') return p; const next = {...p, pins: p.pins.filter(pin => pin.id !== pinId)}; if (power) delete next.power; return next; }), wires: project.wires.filter(w => w.from !== endpoint && w.to !== endpoint)};
+  const output = part?.powerOut && [...part.powerOut.ground, ...part.powerOut.rails.flatMap(r => r.pins)].includes(pinId);
+  return {...project, parts: project.parts.map(p => { if (p.id !== partId || p.type !== 'device') return p; const next = {...p, pins: p.pins.filter(pin => pin.id !== pinId)}; if (power) delete next.power; if (output) delete next.powerOut; return next; }), wires: project.wires.filter(w => w.from !== endpoint && w.to !== endpoint)};
 }
 export function reconnectWire(project, wireId, end, endpoint) {
   if (!['from', 'to'].includes(end)) throw new Error('Choose a wire endpoint.');
@@ -246,6 +254,7 @@ export function circuitNets(project) {
   for (const p of project.parts) {
     for (const pin of p.pins) { nets.find(p.id + ':' + pin.id); if (p.mount) nets.join(p.id + ':' + pin.id, 'hole:' + p.mount.holes[pin.id]); }
     if (p.type === 'switch' && p.closed) nets.join(p.id + ':a', p.id + ':b');
+    if (p.type === 'device' && p.powerOut) for (const group of [p.powerOut.ground, ...p.powerOut.rails.map(r => r.pins)]) for (const pin of group.slice(1)) nets.join(p.id + ':' + group[0], p.id + ':' + pin);
     // A tactile switch's paired legs are always joined; pressing bridges the pairs.
     if (p.type === 'button') { nets.join(p.id + ':1a', p.id + ':1b'); nets.join(p.id + ':2a', p.id + ':2b'); if (p.closed) nets.join(p.id + ':1a', p.id + ':2a'); }
   }
@@ -294,6 +303,8 @@ function modelElements(project) {
       {id: p.id + '~upper', type: 'resistor', name: p.name + ' A–W', value: Math.max(.001, p.value * (1 - p.position / 100)), terminals: [p.id + ':a', p.id + ':w']},
       {id: p.id + '~lower', type: 'resistor', name: p.name + ' W–B', value: Math.max(.001, p.value * p.position / 100), terminals: [p.id + ':w', p.id + ':b']});
     // A device with a power profile becomes a resistive load sized from its nominal voltage and current.
+    // A USB-powered board drives each output rail as a fixed supply above its ground.
+    if (p.type === 'device' && p.powerOut) for (const rail of p.powerOut.rails) elements.push({id: `${p.id}~out~${rail.pins[0]}`, type: 'supply', board: true, name: `${p.name} ${p.pins.find(pin => pin.id === rail.pins[0])?.label || 'output'}`, value: rail.voltage, part: p, terminals: [p.id + ':' + rail.pins[0], p.id + ':' + p.powerOut.ground[0]]});
     if (p.type === 'device' && p.power?.current > 0) elements.push({id: p.id, type: 'load', name: p.name, value: p.power.voltage / (p.power.current / 1000), part: p, terminals: [p.id + ':' + p.power.vcc, p.id + ':' + p.power.gnd]});
   }
   return elements;
@@ -310,7 +321,11 @@ export function simulateCircuit(project) {
   const nets = circuitNets(project), diagnostics = [], readings = Object.create(null), voltages = Object.create(null), references = Object.create(null);
   const add = (level, message, partId) => diagnostics.push({level, message, partId});
   const elements = modelElements(project), sources = elements.filter(e => e.type === 'supply');
-  for (const p of project.parts.filter(p => p.type === 'device')) add(p.power?.current > 0 ? 'note' : 'warning', p.power?.current > 0 ? `${p.name}: modeled only as a ${p.power.current} mA load at ${p.power.voltage} V. GPIO, firmware and protocols are not simulated.` : `${p.name}: wiring reference only. Its power draw, GPIO, firmware and protocols are not simulated.`, p.id);
+  for (const p of project.parts.filter(p => p.type === 'device')) {
+    const outputs = p.powerOut ? p.powerOut.rails.map(r => `${p.pins.find(pin => pin.id === r.pins[0])?.label || 'output'} ${r.voltage} V`).join(', ') : '';
+    if (p.powerOut) add('note', `${p.name}: powered over USB in this model (${outputs}). Its regulator limits, GPIO, firmware and protocols are not simulated.`, p.id);
+    else add(p.power?.current > 0 ? 'note' : 'warning', p.power?.current > 0 ? `${p.name}: modeled only as a ${p.power.current} mA load at ${p.power.voltage} V. GPIO, firmware and protocols are not simulated.` : `${p.name}: wiring reference only. Its power draw, GPIO, firmware and protocols are not simulated.`, p.id);
+  }
   if (!sources.length) add('warning', 'Add a DC supply to test a powered circuit.');
   const graph = new UnionFind();
   for (const e of elements) for (const t of e.terminals.slice(1)) graph.join(nets.find(e.terminals[0]), nets.find(t));
@@ -403,7 +418,7 @@ export function simulateCircuit(project) {
         if (voltage < -.5) add('warning', `${e.name}: reverse polarity (${voltage.toFixed(2)} V). Active buzzers stay silent when reversed.`, e.id);
       }
     }
-    if (supplies.every(e => Math.abs(readings[e.id].current) < .000001)) add('warning', 'No closed load path draws current from this supply. Check wires and switches.');
+    if (supplies.some(e => !e.board) && supplies.every(e => Math.abs(readings[e.id].current) < .000001)) add('warning', 'No closed load path draws current from this supply. Check wires and switches.');
   }
   for (const p of project.parts) {
     if (p.type === 'potentiometer') {
@@ -413,6 +428,7 @@ export function simulateCircuit(project) {
     }
     if (p.type === 'device' && p.power) checkDevicePower(p, voltages, add);
   }
+  for (const id of Object.keys(readings)) if (id.includes('~out~')) delete readings[id];
   return {diagnostics, readings, voltages, references, status: diagnostics.some(d => d.level === 'error') ? 'error' : diagnostics.some(d => d.level !== 'note') ? 'warning' : 'ok'};
 }
 // Compares solved voltages with the device's own entered limits; nothing here infers a datasheet.
