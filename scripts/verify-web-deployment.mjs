@@ -18,7 +18,7 @@ for(let attempt=0;attempt<12;attempt++){
 }
 if(!current)throw Error('Production did not reach the new build; inspect Cloudflare before retrying.');
 const catalog=await fs.readFile('web-release/catalog.json');
-for(const rel of ['catalog.json','wiki/index.html','wiki.css']){
+for(const rel of ['catalog.json','pin-connectors.json','wiki/index.html','wiki.css']){
   const remote=await(await get(new URL(rel,production))).arrayBuffer();
   if(hash(remote)!==hash(await fs.readFile('web-release/'+rel)))throw Error('Published bytes differ: '+rel);
 }

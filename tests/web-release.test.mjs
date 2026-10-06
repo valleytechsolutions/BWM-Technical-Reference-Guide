@@ -12,7 +12,7 @@ async function fixture(t){
     await fs.rm(root,{recursive:true,force:true});
   });
   for(const dir of ['library','wiki','assets'])await fs.mkdir(path.join(root,dir));
-  for(const [name,value] of Object.entries({'index.html':'<html>guide</html>','catalog.json':JSON.stringify({editionInfo:{snapshot:'2026.09.10'}}),'library/manifest.json':'[]','wiki/index.html':'<html>wiki</html>','_headers':'/*','build-info.json':JSON.stringify({appCommit:'a'.repeat(40),collectionCommit:'b'.repeat(40),collectionSnapshot:'2026.09.10'})}))await fs.writeFile(path.join(root,name),value);
+  for(const [name,value] of Object.entries({'index.html':'<html>guide</html>','catalog.json':JSON.stringify({editionInfo:{snapshot:'2026.09.10'}}),'pin-connectors.json':'{}','library/manifest.json':'[]','wiki/index.html':'<html>wiki</html>','_headers':'/*','build-info.json':JSON.stringify({appCommit:'a'.repeat(40),collectionCommit:'b'.repeat(40),collectionSnapshot:'2026.09.10'})}))await fs.writeFile(path.join(root,name),value);
   return root;
 }
 test('Publisher rejects personal files and private paths while accepting the expected build',async t=>{

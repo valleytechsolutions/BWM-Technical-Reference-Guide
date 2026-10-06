@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-const allowed=new Set(['assets','brand','library','licenses','pdf','wiki','_headers','404.html','catalog.json','index.html','robots.txt','sitemap.xml','theme-init.js','THIRD_PARTY_NOTICES.txt','wiki.css','wiki.js','build-info.json']);
+const allowed=new Set(['assets','brand','library','licenses','pdf','wiki','_headers','404.html','catalog.json','pin-connectors.json','index.html','robots.txt','sitemap.xml','theme-init.js','THIRD_PARTY_NOTICES.txt','wiki.css','wiki.js','build-info.json']);
 export async function checkWebRelease(root,{maxFiles=20000,maxFileBytes=25*1024*1024}={}){
   root=path.resolve(root);let count=0,total=0;
   async function walk(dir){
@@ -22,7 +22,7 @@ export async function checkWebRelease(root,{maxFiles=20000,maxFileBytes=25*1024*
     }
   }
   await walk(root);
-  for(const name of ['index.html','catalog.json','library/manifest.json','wiki/index.html','_headers','build-info.json'])if(!(await fs.stat(path.join(root,name))).isFile())throw Error('Required output missing: '+name);
+  for(const name of ['index.html','catalog.json','pin-connectors.json','library/manifest.json','wiki/index.html','_headers','build-info.json'])if(!(await fs.stat(path.join(root,name))).isFile())throw Error('Required output missing: '+name);
   const info=JSON.parse(await fs.readFile(path.join(root,'build-info.json'),'utf8'));
   const catalog=JSON.parse(await fs.readFile(path.join(root,'catalog.json'),'utf8'));
   if(!/^[a-f0-9]{40}$/.test(info.appCommit)||!/^[a-f0-9]{40}$/.test(info.collectionCommit)||info.collectionSnapshot!==catalog.editionInfo.snapshot)throw Error('Build and collection identity mismatch.');
