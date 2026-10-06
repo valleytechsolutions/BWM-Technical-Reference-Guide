@@ -93,3 +93,15 @@ test('meter tool works from the toolbar with inline run and stop', async ({page}
   await expect(page.locator('.bb-live-meter strong')).toHaveText('No direct connection');
   expect(await page.locator('.bb-wire').count()).toBe(9);
 });
+
+test('pan tool scrolls the workspace without moving the build', async ({page}) => {
+  await page.goto('/?tab=breadboard'); await page.getByRole('button', {name: 'Load LED example', exact: true}).click();
+  const before = await saved(page), canvas = page.locator('.bb-canvas');
+  await page.getByRole('button', {name: 'Pan', exact: true}).click();
+  await canvas.scrollIntoViewIfNeeded(); const box = await canvas.boundingBox();
+  await page.mouse.move(box.x + box.width * .7, box.y + box.height * .7); await page.mouse.down();
+  await page.mouse.move(box.x + box.width * .3, box.y + box.height * .3, {steps: 5}); await page.mouse.up();
+  const scrolled = await canvas.evaluate(s => [s.scrollLeft, s.scrollTop]);
+  expect(scrolled[0]).toBeGreaterThan(50); expect(scrolled[1]).toBeGreaterThan(50);
+  expect(await saved(page)).toEqual(before);
+});

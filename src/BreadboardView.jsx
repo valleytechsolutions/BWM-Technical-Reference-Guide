@@ -259,10 +259,11 @@ export default function BreadboardView({catalog, requestedDevice, onDeviceHandle
   }
   const free = project.parts.filter(p => !p.mount), extent = boardsExtent(project), main = boards.find(b => b.id === 'main'), mainLayout = boardLayout(main);
   // 1200 world units span the stage at 100%. The world is at least as large as what is visible, so zooming
-  // out reveals more workspace instead of shrinking a fixed drawing; content can extend it further.
-  const unit = Math.max(1, stageWidth) * zoom / 1200;
-  const canvasHeight = drag.current?.height || Math.min(LIMITS.coordinate + 1000, Math.max(880, Math.ceil(stageHeight / unit), extent.y + 35, ...free.map(p => p.y + partBounds(p).height + 35), ...project.wires.flatMap(w => (w.points || []).map(p => p.y + 35))));
-  const worldWidth = drag.current?.width || Math.min(LIMITS.coordinate + 1000, Math.max(1200, Math.ceil(stageWidth / unit), extent.x + 35, ...free.map(p => p.x + partBounds(p).width + 35), ...project.wires.flatMap(w => (w.points || []).map(p => p.x + 35))));
+  // out reveals more workspace instead of shrinking a fixed drawing; content can extend it further. One more
+  // screen of room past the content in each direction leaves space to pan into and to build outward.
+  const unit = Math.max(1, stageWidth) * zoom / 1200, visibleWidth = Math.ceil(stageWidth / unit), visibleHeight = Math.ceil(stageHeight / unit);
+  const canvasHeight = drag.current?.height || Math.min(LIMITS.coordinate + 1000, visibleHeight + Math.max(880, visibleHeight, extent.y + 35, ...free.map(p => p.y + partBounds(p).height + 35), ...project.wires.flatMap(w => (w.points || []).map(p => p.y + 35))));
+  const worldWidth = drag.current?.width || Math.min(LIMITS.coordinate + 1000, visibleWidth + Math.max(1200, visibleWidth, extent.x + 35, ...free.map(p => p.x + partBounds(p).width + 35), ...project.wires.flatMap(w => (w.points || []).map(p => p.x + 35))));
   const canvasWidth = worldWidth * unit;
   function terminalProps(endpoint) {
     return {role: 'button', tabIndex: 0, 'aria-label': endpointLabel(project, endpoint), 'aria-pressed': pending === endpoint, 'data-net-active': Boolean(highlightedNet && nets.find(endpoint) === highlightedNet),

@@ -62,7 +62,7 @@ test('dragging inserted components is one undo step; keyboard placement works at
   await page.goto('/?tab=breadboard'); await page.getByRole('button', {name: 'Load inserted LED', exact: true}).click();
   await page.locator('[data-part-id="resistor"] .bb-mounted-resistor').scrollIntoViewIfNeeded();
   const center = await page.locator('[data-part-id="resistor"] .bb-mounted-resistor').boundingBox();
-  const svg = await page.getByLabel('Interactive breadboard', {exact: true}).boundingBox();
+  const svg = await page.getByLabel('Interactive breadboard', {exact: true}).evaluate(s => ({width: s.getBoundingClientRect().width * 1200 / s.viewBox.baseVal.width}));
   await page.mouse.move(center.x + center.width / 2, center.y + center.height / 2); await page.mouse.down();
   await page.mouse.move(center.x + center.width / 2 + 26 * svg.width / 1200, center.y + center.height / 2, {steps: 4}); await page.mouse.up();
   expect((await saved(page)).parts.find(p => p.id === 'resistor').mount).toEqual({holes: {a: 'c9', b: 'c15'}});
