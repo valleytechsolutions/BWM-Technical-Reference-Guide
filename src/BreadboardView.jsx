@@ -12,6 +12,7 @@ import BreadboardBoard from './BreadboardBoard.jsx';
 import BoardSettings from './BoardSettings.jsx';
 import DeviceMaker from './DeviceMaker.jsx';
 import {pinStatus, splitByPins} from './catalog-pins.mjs';
+import {loadPinConnectors, withPinConnectors} from './pin-data.mjs';
 import PinSourceNote from './PinSourceNote.jsx';
 import PowerOutputToggle from './PowerOutputToggle.jsx';
 import CircuitProjects from './CircuitProjects.jsx';
@@ -147,7 +148,10 @@ export default function BreadboardView({catalog, requestedDevice, onDeviceHandle
     if (project.parts.length >= LIMITS.parts) { setMessage('This circuit has reached the 60-part limit.'); return; }
     change({...project, parts: [...project.parts, part]}); setSelection(part.id); setPending(null); setNewPin('');
   }
+  useEffect(() => { loadPinConnectors(); }, []);
   function addPart(type, record, kind) {
+    // Catalog boards with transcribed pins get their full pin list before the part is created.
+    if (type === 'device' && record?.pinCount && !record.pinConnectors) { loadPinConnectors().then(pins => addPart(type, withPinConnectors(record, pins), kind)); return; }
     attempt(() => {
       const part = createPart(type, project.parts.length, record, kind);
       if (type === 'device') part.referenceImage = Boolean(referenceArtwork(record));

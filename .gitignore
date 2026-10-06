@@ -3,6 +3,7 @@ dist/
 release/
 library/
 public/catalog.json
+public/pin-connectors.json
 test-results/
 playwright-report/
 .preview.log

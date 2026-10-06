@@ -7,8 +7,9 @@ const LEVELS = {
 export function pinStatus(record) {
   const references = record?.pinReferences?.reduce((n, r) => n + (r.pins?.length || 0), 0) || 0;
   if (references) return {ready: true, count: references, level: 'sourced', text: LEVELS.sourced};
-  const transcribed = record?.pinConnectors?.connectors?.reduce((n, c) => n + c.pins.length, 0) || 0;
-  if (transcribed) { const level = record.pinConnectors.review; return {ready: true, count: transcribed, level, text: LEVELS[level] || 'Transcribed'}; }
+  // The split catalog keeps only pinCount; full pin lists load with the breadboard.
+  const transcribed = record?.pinConnectors?.connectors?.reduce((n, c) => n + c.pins.length, 0) || record?.pinCount || 0;
+  if (transcribed) { const level = record.pinConnectors?.review || 'transcribed'; return {ready: true, count: transcribed, level, text: LEVELS[level] || 'Transcribed'}; }
   const labels = record?.pinLabels?.length || 0;
   if (labels) return {ready: true, count: labels, level: 'labels', text: LEVELS.labels};
   return {ready: false, count: 0, level: 'none', text: 'No pin list yet'};

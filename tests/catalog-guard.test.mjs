@@ -25,3 +25,10 @@ test('the build refreshes a stale public catalog from the imported library and s
   assert.deepEqual(JSON.parse(await fs.readFile(file('public.json'), 'utf8')), catalog());
   await fs.rm(dir, {recursive: true});
 });
+test('pin lists are split out of the first-load catalog and leave a pin count behind', async () => {
+  const {splitCatalog} = await import('../scripts/catalog-split.mjs');
+  const pins = {review: 'ocr-checked', connectors: [{id: 'J1', pins: [{position: 1, label: 'GND'}, {position: 2, label: '3V3'}]}]};
+  const {catalog: lean, pins: file} = splitCatalog({boards: [{id: 'a', pinConnectors: pins}, {id: 'b'}], makerParts: [{id: 'm', pinReferences: []}]});
+  assert.deepEqual(lean.boards, [{id: 'a', pinCount: 2}, {id: 'b'}]); assert.deepEqual(file, {a: pins}); assert.deepEqual(lean.makerParts, [{id: 'm', pinReferences: []}]);
+  assert.deepEqual(splitCatalog(lean).pins, {});
+});

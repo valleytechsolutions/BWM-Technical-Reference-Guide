@@ -15,7 +15,9 @@ for(const rel of [...new Set([...manifest,'manifest.json'])]){
  const destination=path.join(out,'library',rel);await fs.mkdir(path.dirname(destination),{recursive:true});
  await fs.copyFile(path.join(root,'library',rel),destination);
 }
-await fs.copyFile(path.join(root,'library/catalog.json'),path.join(out,'catalog.json'));
+// Same split as public/: the first load stays small; the breadboard fetches pin lists when opened.
+{const {splitCatalog,PIN_FILE}=await import('./catalog-split.mjs');const split=splitCatalog(JSON.parse(await fs.readFile(path.join(root,'library/catalog.json'),'utf8')));
+await fs.writeFile(path.join(out,'catalog.json'),JSON.stringify(split.catalog));await fs.writeFile(path.join(out,PIN_FILE),JSON.stringify(split.pins));}
 const {buildWiki}=await import('./build-wiki.mjs');
 await buildWiki(out,base);
 const headers=`/*
@@ -24,6 +26,8 @@ const headers=`/*
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'self' https://valleytechsolutions.tech https://www.valleytechsolutions.tech
 ${base}catalog.json
+  Cache-Control: public, max-age=0, must-revalidate
+${base}pin-connectors.json
   Cache-Control: public, max-age=0, must-revalidate
 ${base}library/media/*
   Cache-Control: public, max-age=31536000, immutable
