@@ -1,0 +1,77 @@
+import {test, expect} from '@playwright/test';
+import fs from 'node:fs/promises';
+
+const saved = page => page.evaluate(() => { const w = JSON.parse(localStorage.getItem('blackwire-circuit-projects-v1')); return w.entries.find(e => e.id === w.activeId).project; });
+test('inserted example solves, exposes connected contacts, and preserves mounting instructions', async ({page, context}) => {
+  const errors = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto('/?tab=breadboard'); await page.getByRole('button', {name: 'Load inserted LED', exact: true}).click();
+  await expect(page.locator('.bb-mounted')).toHaveCount(2); await expect(page.locator('.bb-wire')).toHaveCount(4);
+  await page.getByRole('button', {name: 'Run DC test'}).click();
+  await expect(page.locator('.bb-component.led')).toHaveClass(/lit/); await expect(page.locator('.bb-result-state')).toHaveText('Model solved');
+  await expect(page.locator('.bb-results-grid')).toContainText('8.57');
+  await page.getByRole('button', {name: 'Breadboard A14', exact: true}).hover();
+  await expect(page.getByRole('button', {name: 'LED · A +', exact: true})).toHaveAttribute('data-net-active', 'true');
+  await expect(page.getByRole('button', {name: 'Breadboard C8', exact: true})).toHaveAttribute('data-occupied', 'true');
+  await page.getByRole('tab', {name: 'Build guide', exact: true}).click();
+  await expect(page.locator('.bb-mount-steps')).toContainText('A + → Breadboard E14');
+  await page.getByLabel('Mark D1 inserted', {exact: true}).check();
+  await page.reload(); await page.getByRole('tab', {name: 'Build guide', exact: true}).click();
+  await expect(page.getByLabel('Mark D1 inserted', {exact: true})).toBeChecked();
+  const download = page.waitForEvent('download'); await page.getByRole('button', {name: 'Download build sheet'}).click();
+  const html = await fs.readFile(await (await download).path(), 'utf8'), sheet = await context.newPage(); await sheet.setContent(html);
+  await expect(sheet.locator('.mounting tbody tr')).toHaveCount(2); await expect(sheet.locator('.mounting')).toContainText('K − → F14'); await sheet.close();
+  await page.getByRole('tab', {name: 'DC test bench', exact: true}).click(); await page.getByRole('button', {name: 'Run DC test'}).click();
+  await page.getByRole('button', {name: 'Move LED', exact: true}).click();
+  await page.evaluate(() => window.scrollTo(0, 0)); await page.screenshot({path: 'test-results/breadboard-inserted.png', fullPage: true});
+  expect(errors).toEqual([]);
+});
+
+test('manual insertion rejects occupied holes, moves by holes, lifts, duplicates, and undoes', async ({page}) => {
+  await page.goto('/?tab=breadboard'); await page.getByRole('button', {name: 'Load inserted LED', exact: true}).click();
+  await page.getByRole('button', {name: 'Add Resistor', exact: true}).click();
+  await page.getByRole('button', {name: 'Insert into breadboard', exact: true}).click();
+  await page.getByRole('button', {name: 'Breadboard TP2', exact: true}).click();
+  await expect(page.locator('.bb-notice')).toContainText('TP2 is occupied');
+  await page.getByRole('button', {name: 'Breadboard H22', exact: true}).click();
+  await expect(page.locator('.bb-insert-banner')).toContainText('First lead: H22');
+  await page.getByRole('button', {name: 'Breadboard H26', exact: true}).click();
+  await expect(page.locator('.bb-mounted')).toHaveCount(3);
+  let project = await saved(page); const id = project.parts.at(-1).id;
+  expect(project.parts.at(-1).mount).toEqual({holes: {a: 'h22', b: 'h26'}});
+  const part = page.locator(`[data-part-id="${id}"]`), handle = part.getByRole('button', {name: 'Move Resistor', exact: true});
+  await handle.focus(); await page.keyboard.press('ArrowRight');
+  expect((await saved(page)).parts.at(-1).mount).toEqual({holes: {a: 'h23', b: 'h27'}});
+  await page.getByRole('button', {name: 'Undo circuit change'}).click();
+  expect((await saved(page)).parts.at(-1).mount).toEqual({holes: {a: 'h22', b: 'h26'}});
+  await handle.click(); await page.getByRole('button', {name: 'Duplicate', exact: true}).click();
+  expect((await saved(page)).parts.at(-1).mount).toBeUndefined();
+  await page.getByRole('button', {name: 'Undo circuit change'}).click(); await handle.click();
+  await page.getByRole('button', {name: 'Lift from breadboard', exact: true}).click();
+  await expect(page.locator('.bb-mounted')).toHaveCount(2); expect((await saved(page)).wires).toHaveLength(4);
+  await page.getByRole('button', {name: 'Undo circuit change'}).click(); await expect(page.locator('.bb-mounted')).toHaveCount(3);
+  await page.reload(); expect((await saved(page)).parts.at(-1).mount).toEqual({holes: {a: 'h22', b: 'h26'}});
+  await handle.click(); await page.getByRole('button', {name: 'Move leads', exact: true}).first().click();
+  await page.getByRole('button', {name: 'Breadboard H23', exact: true}).click();
+  await page.getByRole('tab', {name: 'Connections', exact: true}).click(); await page.locator('.bb-connections>button').first().click();
+  await expect(page.locator('.bb-insert-banner')).toHaveCount(0);
+  await page.getByRole('button', {name: 'Reconnect to', exact: true}).click(); await page.getByRole('button', {name: 'Breadboard TP3', exact: true}).click();
+  expect((await saved(page)).parts.at(-1).mount).toEqual({holes: {a: 'h22', b: 'h26'}}); expect((await saved(page)).wires[0].to).toBe('hole:tp3');
+});
+
+test('dragging inserted components is one undo step; keyboard placement works at phone size', async ({page}) => {
+  await page.goto('/?tab=breadboard'); await page.getByRole('button', {name: 'Load inserted LED', exact: true}).click();
+  await page.locator('[data-part-id="resistor"] .bb-mounted-resistor').scrollIntoViewIfNeeded();
+  const center = await page.locator('[data-part-id="resistor"] .bb-mounted-resistor').boundingBox();
+  const svg = await page.getByLabel('Interactive breadboard', {exact: true}).boundingBox();
+  await page.mouse.move(center.x + center.width / 2, center.y + center.height / 2); await page.mouse.down();
+  await page.mouse.move(center.x + center.width / 2 + 26 * svg.width / 1200, center.y + center.height / 2, {steps: 4}); await page.mouse.up();
+  expect((await saved(page)).parts.find(p => p.id === 'resistor').mount).toEqual({holes: {a: 'c9', b: 'c15'}});
+  await page.getByRole('button', {name: 'Undo circuit change'}).click();
+  expect((await saved(page)).parts.find(p => p.id === 'resistor').mount).toEqual({holes: {a: 'c8', b: 'c14'}});
+  await page.setViewportSize({width: 390, height: 844}); await page.getByRole('button', {name: 'Add LED', exact: true}).click();
+  await page.getByRole('button', {name: 'Insert into breadboard', exact: true}).click();
+  await page.getByRole('button', {name: 'Breadboard A1', exact: true}).focus(); await page.keyboard.press('Enter');
+  await page.keyboard.press('ArrowRight'); await page.keyboard.press('Enter');
+  expect((await saved(page)).parts.at(-1).mount).toEqual({holes: {a: 'a1', b: 'a2'}});
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});

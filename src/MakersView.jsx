@@ -1,6 +1,6 @@
 import HardwareLinks from './HardwareLinks.jsx';
 import React,{useEffect,useMemo,useRef,useState} from 'react';
-import {Monitor,Search,ArrowUpRight,X,SlidersHorizontal,ExternalLink,BookOpen,Layers} from 'lucide-react';
+import {Monitor,Search,ArrowUpRight,X,SlidersHorizontal,ExternalLink,BookOpen,Layers,CircuitBoard} from 'lucide-react';
 import {searchMakerParts,makerSuggestions} from './maker-search.mjs';
 import {webEdition,libraryURL} from './runtime.mjs';
 import {makerAssets,hasVisual} from './maker-assets.mjs';
@@ -12,7 +12,7 @@ const kinds={'product-reference':'Product reference','manufacturer-family':'Manu
 const unique=(parts,key)=>[...new Set(parts.flatMap(p=>Array.isArray(p[key])?p[key]:[p[key]]).filter(v=>v!==undefined&&v!==null&&v!==''))].sort((a,b)=>typeof a==='number'?a-b:String(a).localeCompare(String(b)));
 function facts(p){return [p.technology,...p.controllers,...p.interfaces,p.diagonalInches!=null?p.diagonalInches+' in':'',p.resolution].filter(Boolean);}
 
-export default function MakersView({requestedPart,onRequestedPartHandled,catalog,query,setQuery,openBoard,SourceLink}){
+export default function MakersView({requestedPart,onRequestedPartHandled,catalog,query,setQuery,openBoard,SourceLink,onAddToBreadboard}){
  const parts=catalog.makerParts||[];
  const visuals=useMemo(()=>new Map(parts.map(p=>[p.id,makerAssets(p,catalog)])),[parts,catalog]);
  const [filters,setFilters]=useState({}),[limit,setLimit]=useState(30);
@@ -36,17 +36,17 @@ export default function MakersView({requestedPart,onRequestedPartHandled,catalog
    {matches.length>limit&&<div className="load-more"><button className="secondary-button" onClick={()=>setLimit(n=>n+30)}>Show 30 more</button><span>Showing {limit} of {matches.length}</span></div>}
   </section>
   <aside className="maker-method"><Layers size={22}/><div><h3>A useful reference starts with the exact hardware.</h3><p>Records connect to their original sources. Generic names may cover different pin orders and voltage circuits. A document or pin-label list is not a verified physical pinout; missing facts stay visible while each variant is reviewed.</p><SourceLink url="https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/MAKER_ROADMAP.md">Coverage roadmap & contribution process</SourceLink></div></aside>
-  {selected&&<MakerDialog part={selected} catalog={catalog} close={()=>pick(null)} openBoard={b=>{pick(null);openBoard(b);}} SourceLink={SourceLink}/>}
+  {selected&&<MakerDialog onAddToBreadboard={onAddToBreadboard} part={selected} catalog={catalog} close={()=>pick(null)} openBoard={b=>{pick(null);openBoard(b);}} SourceLink={SourceLink}/>}
  </div>;
 }
 
-function MakerDialog({part:p,catalog,close,openBoard,SourceLink}){
+function MakerDialog({part:p,catalog,close,openBoard,SourceLink,onAddToBreadboard}){
  const ref=useRef(null);
  useEffect(()=>{const dialog=ref.current;dialog.showModal();return()=>dialog.close();},[]);
  const linked=catalog.boards.filter(b=>p.boardIds.includes(b.id)&&b.assets.length);
  const assets=makerAssets(p,catalog);
  const url=new URL(location.href);url.search='';url.searchParams.set('tab','makers');url.searchParams.set('part',p.id);
- return <dialog className="maker-dialog" ref={ref} aria-labelledby="maker-detail-title" onCancel={e=>{e.preventDefault();close();}} onClick={e=>{if(e.target===ref.current)close();}}><div className="maker-dialog-inner"><header><span className="eyebrow">{p.category} / {kinds[p.identityKind]}</span><button className="icon-button" aria-label="Close maker record" onClick={close}><X size={20}/></button></header><div className="card-brand">{p.brand}</div><h2 id="maker-detail-title">{p.name}</h2><div className="maker-facts">{facts(p).map((f,i)=><span key={i}>{f}</span>)}</div><HardwareLinks record={p} SourceLink={SourceLink}/><CoverageSummary record={p}/><MakerGallery part={p} assets={assets} SourceLink={SourceLink}/><PinReference record={p} SourceLink={SourceLink}/><dl className="maker-detail-facts"><dt>Documentation</dt><dd>{p.documentationStatus}</dd><dt>Exact PCB revision</dt><dd>{p.revision}</dd><dt>Interface</dt><dd>{p.interfaces.join(' / ')||'Not recorded'}</dd><dt>Controller</dt><dd>{p.controllers.join(' / ')||'Not recorded'}</dd><dt>Physical pinout</dt><dd>{assets.filter(a=>a.type==='pinout image').length?'Physical pinout references available; check partial-map and revision labels':'Supporting images only; complete physical pinout still needed'}</dd></dl>
+ return <dialog className="maker-dialog" ref={ref} aria-labelledby="maker-detail-title" onCancel={e=>{e.preventDefault();close();}} onClick={e=>{if(e.target===ref.current)close();}}><div className="maker-dialog-inner"><header><span className="eyebrow">{p.category} / {kinds[p.identityKind]}</span><button className="icon-button" aria-label="Close maker record" onClick={close}><X size={20}/></button></header><div className="card-brand">{p.brand}</div><h2 id="maker-detail-title">{p.name}</h2><button className="secondary-button" onClick={()=>{close();onAddToBreadboard(p);}}><CircuitBoard size={16}/>Add to breadboard</button><div className="maker-facts">{facts(p).map((f,i)=><span key={i}>{f}</span>)}</div><HardwareLinks record={p} SourceLink={SourceLink}/><CoverageSummary record={p}/><MakerGallery part={p} assets={assets} SourceLink={SourceLink}/><PinReference record={p} SourceLink={SourceLink}/><dl className="maker-detail-facts"><dt>Documentation</dt><dd>{p.documentationStatus}</dd><dt>Exact PCB revision</dt><dd>{p.revision}</dd><dt>Interface</dt><dd>{p.interfaces.join(' / ')||'Not recorded'}</dd><dt>Controller</dt><dd>{p.controllers.join(' / ')||'Not recorded'}</dd><dt>Physical pinout</dt><dd>{assets.filter(a=>a.type==='pinout image').length?'Physical pinout references available; check partial-map and revision labels':'Supporting images only; complete physical pinout still needed'}</dd></dl>
   {p.pinLabels.length>0&&<section><h3>Documented pin labels</h3><p>Labels only; this is not the physical order or a wiring diagram.</p><div className="maker-pin-labels">{p.pinLabels.map(label=><code key={label}>{label}</code>)}</div></section>}
   <section><h3>Before connecting</h3>{p.notes.map((note,i)=><p key={i}>{note}</p>)}<p>Power input, GPIO logic voltage and current limits need separate confirmation. Sharing a controller name does not establish board compatibility.</p></section>
   {linked.length>0&&<section><h3>Existing reference files</h3>{linked.map(b=><button key={b.id} className="secondary-button" onClick={()=>openBoard(b)}><BookOpen size={16}/>{b.name} · {b.assets.length} files</button>)}</section>}

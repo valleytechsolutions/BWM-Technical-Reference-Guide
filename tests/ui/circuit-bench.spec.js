@@ -1,0 +1,85 @@
+import {test, expect} from '@playwright/test';
+import fs from 'node:fs/promises';
+import {getDocument} from 'pdfjs-dist/legacy/build/pdf.mjs';
+
+const current = page => page.evaluate(() => { const w = JSON.parse(localStorage.getItem('blackwire-circuit-projects-v1')); return w.entries.find(e => e.id === w.activeId).project; });
+
+test('two-lead meter reads voltage and polarity, then checks continuity without adding wires', async ({page}) => {
+  const errors = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto('/?tab=breadboard'); await page.getByRole('button', {name: 'Load LED example'}).click();
+  await page.getByRole('tab', {name: 'Multimeter', exact: true}).click();
+  await page.getByRole('button', {name: 'Breadboard TP30', exact: true}).click();
+  await page.getByRole('button', {name: 'Breadboard TN30', exact: true}).click();
+  await expect(page.locator('.bb-live-meter')).toContainText('Run DC test to measure');
+  await page.getByRole('button', {name: 'Run DC test'}).click();
+  await expect(page.locator('.bb-meter-display strong')).toHaveText('5.000 V');
+  await page.getByRole('button', {name: 'Swap leads', exact: true}).click();
+  await expect(page.locator('.bb-live-meter strong')).toHaveText('-5.000 V');
+  await expect(page.locator('.bb-meter-marker')).toHaveCount(2);
+  await page.screenshot({path: 'test-results/breadboard-meter.png', fullPage: true});
+  await page.getByRole('button', {name: 'Continuity', exact: true}).click();
+  await expect(page.locator('.bb-meter-display strong')).toHaveText('Stop the DC test first');
+  await page.getByRole('button', {name: 'Stop test'}).click();
+  await page.getByRole('button', {name: 'Place red meter lead'}).click();
+  await page.getByRole('button', {name: 'Breadboard A2', exact: true}).click();
+  await page.getByRole('button', {name: 'Breadboard E2', exact: true}).click();
+  await expect(page.locator('.bb-meter-display strong')).toHaveText('Connected');
+  await page.getByRole('button', {name: 'Place black meter lead'}).click();
+  await page.getByRole('button', {name: 'Breadboard F2', exact: true}).click();
+  await expect(page.locator('.bb-meter-display strong')).toHaveText('No direct connection');
+  expect((await current(page)).wires).toHaveLength(9); expect(errors).toEqual([]);
+});
+
+test('build checklist persists, reconnecting resets progress, and downloaded sheet works offline', async ({page, context}) => {
+  await page.goto('/?tab=breadboard'); await page.getByRole('button', {name: 'Load LED example'}).click();
+  await page.getByRole('tab', {name: 'Build guide', exact: true}).click();
+  await expect(page.locator('.bb-layout-checks')).toContainText('No shared holes');
+  await expect(page.locator('.bb-build-step')).toHaveCount(9);
+  await page.getByLabel('Mark W1 installed', {exact: true}).check();
+  await page.getByLabel('Build notes', {exact: true}).fill('Use silicone wires.\n<img src=x onerror="window.unexpected=true">');
+  await page.reload(); await page.getByRole('tab', {name: 'Build guide', exact: true}).click();
+  await expect(page.getByLabel('Mark W1 installed', {exact: true})).toBeChecked();
+  await expect(page.getByLabel('Build notes', {exact: true})).toHaveValue(/Use silicone/);
+  await page.locator('.bb-build-step>button').first().click();
+  await expect(page.getByLabel('Wire label', {exact: true})).toBeVisible();
+  await page.getByRole('button', {name: 'Reconnect to', exact: true}).click();
+  await page.getByRole('button', {name: 'Breadboard TP3', exact: true}).click();
+  await expect(page.getByLabel('Mark W1 installed', {exact: true})).not.toBeChecked();
+  await page.getByRole('button', {name: 'Undo circuit change'}).click();
+  await expect(page.getByLabel('Mark W1 installed', {exact: true})).toBeChecked();
+  const download = page.waitForEvent('download'); await page.getByRole('button', {name: 'Download build sheet'}).click();
+  const file = await download, html = await fs.readFile(await file.path(), 'utf8');
+  expect(file.suggestedFilename()).toMatch(/-build-sheet\.html$/);
+  const sheet = await context.newPage(); await sheet.setContent(html);
+  await expect(sheet.getByRole('heading', {name: 'First light · LED circuit', exact: true})).toBeVisible();
+  await expect(sheet.locator('svg')).toHaveCount(1); await expect(sheet.locator('img')).toHaveCount(0);
+  await expect(sheet.locator('.wiring tbody tr')).toHaveCount(9);
+  expect(await sheet.evaluate(() => window.unexpected)).toBeUndefined();
+  await sheet.emulateMedia({media: 'print'});
+  const printed = await sheet.pdf({path: 'test-results/circuit-build-sheet.pdf', preferCSSPageSize: true, printBackground: true});
+  const loading = getDocument({data: new Uint8Array(printed), useSystemFonts: true}), pdf = await loading.promise;
+  expect(pdf.numPages).toBe(3);
+  const text = async n => (await (await pdf.getPage(n)).getTextContent()).items.map(item => item.str).join(' ');
+  expect(await text(1)).toContain('A–E and F–J'); expect(await text(3)).toContain('W9'); await loading.destroy();
+  await sheet.screenshot({path: 'test-results/circuit-build-sheet.png', fullPage: true}); await sheet.close();
+  await page.screenshot({path: 'test-results/breadboard-build-guide.png', fullPage: true});
+});
+
+test('layout issues locate components and build controls fit a phone', async ({page}) => {
+  await page.goto('/?tab=breadboard'); await page.getByRole('button', {name: 'Add Resistor', exact: true}).click();
+  await page.getByRole('button', {name: 'Resistor · 1', exact: true}).first().click();
+  await page.getByRole('button', {name: 'Breadboard A1', exact: true}).click();
+  await page.getByRole('button', {name: 'Resistor · 2', exact: true}).first().click();
+  await page.getByRole('button', {name: 'Breadboard E1', exact: true}).click();
+  await page.getByRole('tab', {name: 'Build guide', exact: true}).click();
+  await page.getByRole('button', {name: /both terminals are on the same net/}).click();
+  await expect(page.locator('.bb-component.resistor')).toHaveClass(/selected/);
+  await page.setViewportSize({width: 390, height: 844});
+  await page.getByLabel('Build notes', {exact: true}).fill('Bench notes');
+  await page.getByRole('button', {name: 'Download build sheet'}).scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.screenshot({path: 'test-results/breadboard-build-mobile.png', fullPage: true});
+  await page.getByRole('tab', {name: 'Multimeter', exact: true}).click();
+  await expect(page.getByRole('button', {name: 'Place black meter lead'})).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});

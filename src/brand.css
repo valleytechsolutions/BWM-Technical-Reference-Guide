@@ -61,6 +61,9 @@
 :root .sidebar-valleytech{padding:0 8px;gap:8px;align-items:center}
 :root .sidebar-valleytech img{width:22px;height:22px;padding:2px;border-radius:4px}
 :root .sidebar-valleytech span{font-size:11px;letter-spacing:0;line-height:1.35;color:var(--muted)}
+:root .sidebar-project-links{display:flex;flex-direction:column;gap:5px;min-width:0}
+:root .sidebar-project-links a{display:inline-flex;align-items:center;gap:4px;font-size:11px;line-height:1.35;color:var(--muted);text-decoration:none}
+:root .sidebar-project-links a:hover{color:var(--ink);text-decoration:underline}
 :root .sidebar .version{font:11px var(--mono);letter-spacing:0;color:var(--muted);margin:12px 8px 0}
 
 /* Top bar */

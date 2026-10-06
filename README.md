@@ -17,7 +17,15 @@
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
-## New in 0.14.0
+## New in 0.15.0
+
+- **Breadboard maker:** combine catalog devices and basic components on mini, half or full-size breadboards (up to four per circuit, with optional split rails), connect terminals with wires, and insert parts directly into breadboard holes.
+- **Device maker:** define your own modules and chips with terminal roles, a SIP/DIP/dual-row breadboard package and an optional power profile, then save them to **My devices** for reuse.
+- **DC testing and measurements:** run LED, dimmer and transistor-switch examples with diodes, capacitors, push buttons, NPN/PNP transistors and active buzzers, change switches and potentiometers, inspect connected contacts, and measure voltage or continuity with the multimeter.
+- **Save and assemble:** keep multiple local projects, undo edits, import/export circuit files, and download a printable build guide with lead positions, wiring checks and assembly checklists.
+- [Breadboard instructions](docs/WORKBENCH.md#breadboard-maker) · [Release notes and validation status](docs/RELEASE-0.15.0.md). Version 0.15.0 is prepared in source; desktop downloads below remain on 0.14.0 pending native validation and publication.
+
+## Previous update / 0.14.0
 
 - **One Windows installer**, plus Linux DEB packages. No separate library ZIP parts beside Windows setup.
 - **Updates inside Black Wire:** check, download, then restart when ready. Saved boards, measurements and downloaded references survive updates.
@@ -110,6 +118,7 @@ Built for a student's first breadboard, an educator's lab, a hobbyist's parts dr
 | Read the details | Zoom, pan and rotate diagrams; browse local PDFs; save the original-resolution file. |
 | Check the source | Keep source links, revision notes, coverage labels and hashes with each reference. |
 | Plan power | Read sourced voltage/current profiles and published observations; compare adapter ratings, estimate battery runtime and total power across voltage rails. |
+| Prototype a circuit | Place and insert parts on one or more breadboards, define reusable devices, and run a basic DC test with voltage probes, LED feedback and device limit checks. |
 | Keep your work | Save boards and your own measurements locally; import/export JSON backups. |
 | Stay offline | The desktop reference library is bundled locally. External source, wiki and YouTube links open only when selected. No account or cloud sync. |
 
@@ -118,6 +127,26 @@ Built for a student's first breadboard, an educator's lab, a hobbyist's parts dr
 **3,504 reference entries · 1,549 board pinout source image entries · 74 brands/source groups.** There are 1,962 populated catalog records, including shared references and unreviewed source products. This is a collection snapshot, not a claim to cover every board ever made.
 
 ESP32 variants including C5/C6/S3, RP2040/RP2350, CYD displays, Arduino, Teensy, Raspberry Pi, other SBCs, radio boards and GPIO devices are indexed separately where their identities are known. Chip-package references are labeled separately from board pinouts.
+
+## Breadboard & device maker
+
+Open **Breadboard maker** in the sidebar, or choose **Add to breadboard** from a board or module reference. Place supplies, resistors, LEDs, diodes, capacitors, switches, push buttons, potentiometers, transistors and buzzers; click two terminals to wire them together. Each breadboard connects A–E and F–J separately in each column. Choose a mini (17-column, no rails), half (30-column) or full-size (63-column) board, split its power rails at the middle, and add up to four boards to one circuit. Drag component headers to arrange your circuit; placement alone does not connect a terminal.
+
+**Insert parts directly:** select a part, choose **Insert into breadboard**, then choose its holes. Two-lead parts take any two holes; potentiometers, transistors, push buttons and packaged devices follow their footprint from pin 1, with a preview and **R** to rotate. The leads join the board’s electrical strips without extra jumpers. Drag inserted parts or use arrow keys to move by holes; **Move leads** chooses a different orientation, and **Lift from breadboard** returns the part to the workspace. Copper outlines identify occupied holes. **Load inserted LED** gives you a complete three-part circuit with four jumper wires; **Load transistor switch** lights an LED only while you hold a push button.
+
+**Make your own devices:** the **Device maker** tab edits a custom or catalog device: paste terminal labels in pin order, assign roles (power, ground, GPIO, bus…), choose a breadboard package, and optionally enter its voltage range and current draw. The DC test then draws that current and flags supply voltage outside your range or overdriven inputs; the build guide flags reversed power and VCC–GND shorts. Save it to **My devices** to reuse it in any circuit, or export the library as JSON. Roles and limits are the values you enter, not inferred datasheets.
+
+**Load LED example → Run DC test** starts a working circuit. Change resistor or supply values, toggle the switch, and use **Probe** to inspect node voltages. The test estimates steady DC currents and flags supply shorts, excessive LED current, reverse LED polarity and resistor dissipation above the example rating.
+
+Catalog boards, sensors and displays are available as **wiring references**, showing their original reference artwork where available. Edit terminal labels and place contacts on that artwork; unplaced terminals retain a logical layout. Rotation and duplication preserve terminal identities, and attached wires follow components. They do not yet simulate firmware, GPIO, sensors or communication protocols. The DC model uses ideal connections and supplies plus simplified LEDs, diodes and transistors; capacitors are treated as fully charged. It does not certify a physical build.
+
+Use **Projects** to keep up to 50 separate local circuits, reopen builds, save copies, and delete individual projects. New circuits, examples and imports preserve your existing builds. Version 1 and 2 circuit files upgrade automatically to version 3, which preserves inserted lead connections. The original legacy single-circuit save remains untouched. The breadboard's **Export / Import** controls use JSON files separately from the About-page bookmark/measurement backup. Editing supports undo/redo within the current project session. [Workbench instructions](docs/WORKBENCH.md#breadboard-maker).
+
+**Shape the wiring:** double-click a wire to add a bend, drag bend handles, label a wire, or reconnect either endpoint. Select a connection to highlight its breadboard net. Pan, zoom, expanded workspace, connection lists and a parts list help with larger builds.
+
+**Measure and build:** use **Multimeter** for two-lead DC voltage measurements and direct-path continuity checks. The **Build guide** groups your parts, flags shared holes and bypassed components, and saves a per-wire assembly checklist and notes. Download a self-contained HTML build sheet with a vector layout and exact terminal-to-terminal instructions; open it to print or save as PDF. Catalog devices remain wiring references, not simulated firmware.
+
+**Try a complete adjustable build:** load the **dimmer example**, run the DC test, select the potentiometer and move **Wiper position**. Its two resistive track segments and the LED load are solved together, so the displayed current and LED brightness respond to the actual connections. This generic analog model does not run microcontroller firmware.
 
 ## Devices & IoT
 

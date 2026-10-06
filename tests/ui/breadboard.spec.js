@@ -1,0 +1,118 @@
+import {test, expect} from '@playwright/test';
+import fs from 'node:fs/promises';
+const currentProject = page => page.evaluate(() => { const w = JSON.parse(localStorage.getItem('blackwire-circuit-projects-v1')); return w.entries.find(e => e.id === w.activeId).project; });
+
+test('LED example, live switch, probe, persistence, export and undo', async ({page}) => {
+  const errors = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto('/?tab=breadboard');
+  await expect(page.getByRole('heading', {name: 'Breadboard & device maker'})).toBeVisible();
+  await page.getByRole('button', {name: 'Load LED example'}).click();
+  await page.getByRole('button', {name: 'Run DC test'}).click();
+  await expect(page.locator('.bb-result-state')).toHaveText('Model solved');
+  await expect(page.locator('.bb-component.led')).toHaveClass(/lit/);
+  await expect(page.locator('.bb-results-grid')).toContainText('8.57');
+  await page.getByRole('button', {name: 'Toggle Switch', exact: true}).click();
+  await expect(page.locator('.bb-component.led')).not.toHaveClass(/lit/);
+  await expect(page.locator('.bb-diagnostics')).toContainText('No closed load path');
+  await page.getByRole('button', {name: 'Toggle Switch', exact: true}).click();
+  await page.getByRole('button', {name: 'Probe', exact: true}).click();
+  await page.getByRole('button', {name: 'Breadboard TP30', exact: true}).click();
+  await expect(page.locator('.bb-probe-reading')).toContainText('5 V');
+  await page.getByRole('button', {name: 'Move Resistor', exact: true}).click();
+  await page.getByLabel('Resistance (Ω)').fill('1000'); await page.getByLabel('Resistance (Ω)').press('Enter');
+  await expect(page.getByRole('button', {name: 'Run DC test'})).toBeVisible();
+  await page.getByRole('button', {name: 'Run DC test'}).click();
+  await expect(page.locator('.bb-results-grid')).toContainText('2.94');
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', {name: 'Export', exact: true}).click();
+  const exported = JSON.parse(await fs.readFile(await (await downloadPromise).path(), 'utf8'));
+  expect(exported.parts.find(p => p.type === 'resistor').value).toBe(1000);
+  expect(exported.wires).toHaveLength(9);
+  await page.getByRole('button', {name: 'New', exact: true}).click();
+  await expect(page.locator('.bb-component')).toHaveCount(0);
+  await page.getByRole('button', {name: /Projects/}).click();
+  await page.locator('.bb-project-open').filter({hasText: 'First light'}).click();
+  await page.getByRole('button', {name: 'Close saved projects'}).click();
+  await expect(page.locator('.bb-component')).toHaveCount(4);
+  await page.reload(); await expect(page.locator('.bb-component')).toHaveCount(4);
+  await page.getByRole('button', {name: 'Run DC test'}).click();
+  await page.screenshot({path: 'test-results/breadboard-desktop.png', fullPage: true});
+  expect(errors).toEqual([]);
+});
+
+test('manual wiring, shared holes, drag, deletion, and short detection', async ({page}) => {
+  await page.goto('/?tab=breadboard');
+  await page.getByRole('button', {name: 'Add DC supply', exact: true}).click();
+  await page.getByRole('button', {name: 'DC supply · +', exact: true}).click();
+  await page.getByRole('button', {name: 'Breadboard A1', exact: true}).click();
+  await page.getByRole('button', {name: 'DC supply · −', exact: true}).click();
+  await page.getByRole('button', {name: 'Breadboard E1', exact: true}).click();
+  await page.getByRole('button', {name: 'Run DC test'}).click();
+  await expect(page.locator('.bb-diagnostics')).toContainText('short circuit');
+  await page.getByRole('button', {name: 'Breadboard A1', exact: true}).click();
+  await page.getByRole('button', {name: 'Breadboard A2', exact: true}).click();
+  await expect(page.locator('.bb-wire')).toHaveCount(3);
+  await page.getByRole('button', {name: 'Remove wire', exact: true}).click();
+  await expect(page.locator('.bb-wire')).toHaveCount(2);
+  const handle = page.getByRole('button', {name: 'Move DC supply', exact: true});
+  await handle.scrollIntoViewIfNeeded();
+  const box = await handle.boundingBox();
+  await page.mouse.move(box.x + 20, box.y + 8); await page.mouse.down(); await page.mouse.move(box.x + 75, box.y + 28, {steps: 5}); await page.mouse.up();
+  await expect.poll(async () => (await currentProject(page)).parts[0].x).toBeGreaterThan(35);
+  await page.getByRole('button', {name: 'Remove part & its wires'}).click();
+  await expect(page.locator('.bb-component')).toHaveCount(0); await expect(page.locator('.bb-wire')).toHaveCount(0);
+  await page.getByRole('button', {name: 'Breadboard A1', exact: true}).focus();
+  await page.keyboard.press('Enter'); await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowDown'); await page.keyboard.press('Enter');
+  await expect(page.getByRole('button', {name: 'Wire from Breadboard A1 to Breadboard B2', exact: true})).toBeVisible();
+});
+
+test('catalog device terminals, reference link and board-to-circuit integration', async ({page}) => {
+  await page.goto('/?tab=breadboard');
+  await page.getByRole('button', {name: 'Your catalog', exact: true}).click();
+  await page.getByLabel('Find catalog components').fill('MAX98357');
+  await page.getByRole('button', {name: /Add Adafruit MAX98357.* to circuit/}).first().click();
+  await expect(page.locator('.bb-terminal-list')).toContainText('GND');
+  await page.getByLabel('New terminal', {exact: true}).fill('TEST'); await page.getByRole('button', {name: 'Add terminal', exact: true}).click();
+  await expect(page.locator('.bb-terminal-list')).toContainText('TEST');
+  await page.getByRole('button', {name: 'Run DC test'}).click();
+  await expect(page.locator('.bb-diagnostics')).toContainText('not simulated');
+  await page.getByRole('button', {name: 'Open device reference'}).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.getByRole('button', {name: 'Add to breadboard', exact: true}).click();
+  await expect(page.locator('.bb-component.device')).toHaveCount(2);
+  await page.getByRole('button', {name: 'Board library', exact: false}).first().click();
+  await page.getByRole('combobox', {name: 'Search boards and references'}).fill('Teensy 4.1'); await page.keyboard.press('Escape');
+  await page.getByRole('button', {name: 'View Teensy 4.1 references', exact: true}).click();
+  await page.getByRole('button', {name: 'Add to breadboard', exact: true}).click();
+  await expect(page.locator('.bb-component.device')).toHaveCount(3);
+  await expect(page.locator('.bb-inspector')).toContainText('No structured pin list');
+});
+
+test('valid imports replace reversibly; malformed imports and corrupt saves preserve data', async ({page}) => {
+  await page.goto('/?tab=breadboard');
+  await page.getByRole('button', {name: 'Load LED example'}).click();
+  const data = JSON.stringify(await currentProject(page));
+  await page.getByLabel('Import circuit file').setInputFiles({name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{"format":"no"}')});
+  await expect(page.locator('.bb-notice')).toContainText('Import failed'); await expect(page.locator('.bb-component')).toHaveCount(4);
+  await page.getByRole('button', {name: 'New', exact: true}).click();
+  await page.getByLabel('Import circuit file').setInputFiles({name: 'circuit.json', mimeType: 'application/json', buffer: Buffer.from(data)});
+  await expect(page.locator('.bb-component')).toHaveCount(4);
+  await page.evaluate(() => localStorage.setItem('blackwire-circuit-projects-v1', 'broken saved data'));
+  await page.reload(); await expect(page.locator('.bb-notice')).toContainText('Automatic saving is paused');
+  await page.getByRole('button', {name: 'Add LED', exact: true}).click();
+  expect(await page.evaluate(() => localStorage.getItem('blackwire-circuit-projects-v1'))).toBe('broken saved data');
+});
+
+test('phone and light theme keep the circuit controls within the page', async ({page}) => {
+  await page.setViewportSize({width: 390, height: 844}); await page.goto('/?tab=breadboard');
+  await page.getByRole('button', {name: 'Load LED example'}).click();
+  await page.getByRole('button', {name: 'Run DC test'}).click();
+  await expect(page.locator('.bb-result-state')).toHaveText('Model solved');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({path: 'test-results/breadboard-mobile.png', fullPage: true});
+  await page.getByRole('button', {name: 'Light mode', exact: true}).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.setViewportSize({width: 1440, height: 1000});
+  await page.getByRole('button', {name: 'Fit circuit'}).click();
+  await page.screenshot({path: 'test-results/breadboard-light.png', fullPage: true});
+});

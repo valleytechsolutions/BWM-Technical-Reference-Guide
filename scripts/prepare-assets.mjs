@@ -1,7 +1,9 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createRequire} from 'node:module';
+import {prepareCatalog} from './catalog-guard.mjs';
 const require=createRequire(import.meta.url);
+await prepareCatalog();
 const pdfRoot=path.dirname(require.resolve('pdfjs-dist/package.json'));
 for(const name of ['cmaps','standard_fonts','wasm'])await fs.cp(path.join(pdfRoot,name),path.join('public','pdf',name),{recursive:true});
 await fs.copyFile(path.join(pdfRoot,'LICENSE'),path.join('public','pdf','LICENSE'));
