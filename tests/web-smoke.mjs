@@ -75,6 +75,14 @@ try{
   await expect(measurement).toHaveCount(0);await expect(frame.locator('.measurement-list')).toContainText('Automated sandbox test '+method);
  }
  await page.goto(url);await page.setViewportSize({width:390,height:844});await expect(page.getByRole('heading',{name:/Board library/})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await page.goto(url+'?board='+encodeURIComponent(pdfBoard.id));
+ const mobileDialog=page.getByRole('dialog');await expect(mobileDialog).toBeVisible();
+ const titleBox=await mobileDialog.getByRole('heading',{level:2}).boundingBox();
+ const addBox=await mobileDialog.getByRole('button',{name:'Add to breadboard',exact:true}).boundingBox();
+ const closeBox=await mobileDialog.getByRole('button',{name:'Close board',exact:true}).boundingBox();
+ expect(addBox.y).toBeGreaterThanOrEqual(titleBox.y+titleBox.height);
+ expect(closeBox.x).toBeGreaterThanOrEqual(0);expect(closeBox.x+closeBox.width).toBeLessThanOrEqual(390);
+ await mobileDialog.getByRole('button',{name:'Close board',exact:true}).click();await expect(mobileDialog).toHaveCount(0);
  expect(errors).toEqual([]);expect(failed).toEqual([]);
  const report={passed:true,base,initialDecodedBytes:initialBytes,references:catalog.stats.referenceEntries,checks:['subpath assets','on-demand originals','dash search','image rendering','original download','browser bookmarks','direct board links','PDF pages','power desk','sandboxed embed','sandboxed PDF page jump by click and Enter','sandboxed measurement validation and saving','mobile layout','production CSP']};
  await fs.writeFile('data/qa/web/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));

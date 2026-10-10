@@ -19,7 +19,7 @@ Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-pa
 
 ## Vendor references / collection 2026.10.2
 
-**10 new records · 124 enriched records · 232 added references · 159 sourced external pin-purpose rows.** Seeed, M5Stack, Waveshare, Arduino, Adafruit, DFRobot and Renesas are included, with discovery through DigiKey and Mouser. Fourteen added images are physical pinout references; schematics, function sheets and component labels keep their separate roles. [Coverage and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.10.2.md) · [Read in the guide](docs/wiki/vendor-reference-update.md). First Edition / 2026 and app version 0.15.0 remain unchanged; this content update does not replace published desktop installers.
+**10 new records · 124 enriched records · 232 added references · 159 sourced external pin-purpose rows.** Seeed, M5Stack, Waveshare, Arduino, Adafruit, DFRobot and Renesas are included, with discovery through DigiKey and Mouser. Fourteen added images are physical pinout references; schematics, function sheets and component labels keep their separate roles. [Coverage and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.10.2.md) · [Read in the guide](docs/wiki/vendor-reference-update.md). First Edition / 2026 is unchanged. Browser/source app 0.15.1 also fixes overlapping reference-header actions on narrow screens; published desktop installers remain 0.14.0.
 
 ## High Boy schematic / collection 2026.10.1
 

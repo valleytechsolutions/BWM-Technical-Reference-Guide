@@ -343,5 +343,7 @@
   :root .page-header h1,:root :is(.makers-hero,.devices-hero,.power-hero,.about-brand) h1{font-size:25px}
   :root .page-meta>div{padding:0 16px}
   :root .global-search-panel{top:42px}
+  :root .board-dialog .dialog-header{flex-direction:column;align-items:stretch;gap:12px}
+  :root .board-dialog .dialog-header>div:last-child{flex-wrap:wrap;flex-shrink:1;gap:8px;max-width:100%}
 }
 @media(max-width:430px){:root main{padding:24px 16px 0}:root .page-meta>div:nth-child(n+4){display:none}}
