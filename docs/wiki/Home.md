@@ -5,6 +5,7 @@ Board pinouts, manufacturer source files and power data. Every reference keeps i
 [Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases)
 
 - [Wiring & protocols](Wiring.md) — Original connection diagrams and practical guides.
+- [High Boy V2_03 schematic](highboy-schematic.md) — The eight-page schematic dated September 29, 2026, with the older MVP revision kept separate.
 - [Install and update the desktop app](desktop-updates.md) — One installer, a persistent offline library and updates inside Black Wire.
 - [Zoom and pan a reference](reference-viewer.md) — Pinch, drag and use keyboard controls on original images and PDF pages.
 - [LoRa radios and GPIO devices](radio-and-gpio-references.md) — Match the radio module, carrier, region and board revision before using a connector reference.

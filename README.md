@@ -17,6 +17,12 @@
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
+## High Boy schematic / collection 2026.10.1
+
+The guide now includes the user-supplied **High Boy V2_03 schematic dated September 29, 2026**, preserved as an eight-page PDF. The historical REV 2.2 MVP / ESP32-S3 labels remain separate. [Open the updated schematic](https://valleytech-black-wire-guide.pages.dev/?board=high-code-gpio-device-high-boy-production-version) · [Revision and source notes](docs/wiki/highboy-schematic.md).
+
+This is a content update within First Edition / 2026. Existing desktop installers retain their bundled catalogs; no new installer is distributed for this update.
+
 ## New in 0.15.0
 
 - **Breadboard maker:** combine catalog devices and basic components on mini, half or full-size breadboards (up to four per circuit, with optional split rails), connect terminals with wires, and insert parts directly into breadboard holes.
