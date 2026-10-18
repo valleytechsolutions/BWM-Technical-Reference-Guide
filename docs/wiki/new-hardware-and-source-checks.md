@@ -24,6 +24,6 @@ ELM11 Feather is listed for pre-order by its creator. Its three pinout images ap
 
 The endpoint audit records HTTP responses separately from model and revision review. A responding URL does not prove the correct datasheet was returned. Restricted access, timeouts and deferred checks remain unverified; they are not called broken links. Saved documents remain available offline when a publisher page disappears.
 
-[Endpoint results and limitations](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/LINK-AUDIT.md) · [Intake and audit report](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.9.md)
+[Endpoint results and limitations](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/LINK-AUDIT.md) · [Intake and audit report](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.9.md)
 
 [Read the public wiki](https://valleytech-black-wire-guide.pages.dev/wiki/new-hardware-and-source-checks/) · [Open the guide](https://valleytech-black-wire-guide.pages.dev/)

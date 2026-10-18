@@ -6,7 +6,7 @@ Rotated pinout images now retain reachable corners. Stored measurements are vali
 
 ## Collection 2026.09.6
 
-Two newly tracked SparkFun ESP32 Thing Plus models, WRL-20168 USB-C and WRL-15663 micro-B, have distinct original pinout PDFs and rendered physical header sheets. Three existing records gain supporting documentation: Pro Micro RP2350, Thing Plus RP2350, and ESP32-P4-Function-EV-Board v1.5.2. Supporting photos and schematics are not counted as physical pinouts. Eight new reference entries bring the board collection to 3,011 entries; 1,369 entries are pinout images. [Source audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/QUALITY-AUDIT-2026.09.6.md).
+Two newly tracked SparkFun ESP32 Thing Plus models, WRL-20168 USB-C and WRL-15663 micro-B, have distinct original pinout PDFs and rendered physical header sheets. Three existing records gain supporting documentation: Pro Micro RP2350, Thing Plus RP2350, and ESP32-P4-Function-EV-Board v1.5.2. Supporting photos and schematics are not counted as physical pinouts. Eight new reference entries bring the board collection to 3,011 entries; 1,369 entries are pinout images. [Source audit](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/QUALITY-AUDIT-2026.09.6.md).
 
 ## Verification scope
 

@@ -12,7 +12,7 @@ Collection 2026.10.4 expands Waveshare, M5Stack and NodeMCU documentation while 
 
 NodeMCU DevKit 0.9 and 1.0 gain official board schematics. ToughC5 and Unit 8Servos2-I2C have saved manufacturer hardware guides. ATOM Lite, StampS3A, Nesso N1 connectors and several Waveshare boards gain physical maps. A module within a kit, a connector table and a full-device map are labeled separately. Match the pictured revision before wiring.
 
-[Review additions and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.10.4.md)
+[Review additions and remaining gaps](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.10.4.md)
 
 ## Datasheets are not interchangeable
 

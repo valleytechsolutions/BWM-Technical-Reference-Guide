@@ -18,7 +18,7 @@ Collection 2026.10.3 adds Waveshare ESP32-S3-LR1121-OLED-1.54, ESP32-S3-RS485-WL
 
 All nine products in the current Waveshare C5 documentation category are tracked; complete pinout approval is separate. M5Stack releases through the latest listed October 9 entries were checked. No new official NodeMCU hardware release was established. Failed downloads and unresolved revision/alias leads remain recorded. Source artwork retains its own rights. First Edition / 2026 and the book draft are unchanged.
 
-[Review scope and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.10.3.md)
+[Review scope and remaining gaps](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.10.3.md)
 
 ## Support the project
 

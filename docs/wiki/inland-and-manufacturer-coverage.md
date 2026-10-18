@@ -24,6 +24,6 @@ The 50 official MCU-category SKU pages include RP2040, RP2350, C5, C5-U, C6, S3,
 
 Distributor leads are attributed to the actual hardware manufacturer. TI LaunchPad, Microchip AVR-IoT WG and Silicon Labs references include their source PDF pages. An available document does not prove every pin is covered. No worldwide or entire-brand completeness is claimed.
 
-[Inland SKU/source checklist](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/catalog/inland-coverage.json) · [DFRobot coverage](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/catalog/dfrobot-coverage.json) · [Intake report](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.10.md)
+[Inland SKU/source checklist](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/catalog/inland-coverage.json) · [DFRobot coverage](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/catalog/dfrobot-coverage.json) · [Intake report](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.10.md)
 
 [Read the public wiki](https://valleytech-black-wire-guide.pages.dev/wiki/inland-and-manufacturer-coverage/) · [Open the guide](https://valleytech-black-wire-guide.pages.dev/)

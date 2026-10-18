@@ -18,7 +18,7 @@ Public destinations:
 
 - [Valleytech store guide](https://valleytechsolutions.tech/pages/bwm-technical-reference-guide)
 - [Full-screen guide](https://valleytech-black-wire-guide.pages.dev/)
-- [Pinout collection](https://github.com/valleytechsolutions/black-wire-pinouts)
-- [Desktop app](https://github.com/valleytechsolutions/black-wire-desktop)
+- [Pinout collection](https://git.churchofmalware.org/Valleytech/black-wire-pinouts)
+- [Desktop app](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide)
 
-See [website deployment](WEBSITE.md) and the collection's [edition policy](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/EDITION.md). A printed edition is not ready until content and third-party print rights have been reviewed and its contents frozen.
+See [website deployment](WEBSITE.md) and the collection's [edition policy](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/EDITION.md). A printed edition is not ready until content and third-party print rights have been reviewed and its contents frozen.

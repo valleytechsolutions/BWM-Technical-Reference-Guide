@@ -7,7 +7,7 @@ The public name is **The Black Wire Maker's Technical Reference Guide**. App 0.6
 - [Interactive guide](https://valleytech-black-wire-guide.pages.dev/): canonical URL for the app; crawlable initial HTML describes it and links to documentation.
 - [Reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/): eight original guides, board and maker directories, and 21 family/category pages. Static HTML works without JavaScript. Every catalog listing has a direct app link and a coverage label.
 - [Valleytech store page](https://valleytechsolutions.tech/pages/bwm-technical-reference-guide): a useful introduction, wiki/download links and the embedded app. The existing handle and store navigation stay stable.
-- [App GitHub wiki](https://github.com/valleytechsolutions/black-wire-desktop/wiki): the same practical guide text, maintained from the versioned source.
+- [App GitHub wiki](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/wiki): the same practical guide text, maintained from the versioned source.
 - The app and collection READMEs link to the guide, documentation, actual downloads and contribution paths. Repository topics describe real supported subjects.
 
 ## How it is built

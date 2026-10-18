@@ -6,7 +6,7 @@ Dagnazty's merged theme brings Black Wire's red, black and gold styling to the a
 
 The reference collection adds 32 listings covering HaleHound CYD builds, their QDtech base boards and Elechouse NFC/RFID, radio, driver, voice and development hardware. The 106 reference attachments include the original HaleHound build PDF, rendered diagram pages and manufacturer documents. Five Elechouse variants also include 36 source-linked pin-purpose rows. Exact variants, missing physical maps and conflicting source claims remain visible.
 
-[Source coverage and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.11.md) · [Hardware wiki guide](https://valleytech-black-wire-guide.pages.dev/wiki/halehound-and-elechouse-hardware/)
+[Source coverage and remaining gaps](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.11.md) · [Hardware wiki guide](https://valleytech-black-wire-guide.pages.dev/wiki/halehound-and-elechouse-hardware/)
 
 ## Windows download
 

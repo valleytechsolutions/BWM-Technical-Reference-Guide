@@ -30,6 +30,6 @@ Random Nerd Tutorials provides an ESP32/RFM95 LoRa wiring project. Follow the ex
 
 This snapshot adds 34 records, enriches 12 and saves 104 reference attachments, including 25 physical pinout images and 164 sourced pin-function rows. More RAK, Heltec, Seeed, Elecrow and distributor leads remain open; no complete worldwide inventory is claimed. Manufacturer artwork retains its own rights. The editorial edition remains First Edition / 2026.
 
-[Intake and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.13.md)
+[Intake and remaining gaps](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.13.md)
 
 [Read the public wiki](https://valleytech-black-wire-guide.pages.dev/wiki/radio-and-gpio-references/) · [Open the guide](https://valleytech-black-wire-guide.pages.dev/)

@@ -6,14 +6,14 @@
 <p align="center"><strong>Board pinouts, manufacturer source files and power data.</strong><br>Every reference keeps its source, revision and review status. A Valleytech Solutions project, made for the workbench.</p>
 <p align="center">Makers · Educators · Students · Hobbyists · Engineers</p>
 
-<p align="center"><a href="https://github.com/valleytechsolutions/black-wire-desktop/releases">Downloads & release status</a> · <a href="https://github.com/valleytechsolutions/black-wire-pinouts">Browse the pinout collection</a> · <a href="docs/BUILDING.md">Build the app</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
+<p align="center"><a href="https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases">Downloads & release status</a> · <a href="https://git.churchofmalware.org/Valleytech/black-wire-pinouts">Browse the pinout collection</a> · <a href="docs/BUILDING.md">Build the app</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
 <p align="center"><img alt="Edition" src="https://img.shields.io/badge/edition-First_Edition_2026-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Offline" src="https://img.shields.io/badge/reference_library-offline-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Platforms" src="https://img.shields.io/badge/packages-Windows_%7C_Linux_DEB-d9b872?style=flat-square&labelColor=0a0808"></p>
 
 ![Inland ESP32 original pinout in the Black Wire guide](docs/screenshots/inland-reference.png)
 
 ## Open the reference workbench
 
-**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download the latest desktop release](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/latest)**
+**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download the latest desktop release](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases/latest)**
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
@@ -27,7 +27,7 @@ Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-pa
 
 ## Vendor references / collection 2026.10.2
 
-**10 new records · 124 enriched records · 232 added references · 159 sourced external pin-purpose rows.** Seeed, M5Stack, Waveshare, Arduino, Adafruit, DFRobot and Renesas are included, with discovery through DigiKey and Mouser. Fourteen added images are physical pinout references; schematics, function sheets and component labels keep their separate roles. [Coverage and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.10.2.md) · [Read in the guide](docs/wiki/vendor-reference-update.md). First Edition / 2026 is unchanged. App 0.15.1 fixed overlapping reference-header actions on narrow screens; that fix is retained in 0.16.0.
+**10 new records · 124 enriched records · 232 added references · 159 sourced external pin-purpose rows.** Seeed, M5Stack, Waveshare, Arduino, Adafruit, DFRobot and Renesas are included, with discovery through DigiKey and Mouser. Fourteen added images are physical pinout references; schematics, function sheets and component labels keep their separate roles. [Coverage and remaining gaps](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.10.2.md) · [Read in the guide](docs/wiki/vendor-reference-update.md). First Edition / 2026 is unchanged. App 0.15.1 fixed overlapping reference-header actions on narrow screens; that fix is retained in 0.16.0.
 
 ## High Boy schematic / collection 2026.10.1
 
@@ -66,7 +66,7 @@ Fifteen original connection guides cover RJ45 and telephone connectors, serial b
 
 ## Previous update / 0.11.0
 
-- **HaleHound and Elechouse references:** 32 new listings, 106 reference attachments and 36 source-linked pin-purpose rows. Exact variants, original PDFs and unresolved source conflicts remain visible. [Coverage details](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.11.md).
+- **HaleHound and Elechouse references:** 32 new listings, 106 reference attachments and 36 source-linked pin-purpose rows. Exact variants, original PDFs and unresolved source conflicts remain visible. [Coverage details](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.11.md).
 
 - **A Black Wire brand theme:** red and black with a light royal-gold undertone across the app, the reference wiki, the 404 page and the share card. Red marks where you are, primary actions and pinout availability; gold carries labels, links and focus. Reference images and PDFs keep their original colors.
 - **Reference-first pages:** each section opens with a plain title, a factual description and the collection figures instead of slogans and artwork. A wire underline, a faint Black Wire mark and a **BWM Reference** label identify every page.
@@ -77,7 +77,7 @@ Fifteen original connection guides cover RJ45 and telephone connectors, serial b
 - 67 Inland records with exact SKU/revision distinctions, original images and visible gaps.
 - All 50 DFRobot MCU-category SKUs reviewed; additional TI, Microchip and Silicon Labs GPIO references.
 - Independent offline-library ZIP parts, all checked before an existing Windows installation is changed.
-- [Release notes and limitations](docs/RELEASE-0.10.0.md) · [Inland coverage](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/catalog/inland-coverage.json).
+- [Release notes and limitations](docs/RELEASE-0.10.0.md) · [Inland coverage](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/catalog/inland-coverage.json).
 
 ## Previous update / 0.9.0
 
@@ -121,7 +121,7 @@ Fifteen original connection guides cover RJ45 and telephone connectors, serial b
 - **Better discovery:** useful titles and descriptions, canonical links, social previews and a sitemap. GitHub wiki pages and issue templates make corrections and contributions easier.
 - **Useful edge-case fixes:** saved theme synchronization across tabs, a clear fallback when storage is blocked, and direct links to undocumented board records.
 
-The current collection is **2026.09.13**: 2,703 board/device listings and 575 maker listings, including families and shared records. A physical source is not an independently approved all-pin reference. [Coverage audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/PINOUT_COVERAGE.md).
+The current collection is **2026.09.13**: 2,703 board/device listings and 575 maker listings, including families and shared records. A physical source is not an independently approved all-pin reference. [Coverage audit](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/PINOUT_COVERAGE.md).
 
 ## Your board. Its pins. One place.
 
@@ -186,9 +186,9 @@ The power desk includes **13 sourced profiles and 22 published operating observa
 
 ## Download and open
 
-Check [Releases](https://github.com/valleytechsolutions/black-wire-desktop/releases) for the actual available assets and validation status. An absent platform asset means that platform has not been released.
+Check [Releases](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases) for the actual available assets and validation status. An absent platform asset means that platform has not been released.
 
-**[Download the latest release](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/latest)**. For original images and PDFs without an application, use the separate [collection downloads](https://github.com/valleytechsolutions/black-wire-pinouts/releases).
+**[Download the latest release](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases/latest)**. For original images and PDFs without an application, use the separate [collection downloads](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/releases).
 
 | Platform | Package |
 |---|---|
@@ -210,16 +210,16 @@ See [Website integration](docs/WEBSITE.md) for the prepared page, build commands
 
 ## Two repositories, one field guide
 
-- **[black-wire-pinouts](https://github.com/valleytechsolutions/black-wire-pinouts):** images, PDFs, catalog, board pages and per-reference attribution.
+- **[black-wire-pinouts](https://git.churchofmalware.org/Valleytech/black-wire-pinouts):** images, PDFs, catalog, board pages and per-reference attribution.
 - **This repository:** desktop application, power data, UI screenshots, tests and packaging. Large library files are imported during a build; personal bookmarks and measurements are never part of the repository.
 
-Power Desk 0.7.0 adds explicit current units, confirmation resets after rating changes, visible input notes, linked observation sources and battery derating. Read the [Power Desk guide](docs/wiki/power-desk.md) and [source review](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/POWER-REVIEW-2026.09.7.md).
+Power Desk 0.7.0 adds explicit current units, confirmation resets after rating changes, visible input notes, linked observation sources and battery derating. Read the [Power Desk guide](docs/wiki/power-desk.md) and [source review](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/POWER-REVIEW-2026.09.7.md).
 
 See [Build and development](docs/BUILDING.md), [Workbench guide](docs/WORKBENCH.md), [Attribution](ATTRIBUTION.md) and [Contribution guide](CONTRIBUTING.md).
 
 ## Attribution and project status
 
-Original board artwork belongs to its credited authors/manufacturers. This application does not claim ownership or grant new permissions over those references. See the collection's [per-asset ledger](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/catalog/attributions.csv) before reuse. **Original app code: [MIT](LICENSE)** — reuse and modify, including commercially, while retaining the copyright and permission notice. **Original guide material: CC BY 4.0** — reuse with attribution, a license link and a note of changes. See [license scope](LICENSING.md), [creator credit](NOTICE.md) and [privacy](PRIVACY.md). These licenses do not relicense manufacturer diagrams.
+Original board artwork belongs to its credited authors/manufacturers. This application does not claim ownership or grant new permissions over those references. See the collection's [per-asset ledger](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/catalog/attributions.csv) before reuse. **Original app code: [MIT](LICENSE)** — reuse and modify, including commercially, while retaining the copyright and permission notice. **Original guide material: CC BY 4.0** — reuse with attribution, a license link and a note of changes. See [license scope](LICENSING.md), [creator credit](NOTICE.md) and [privacy](PRIVACY.md). These licenses do not relicense manufacturer diagrams.
 
 First Edition is a growing digital collection for a lasting maker reference. The public wiki is available; annual print editions are a future project, with separate completeness, rights and print-quality reviews.
 

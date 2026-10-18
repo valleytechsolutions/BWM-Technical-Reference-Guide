@@ -21,7 +21,7 @@ Records carry model and revision notes, source URLs, review status and hashes wh
 
 Directory counts describe this catalog snapshot, including family records and shared references. They are not a worldwide inventory or a count of fully verified devices. The coverage audit records remaining work.
 
-[Current pinout coverage audit](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/PINOUT_COVERAGE.md)
+[Current pinout coverage audit](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/PINOUT_COVERAGE.md)
 
 ## Artwork and reuse
 

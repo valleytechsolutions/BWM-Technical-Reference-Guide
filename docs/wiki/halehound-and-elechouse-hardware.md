@@ -24,7 +24,7 @@ PN532 V3, V4, Evolution, external-antenna, USB and MINI are separate records. PN
 
 The serial RFID V5 product links a legacy V3 manual. PN5321 MINI web and PDF specifications disagree on supply range and protocol support; both the conflict and the saved PDF revision are recorded. Manufacturer current measurements are not Black Wire bench tests. Some products still have only labels, tables or photos. Exact Ebyte E07 and Cinder Ferret carrier revisions need further review.
 
-[Intake evidence and exclusions](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/catalog/halehound-elechouse-research-2026.09.11.json)
+[Intake evidence and exclusions](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/catalog/halehound-elechouse-research-2026.09.11.json)
 
 ## Credits and reuse
 

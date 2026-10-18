@@ -4,7 +4,7 @@ Pinch to enlarge a reference, then drag to the connector you need. Image and PDF
 
 Collection **2026.09.13** adds 34 board/module records and enriches 12 existing records: RAKwireless, Heltec, Elecrow, Seeed Studio, H4M Pro, ESP32-MDK, Hat Labs, LOLIN and REYAX. The 104 new attachments include 25 physical pinout images, with source PDFs, connector tables, schematics and identification pictures labeled separately. There are 164 additional sourced pin-function rows.
 
-[Coverage and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.13.md) · [Viewer controls](https://valleytech-black-wire-guide.pages.dev/wiki/reference-viewer/) · [Radio reference guide](https://valleytech-black-wire-guide.pages.dev/wiki/radio-and-gpio-references/)
+[Coverage and remaining gaps](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.13.md) · [Viewer controls](https://valleytech-black-wire-guide.pages.dev/wiki/reference-viewer/) · [Radio reference guide](https://valleytech-black-wire-guide.pages.dev/wiki/radio-and-gpio-references/)
 
 Source tests and browser regression cover touch pinch in/out, mouse panning, Ctrl+wheel, keyboard, zoom reset between references and PDF canvas limits. Automated touch checks use Chromium emulation; physical iOS/macOS trackpads and touch hardware have not been independently verified. First Edition / 2026 and the book draft remain unchanged. This update does not establish complete worldwide coverage or new independently tested power limits.
 

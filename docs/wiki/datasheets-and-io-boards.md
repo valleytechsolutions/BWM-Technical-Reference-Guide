@@ -30,6 +30,6 @@ A photograph or labeled board layout helps identify a device and locate connecto
 
 The audit covers every listing, including undocumented and generic records, without claiming that every device or datasheet in existence has been found.
 
-[Documentation inventory and gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/DOCUMENTATION.md) · [Jetson, NanoPi and I/O additions](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.8.md) · [I/O and expansion directory](https://valleytech-black-wire-guide.pages.dev/wiki/boards/expansion/)
+[Documentation inventory and gaps](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/DOCUMENTATION.md) · [Jetson, NanoPi and I/O additions](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.8.md) · [I/O and expansion directory](https://valleytech-black-wire-guide.pages.dev/wiki/boards/expansion/)
 
 [Read the public wiki](https://valleytech-black-wire-guide.pages.dev/wiki/datasheets-and-io-boards/) · [Open the guide](https://valleytech-black-wire-guide.pages.dev/)

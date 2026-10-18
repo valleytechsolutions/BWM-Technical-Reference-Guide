@@ -4,7 +4,7 @@ Search now keeps chip suffixes separate from display sizes, recognizes Unicode d
 
 Workbench imports reject duplicate measurement IDs and generate collision-free missing IDs, preventing imports that could make saved data unreadable. Merged catalog IDs preserve deep links, favorites and measurements. Library import removes retired managed files so they do not remain in native packages.
 
-Collection **2026.09.9** adds ESP-Mosaico, P4X and FPGA references: six new records, one populated record and 24 references, including four physical pinout-image entries. One truncated source image was retired; two malformed import records were merged. [Detailed source audit and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.9.md).
+Collection **2026.09.9** adds ESP-Mosaico, P4X and FPGA references: six new records, one populated record and 24 references, including four physical pinout-image entries. One truncated source image was retired; two malformed import records were merged. [Detailed source audit and remaining gaps](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.9.md).
 
 Document links now show availability checks separately from source/model review. **2,230 endpoints** are accounted for; six old model pages still return not found, and restricted, timed-out or deferred endpoints remain explicitly unverified. **ESP-Mosaico GPIO19 has a manufacturer-source discrepancy** retained in its scope notes. A responding URL is not proof of a complete or electrically verified datasheet.
 

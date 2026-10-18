@@ -2,7 +2,7 @@
 
 Board pinouts, manufacturer source files and power data. Every reference keeps its source, revision and review status.
 
-[Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases)
+[Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases)
 
 - [Wiring & protocols](Wiring.md) — Original connection diagrams and practical guides.
 - [Manufacturer manuals, schematics and pinout gaps](vendor-documentation-recovery.md) — Collection 2026.10.4 expands Waveshare, M5Stack and NodeMCU documentation while keeping the limits of each source clear.

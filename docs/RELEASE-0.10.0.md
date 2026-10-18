@@ -4,7 +4,7 @@ First Edition / 2026 · collection 2026.09.10 · Windows x64 preview, unsigned.
 
 Adds 118 listings: 68 board/device records and 50 maker-module records. Inland now has 67 records spanning boards, shields, sensors, displays, radios and kits, with eight original physical pinout-image attachments. All 50 DFRobot MCU-category SKU pages were reviewed. The update also includes manufacturer GPIO sheets for two TI LaunchPads, Microchip AVR-IoT WG and Silicon Labs EFM32ZG-STK3200.
 
-Exact SKUs, USB-C versus older boards, kit variants and conflicting manufacturer labels remain distinct. Photos, board labels, schematics, wiring examples and physical pinout sheets have separate labels. Missing sheets remain visible. [Detailed source coverage](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.10.md).
+Exact SKUs, USB-C versus older boards, kit variants and conflicting manufacturer labels remain distinct. Photos, board labels, schematics, wiring examples and physical pinout sheets have separate labels. Missing sheets remain visible. [Detailed source coverage](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.10.md).
 
 ## Windows download
 

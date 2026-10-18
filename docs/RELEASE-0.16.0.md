@@ -8,7 +8,7 @@ First Edition / 2026 · Collection **2026.10.3**.
 - Includes the breadboard/device maker features introduced in 0.15 and the mobile reference-header fix from 0.15.1.
 - Retains in-app updates, persistent workbench data and the verified offline reference cache introduced in 0.14. Original files download on demand or through **Download offline library**.
 
-[Reference review and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.10.3.md) · [Installation instructions](DOWNLOADS.md).
+[Reference review and remaining gaps](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.10.3.md) · [Installation instructions](DOWNLOADS.md).
 
 ## Validation and platform status
 

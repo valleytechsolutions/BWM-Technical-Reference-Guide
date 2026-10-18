@@ -6,7 +6,7 @@ The eight-page schematic dated September 29, 2026, with the older MVP revision k
 
 The High Boy V2_03 record contains the user-supplied original PDF, dated September 29, 2026. It covers power, ESP32-P4/C5 processors, radio, RFID/NFC, display and audio peripherals, GPIO/microSD connectors, and USB/UART. Search Highboy or High Boy V2_03 in the guide. Use PDF page 7 for the GPIO/microSD connector sheet and page 8 for USB/UART.
 
-[Open High Boy V2_03](https://valleytech-black-wire-guide.pages.dev/?board=high-code-gpio-device-high-boy-production-version) · [Source and checksum](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/HIGHBOY-2026.10.1.md)
+[Open High Boy V2_03](https://valleytech-black-wire-guide.pages.dev/?board=high-code-gpio-device-high-boy-production-version) · [Source and checksum](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/HIGHBOY-2026.10.1.md)
 
 ## Match the hardware revision
 

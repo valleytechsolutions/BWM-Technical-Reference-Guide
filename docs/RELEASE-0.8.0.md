@@ -1,6 +1,6 @@
 # Black Wire 0.8.0 / Jetson, NanoPi and I/O documentation
 
-Collection 2026.09.8 adds 75 listings, populates eight previously empty records and adds 114 reference entries, including 15 physical pinout-image entries. FriendlyELEC NanoPi/NanoPC and carriers, NVIDIA Jetson developer kits, Raspberry Pi CM4/CM5 I/O boards, Olimex, RAK13002 and the Antmicro Orin carrier are included. [Intake and exact limits](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.8.md).
+Collection 2026.09.8 adds 75 listings, populates eight previously empty records and adds 114 reference entries, including 15 physical pinout-image entries. FriendlyELEC NanoPi/NanoPC and carriers, NVIDIA Jetson developer kits, Raspberry Pi CM4/CM5 I/O boards, Olimex, RAK13002 and the Antmicro Orin carrier are included. [Intake and exact limits](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.8.md).
 
 Every one of the 2,589 board/device and 501 maker listings now has explicit documentation coverage. Board datasheets, chip datasheets, hardware manuals, schematics and original websites are separate. This is an audit of recorded evidence: older unclassified documents do not automatically count as board datasheets. Missing sources remain visible. Saved PDFs open locally; links labeled online need a connection.
 

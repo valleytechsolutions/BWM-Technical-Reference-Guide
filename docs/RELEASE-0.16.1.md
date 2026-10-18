@@ -20,4 +20,4 @@ Release contents include the Windows x64 installer and blockmap, Linux amd64 DEB
 
 Windows packages are unsigned and may still produce reputation warnings. Linux coverage is Ubuntu 22.04/24.04; other distributions are not claimed tested. No new macOS binary or AppImage is included.
 
-[Install and update](DOWNLOADS.md) · [Documentation scope and remaining gaps](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.10.4.md)
+[Install and update](DOWNLOADS.md) · [Documentation scope and remaining gaps](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.10.4.md)

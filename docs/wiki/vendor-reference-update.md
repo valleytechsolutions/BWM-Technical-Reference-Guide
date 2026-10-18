@@ -24,6 +24,6 @@ The 232 added references include 14 physical pinout images, 152 original PDFs, 1
 
 Collection 2026.10.2 is within First Edition / 2026. This targeted pass is not a complete worldwide inventory. Failed downloads, exact-variant leads and electrical-review gaps remain recorded. Original artwork retains its own rights. Existing desktop installers retain their published catalogs; the expanded references are available in the browser guide and current source.
 
-[Full intake and remaining work](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.10.2.md)
+[Full intake and remaining work](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.10.2.md)
 
 [Read the public wiki](https://valleytech-black-wire-guide.pages.dev/wiki/vendor-reference-update/) · [Open the guide](https://valleytech-black-wire-guide.pages.dev/)

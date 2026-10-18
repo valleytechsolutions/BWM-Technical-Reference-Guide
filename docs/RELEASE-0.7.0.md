@@ -1,6 +1,6 @@
 # Black Wire 0.7.0 / manufacturer and SBC expansion
 
-Find more exact hardware references without leaving the workbench: collection 2026.09.7 adds 107 board/device listings, 229 reference entries, 127 physical pinout-image entries and 15 linked maker records. Adafruit, SparkFun, FPGA boards, PortaPack H4M, LattePanda and Milk-V Mars are included. [Source intake and limits](https://github.com/valleytechsolutions/black-wire-pinouts/blob/main/docs/EXPANSION-2026.09.7.md).
+Find more exact hardware references without leaving the workbench: collection 2026.09.7 adds 107 board/device listings, 229 reference entries, 127 physical pinout-image entries and 15 linked maker records. Adafruit, SparkFun, FPGA boards, PortaPack H4M, LattePanda and Milk-V Mars are included. [Source intake and limits](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/src/branch/main/docs/EXPANSION-2026.09.7.md).
 
 SBC and FPGA shortcuts complement manufacturer/processor search. Architecture filters distinguish ARM, x86 and RISC-V, including mixed-architecture records. Unknown architectures remain available without filtering. Specifications and hardware-source links are visible in board and maker dialogs, including records whose pinout is missing. The wiki includes an SBC guide, direct hardware links and the actual package version.
 
