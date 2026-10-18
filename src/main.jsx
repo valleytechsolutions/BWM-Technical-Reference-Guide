@@ -1,3 +1,4 @@
+import {referenceSourceURL} from './hardware-links.mjs';
 import {AdapterTool,BatteryTool,BudgetTool,NumericField,PowerBasics} from './PowerTools.jsx';
 import HardwareLinks from './HardwareLinks.jsx';
 import MakersView from './MakersView.jsx';
@@ -31,7 +32,7 @@ const number=n=>new Intl.NumberFormat('en-US').format(n);
 const collectionId=edition=>String(edition||'').match(/\d{4}\.\d+\.\d+/)?.[0]||edition;
 const fmt=(n,d=2)=>Number.isFinite(n)?Number(n.toFixed(d)).toString():'—';
 
-function SourceLink({url,children,...props}){if(!/^https?:\/\//i.test(url||''))return null;return <a href={url} target="_blank" rel="noreferrer" {...props} onClick={e=>{if(window.blackwire){e.preventDefault();window.blackwire.openSource(url).catch(()=>{});}}}>{children||'Manufacturer source'}<ExternalLink size={12}/></a>;}
+function SourceLink({url,children,...props}){url=referenceSourceURL(url);if(!/^https?:\/\//i.test(url||''))return null;return <a href={url} target="_blank" rel="noreferrer" {...props} onClick={e=>{if(window.blackwire){e.preventDefault();window.blackwire.openSource(url).catch(()=>{});}}}>{children||'Manufacturer source'}<ExternalLink size={12}/></a>;}
 const familyLabel=f=>({'SBC':'All single-board computers','ESP32':'ESP32 & ESP8266','Other':'Other development boards','Raspberry Pi SBC':'Raspberry Pi computers','Other SBC':'Single-board computers','GPIO device':'Devices with GPIO','Expansion':'I/O & expansion boards','Source collection':'Manufacturer source collection'}[f]||f);
 const shortType=t=>({'pinout image':'Pinout','GPIO reference image':'GPIO reference','board labeling image':'Board labels','original reference PDF':'Original PDF','source reference':'Source file','chip-package reference':'Chip package','pin function reference':'Pin functions'}[canonicalReferenceType(t)]||t);
 const initialWorkbench={favorites:[],measurements:[]};

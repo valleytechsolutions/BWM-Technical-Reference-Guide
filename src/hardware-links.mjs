@@ -24,3 +24,10 @@ export function documentationSummary(record){
  const visualCount=record.documentationCoverage?.visualCount??(record.assets||[]).filter(a=>a.type!=='chip-package reference'&&(a.thumb||['png','jpg','jpeg','webp','svg','gif'].includes(a.extension))).length;
  return {boardDatasheet,website:links.some(s=>s.kind==='website'),visualCount,hardwareGuide:resources.some(s=>s.kind==='hardware-guide'&&s.scope==='board'&&safeSourceURL(s.url))};
 }
+
+// Keep historical catalog provenance intact while opening its public mirror.
+export function referenceSourceURL(url){
+ if(typeof url!=='string')return url;
+ return url.replace(/^https:\/\/raw\.githubusercontent\.com\/valleytechsolutions\/black-wire-pinouts\/([a-f0-9]{40})\/(library\/media\/[a-f0-9]{64}\.[a-z0-9]+)(?=$|[?#])/i,
+  'https://git.churchofmalware.org/Valleytech/black-wire-pinouts/raw/commit/$1/$2');
+}
