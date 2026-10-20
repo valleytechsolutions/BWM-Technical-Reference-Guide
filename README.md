@@ -17,6 +17,10 @@
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
+## October brand sweep / collection 2026.10.5
+
+**16 board/device records · 16 maker records · 72 references · nine physical-pinout images.** Original maps and supporting documents retain separate scope labels. [What changed and what still needs review](docs/wiki/october-brand-sweep.md). The source/browser version remains **0.16.2**; the published desktop installer remains **0.16.1**. First Edition / 2026 is unchanged.
+
 ## Documentation recovery / 0.16.1
 
 **Collection 2026.10.4:** 571 references added across 416 existing Waveshare, M5Stack and NodeMCU listings. Official manuals, schematics, physical maps and component datasheets retain separate scope labels. Large Nesso N1 images have efficient screen previews with originals preserved. [What changed and what is still missing](docs/wiki/vendor-documentation-recovery.md) · [Release validation](docs/RELEASE-0.16.1.md).

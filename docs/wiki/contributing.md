@@ -6,7 +6,7 @@ Report errors, contribute sources and request hardware with enough evidence to r
 
 Use the pinout collection for incorrect labels, wrong models, missing sources or missing boards. Include the exact device and revision, guide record link, what appears wrong and manufacturer evidence. Identify the connector, pin or callout involved. Exclude private measurements and personal information.
 
-[Report a reference issue](https://github.com/valleytechsolutions/black-wire-pinouts/issues/new/choose)
+[Report a reference issue](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/issues)
 
 ## Contribute a useful source
 
@@ -22,7 +22,7 @@ Use the pinout collection for incorrect labels, wrong models, missing sources or
 
 For broken search, display issues or desktop bugs, state the app version, platform, exact steps and expected result. Include the theme and window size for layout problems. A minimal reproducible report helps test the correction.
 
-[Report an app issue](https://github.com/valleytechsolutions/black-wire-desktop/issues/new/choose)
+[Report an app issue](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/issues)
 
 ## Suggest a practical improvement
 

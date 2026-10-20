@@ -6,7 +6,7 @@ One installer, a persistent offline library and updates inside Black Wire.
 
 Download the Windows setup EXE or Linux DEB from the official release. Version 0.14 and later no longer require library ZIP parts beside the Windows installer. Users of 0.13 and earlier need the new installer once to gain the updater.
 
-[Official downloads](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases/latest)
+[Official downloads](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases)
 
 ## Prepare for offline work
 

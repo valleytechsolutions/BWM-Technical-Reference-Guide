@@ -5,6 +5,7 @@ Board pinouts, manufacturer source files and power data. Every reference keeps i
 [Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases)
 
 - [Wiring & protocols](Wiring.md) — Original connection diagrams and practical guides.
+- [October brand sweep: new references and open gaps](october-brand-sweep.md) — Collection 2026.10.5 adds 16 board/device records and 16 maker records with original manufacturer references.
 - [Manufacturer manuals, schematics and pinout gaps](vendor-documentation-recovery.md) — Collection 2026.10.4 expands Waveshare, M5Stack and NodeMCU documentation while keeping the limits of each source clear.
 - [C5 boards, new references and project support](waveshare-c5-and-support.md) — Waveshare C5 pinouts, M5Stack and NodeMCU reference updates, and the optional Patreon link.
 - [New vendor pin and schematic references](vendor-reference-update.md) — Find the October additions from Seeed, M5Stack, Waveshare, Arduino, Adafruit, DFRobot and Renesas.
