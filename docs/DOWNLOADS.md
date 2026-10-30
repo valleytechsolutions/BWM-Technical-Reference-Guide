@@ -1,32 +1,32 @@
 # Install and update Black Wire
 
-Download from the [official releases](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases/latest). GitHub's automatic source ZIP is not an installer.
+Download from the [official releases](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/latest). GitHub's automatic source ZIP is not an installer. The Gitea release mirrors notes, checksums and validation with direct links to the complete GitHub packages because its upload limit rejects large files.
 
 ## Windows x64
 
-Run **Black-Wire-0.16.1-windows-x64-setup.exe**. This is the only installer file you need; it creates Start menu and desktop shortcuts. Windows 10/11 x64 is the intended platform; release notes identify the exact native test environments.
+Run **Black-Wire-0.16.3-windows-x64-setup.exe**. This is the only installer file you need; it creates Start menu and desktop shortcuts. Windows 10/11 x64 is the intended platform; release notes identify the exact native test environments.
 
 An installation for all users can request administrator approval during setup and future updates. Use your normal Windows account and your organization's installation policy.
 
 **Do not download old library ZIP parts for this installer.** Version 0.14 replaces their extraction step. Search, previews and wiring guides are included. Original diagrams and PDFs download inside the app.
 
-Users of 0.13 or earlier must install this version once to gain the updater. Setup preserves an older installed reference library before replacing the app. This first migration may need another 2.6 GB free while the library is copied. If preservation fails, setup stops before removing the old installation. Saved workbench data is separate.
+Users of 0.13 or earlier must install this version once to gain the updater. Setup preserves an older installed reference library before replacing the app. This first migration needs enough additional free space to copy the existing installed library. If preservation fails, setup stops before removing the old installation. Saved workbench data is separate.
 
 ## Linux x64
 
 **Ubuntu/Debian desktop: prefer the DEB.** Open it with your package manager, or run:
 
 ```sh
-sudo apt install ./Black-Wire-0.16.1-linux-amd64.deb
+sudo apt install ./Black-Wire-0.16.3-linux-amd64.deb
 ```
 
 The package installs dependencies and an application-menu entry. In-app updates use the system package manager and may request administrator authentication through PolicyKit. A desktop PolicyKit authentication agent is required unless the account has passwordless sudo. Do not run the app as root.
 
-AppImage is not included in 0.16.1: its automatic restart did not pass validation. Other Linux distributions and package types need separate native testing. Do not disable the Chromium sandbox or change system security settings.
+AppImage remains withheld after an earlier automatic-restart validation failure; this release validates the DEB only. Other Linux distributions and package types need separate native testing. Do not disable the Chromium sandbox or change system security settings.
 
 ## Prepare for offline use
 
-Open **Updates & offline library → Download offline library**. The complete collection occupies about 2.6 GB; allow at least 4 GB free for the app, references and update workspace, plus space for the installer download and any legacy migration.
+Open **Updates & offline library → Download offline library**. The current complete reference library occupies approximately 4.5 GB including browsing assets; allow at least 8 GB free for a fresh installation, downloads and update workspace, plus space for retained older caches and any legacy migration.
 
 Browse while it downloads. Pause or close the app at any time; completed files remain available and are reused on retry. **Wait for “Ready for offline use” before relying on the complete collection without internet.** Individual originals also download when opened online. Manufacturer website links still require internet.
 
@@ -47,7 +47,7 @@ This normal release's Windows package is **unsigned**. A normal GitHub release d
 Compare the download to SHA256SUMS.txt from the same release:
 
 ```powershell
-Get-FileHash -Algorithm SHA256 -LiteralPath '.\Black-Wire-0.16.1-windows-x64-setup.exe'
+Get-FileHash -Algorithm SHA256 -LiteralPath '.\Black-Wire-0.16.3-windows-x64-setup.exe'
 ```
 
 ```sh
@@ -56,4 +56,4 @@ sha256sum -c SHA256SUMS.txt --ignore-missing
 
 Update files have checksum verification; references are verified against the app's pinned SHA-256 index. Checksums do not substitute for publisher signing. macOS source remains available, but **no newly validated macOS installer is included**. Earlier releases remain unchanged.
 
-[Release notes](RELEASE-0.16.1.md) · [Build instructions](BUILDING.md) · [Updater supported targets](https://www.electron.build/v26/docs/features/auto-update/)
+[Release notes](RELEASE-0.16.3.md) · [Build instructions](BUILDING.md) · [Updater supported targets](https://www.electron.build/v26/docs/features/auto-update/)

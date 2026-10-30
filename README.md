@@ -6,24 +6,24 @@
 <p align="center"><strong>Board pinouts, manufacturer source files and power data.</strong><br>Every reference keeps its source, revision and review status. A Valleytech Solutions project, made for the workbench.</p>
 <p align="center">Makers · Educators · Students · Hobbyists · Engineers</p>
 
-<p align="center"><a href="https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases">Downloads & release status</a> · <a href="https://git.churchofmalware.org/Valleytech/black-wire-pinouts">Browse the pinout collection</a> · <a href="docs/BUILDING.md">Build the app</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
+<p align="center"><a href="https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases">Downloads & release status</a> · <a href="https://git.churchofmalware.org/Valleytech/black-wire-pinouts">Browse the pinout collection</a> · <a href="docs/BUILDING.md">Build the app</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
 <p align="center"><img alt="Edition" src="https://img.shields.io/badge/edition-First_Edition_2026-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Offline" src="https://img.shields.io/badge/reference_library-offline-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Platforms" src="https://img.shields.io/badge/packages-Windows_%7C_Linux_DEB-d9b872?style=flat-square&labelColor=0a0808"></p>
 
 ![Inland ESP32 original pinout in the Black Wire guide](docs/screenshots/inland-reference.png)
 
 ## Open the reference workbench
 
-**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download the latest desktop release](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases/latest)**
+**[Use the web app](https://valleytech-black-wire-guide.pages.dev/) · [Read the wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Download the latest desktop release](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/latest)**
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
-## October 30 update / 0.16.3 candidate
+## October 30 update / desktop 0.16.3
 
-**13 new listings · one board updated · 39 references · five physical pinout images.** ESP32-S31, Metro Hydra, Waveshare, M5Stack and LattePanda references are now in collection **2026.10.6**. The desktop candidate also includes the preceding 2026.10.5 additions. [What changed](docs/wiki/october-30-hardware-update.md) · [Validated desktop downloads](docs/DOWNLOADS.md). First Edition / 2026 stays unchanged.
+**13 new listings · one board updated · 39 references · five physical pinout images.** ESP32-S31, Metro Hydra, Waveshare, M5Stack and LattePanda references are now in collection **2026.10.6**. The normal desktop release also includes the preceding 2026.10.5 additions. Windows setup and Linux DEB packages passed native installation and in-app update checks. [Release and validation](docs/RELEASE-0.16.3.md). [What changed](docs/wiki/october-30-hardware-update.md) · [Validated desktop downloads](docs/DOWNLOADS.md). First Edition / 2026 stays unchanged.
 
 ## October brand sweep / collection 2026.10.5
 
-**16 board/device records · 16 maker records · 72 references · nine physical-pinout images.** Original maps and supporting documents retain separate scope labels. [What changed and what still needs review](docs/wiki/october-brand-sweep.md). The source/browser version remains **0.16.2**; the published desktop installer remains **0.16.1**. First Edition / 2026 is unchanged.
+**16 board/device records · 16 maker records · 72 references · nine physical-pinout images.** Original maps and supporting documents retain separate scope labels. [What changed and what still needs review](docs/wiki/october-brand-sweep.md). These additions first shipped in browser version 0.16.2 and are now included in desktop 0.16.3. First Edition / 2026 is unchanged.
 
 ## Documentation recovery / 0.16.1
 
@@ -196,7 +196,7 @@ The power desk includes **13 sourced profiles and 22 published operating observa
 
 Check [Releases](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases) for the actual available assets and validation status. An absent platform asset means that platform has not been released.
 
-**[Download the latest release](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases/latest)**. For original images and PDFs without an application, use the separate [collection downloads](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/releases).
+**[Download the latest release](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/latest)**. For original images and PDFs without an application, use the separate [collection downloads](https://git.churchofmalware.org/Valleytech/black-wire-pinouts/releases).
 
 | Platform | Package |
 |---|---|
