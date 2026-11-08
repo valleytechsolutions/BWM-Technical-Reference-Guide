@@ -5,6 +5,7 @@ Board pinouts, manufacturer source files and power data. Every reference keeps i
 [Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases)
 
 - [Wiring & protocols](Wiring.md) — Original connection diagrams and practical guides.
+- [November 3: new pinouts, sensors and hardware documentation](november-3-hardware-update.md) — Collection 2026.11.1 adds 15 listings, updates three existing listings and saves 33 references, including nine physical pinout images. Includes the November 7 Cerberus addition.
 - [October 30: new hardware references and desktop collection update](october-30-hardware-update.md) — Collection 2026.10.6 adds 13 listings, updates one board and saves 39 references.
 - [October brand sweep: new references and open gaps](october-brand-sweep.md) — Collection 2026.10.5 adds 16 board/device records and 16 maker records with original manufacturer references.
 - [Manufacturer manuals, schematics and pinout gaps](vendor-documentation-recovery.md) — Collection 2026.10.4 expands Waveshare, M5Stack and NodeMCU documentation while keeping the limits of each source clear.

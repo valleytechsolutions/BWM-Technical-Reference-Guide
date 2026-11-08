@@ -17,6 +17,10 @@
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
+## November 3 update / 0.16.4 candidate
+
+**15 new listings · three existing listings updated · 33 references · nine physical pinout images.** Includes the November 7 **Cerberus by 463n7.io** pinout. Collection **2026.11.1** adds exact-model ESP32, FPGA, sensor, NFC and expansion references with explicit revision and documentation gaps. [What changed](docs/wiki/november-3-hardware-update.md) · [Desktop downloads and validation](docs/DOWNLOADS.md). First Edition / 2026 remains unchanged.
+
 ## October 30 update / desktop 0.16.3
 
 **13 new listings · one board updated · 39 references · five physical pinout images.** ESP32-S31, Metro Hydra, Waveshare, M5Stack and LattePanda references are now in collection **2026.10.6**. The normal desktop release also includes the preceding 2026.10.5 additions. Windows setup and Linux DEB packages passed native installation and in-app update checks. [Release and validation](docs/RELEASE-0.16.3.md). [What changed](docs/wiki/october-30-hardware-update.md) · [Validated desktop downloads](docs/DOWNLOADS.md). First Edition / 2026 stays unchanged.

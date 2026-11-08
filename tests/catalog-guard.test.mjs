@@ -32,3 +32,22 @@ test('pin lists are split out of the first-load catalog and leave a pin count be
   assert.deepEqual(lean.boards, [{id: 'a', pinCount: 2}, {id: 'b'}]); assert.deepEqual(file, {a: pins}); assert.deepEqual(lean.makerParts, [{id: 'm', pinReferences: []}]);
   assert.deepEqual(splitCatalog(lean).pins, {});
 });
+
+test('first-load catalogs omit ingestion metadata while retaining source credits and the full library', async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'bw-provenance-')), file = name => path.join(dir, name);
+  const asset = {id: 'original', file: 'media/original.webp', hash: 'source-hash', sources: ['https://example.com/board'], url: 'https://example.com/pinout.webp', rights: 'Original creator retains rights', review: 'Revision review pending', notes: 'Match this PCB revision', originals: ['Manufacturer pinout'], provenance: {kind: 'user-supplied-original', sourceSha256: 'source-hash', reviewed: '2026-11-07'}};
+  const full = catalog({boards: [{id: 'b', assets: [asset]}], makerParts: [{id: 'm', assets: [asset]}]});
+  const original = JSON.stringify(full);
+  try {
+    await fs.writeFile(file('source.json'), JSON.stringify(source));
+    await fs.writeFile(file('library.json'), original);
+    await prepareCatalog({library: file('library.json'), target: file('public.json'), sourceFile: file('source.json')});
+    const lean = JSON.parse(await fs.readFile(file('public.json'), 'utf8'));
+    const {provenance, ...visible} = asset;
+    assert.deepEqual(lean.boards[0].assets[0], visible);
+    assert.deepEqual(lean.makerParts[0].assets[0], visible);
+    assert.equal(await fs.readFile(file('library.json'), 'utf8'), original);
+    assert.equal(JSON.stringify(full), original);
+    assert.deepEqual(JSON.parse(original).boards[0].assets[0].provenance, provenance);
+  } finally { await fs.rm(dir, {recursive: true, force: true}); }
+});

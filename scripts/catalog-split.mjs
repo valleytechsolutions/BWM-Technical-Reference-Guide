@@ -1,12 +1,16 @@
 // The guide's first load fetches catalog.json; transcribed pin lists are only needed by the breadboard.
 // Split them into pin-connectors.json (loaded on demand) and leave a small pinCount on each record so
 // the catalog can still say which boards arrive with pins.
+// Detailed ingestion provenance stays in library/catalog.json. The viewer uses the
+// asset's source links, credits, rights, review notes and hash, all retained here.
 export const PIN_FILE = 'pin-connectors.json';
 export function splitCatalog(catalog) {
   const pins = {};
   const strip = record => {
-    if (!record.pinConnectors) return record;
-    const {pinConnectors, ...rest} = record;
+    const assets = Array.isArray(record.assets) ? record.assets.map(({provenance, ...asset}) => asset) : null;
+    const lean = assets ? {...record, assets} : record;
+    if (!record.pinConnectors) return lean;
+    const {pinConnectors, ...rest} = lean;
     pins[record.id] = pinConnectors;
     return {...rest, pinCount: pinConnectors.connectors.reduce((n, c) => n + c.pins.length, 0)};
   };
