@@ -6,7 +6,7 @@
 <p align="center"><strong>Board pinouts, manufacturer source files and power data.</strong><br>Every reference keeps its source, revision and review status. A Valleytech Solutions project, made for the workbench.</p>
 <p align="center">Makers · Educators · Students · Hobbyists · Engineers</p>
 
-<p align="center"><a href="https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases">Downloads & release status</a> · <a href="https://git.churchofmalware.org/Valleytech/black-wire-pinouts">Browse the pinout collection</a> · <a href="docs/BUILDING.md">Build the app</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
+<p align="center"><a href="https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases">Downloads & release status</a> · <a href="https://github.com/valleytechsolutions/black-wire-pinouts">Browse the pinout collection</a> · <a href="docs/BUILDING.md">Build the app</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
 <p align="center"><img alt="Edition" src="https://img.shields.io/badge/edition-First_Edition_2026-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Offline" src="https://img.shields.io/badge/reference_library-offline-d9b872?style=flat-square&labelColor=0a0808"> <img alt="Platforms" src="https://img.shields.io/badge/packages-Windows_%7C_Linux_DEB-d9b872?style=flat-square&labelColor=0a0808"></p>
 
 ![Inland ESP32 original pinout in the Black Wire guide](docs/screenshots/inland-reference.png)
@@ -17,9 +17,9 @@
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
-## November 3 update / 0.16.4 candidate
+## November 3 update / desktop 0.16.4
 
-**15 new listings · three existing listings updated · 33 references · nine physical pinout images.** Includes the November 7 **Cerberus by 463n7.io** pinout. Collection **2026.11.1** adds exact-model ESP32, FPGA, sensor, NFC and expansion references with explicit revision and documentation gaps. [What changed](docs/wiki/november-3-hardware-update.md) · [Desktop downloads and validation](docs/DOWNLOADS.md). First Edition / 2026 remains unchanged.
+**15 new listings, 3 updated listings and 33 references, including 9 physical pinout images.** Includes the November 7 **Cerberus by 463n7.io** physical-header pinout. Collection **2026.11.1** covers the reviewed November additions and documentation recovery. Windows setup and Linux DEB passed the native install/update matrix. [Release and validation](docs/RELEASE-0.16.4.md) · [What changed](docs/wiki/november-3-hardware-update.md) · [Downloads](docs/DOWNLOADS.md). First Edition / 2026 remains unchanged.
 
 ## October 30 update / desktop 0.16.3
 
