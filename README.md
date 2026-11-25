@@ -17,6 +17,10 @@
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
+## November 25 GPIO references / 0.16.5
+
+Collection **2026.11.2** adds 40 board, device and module listings, identifies the earlier Seeed XIAO rear pads, and makes manufacturer-hosted GPIO diagrams searchable. [Revision and model guide](docs/wiki/november-25-gpio-pinouts.md) · [Release notes](docs/RELEASE-0.16.5.md).
+
 ## November 3 update / desktop 0.16.4
 
 **15 new listings, 3 updated listings and 33 references, including 9 physical pinout images.** Includes the November 7 **Cerberus by 463n7.io** physical-header pinout. Collection **2026.11.1** covers the reviewed November additions and documentation recovery. Windows setup and Linux DEB passed the native install/update matrix. [Release and validation](docs/RELEASE-0.16.4.md) · [What changed](docs/wiki/november-3-hardware-update.md) · [Downloads](docs/DOWNLOADS.md). First Edition / 2026 remains unchanged.

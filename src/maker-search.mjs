@@ -1,3 +1,4 @@
+import {hasOnlinePinout,onlineDiagrams} from './hardware-links.mjs';
 import {createSearchCache} from './search-cache.mjs';
 const cachedSearch=createSearchCache();
 // Search facts identify hardware; they never infer electrical compatibility.
@@ -37,8 +38,8 @@ export function searchMakerParts(parts,{query='',category='',brand='',technology
  return cachedSearch(parts,key,()=>parts.filter(p=>{
   if(category&&p.category!==category||brand&&p.brand!==brand||technology&&p.technology!==technology||bus&&!p.interfaces?.includes(bus)||size&&String(p.diagonalInches)!==size||identityKind&&p.identityKind!==identityKind)return false;
   if(documentedOnly&&p.documentationStatus!=='Manufacturer documentation recorded')return false;
-  if(imagesOnly&&!p.imageCount)return false;
-  if(pinoutsOnly&&!p.pinoutCoverage?.physicalCount)return false;
+  if(imagesOnly&&!p.imageCount&&!onlineDiagrams(p).length)return false;
+  if(pinoutsOnly&&!p.pinoutCoverage?.physicalCount&&!hasOnlinePinout(p))return false;
   if(savedOnly&&!favorites.includes(p.id))return false;
   const idx=index(p);
   return !q||[idx.name,...idx.aliases,...idx.controllers].includes(q)||terms.every(t=>termMatch(idx,t));

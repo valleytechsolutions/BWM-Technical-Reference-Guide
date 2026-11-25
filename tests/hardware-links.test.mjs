@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {hardwareLinks,documentationSummary,safeLibraryPath,availabilityLabel} from '../src/hardware-links.mjs';
+import {searchCatalog} from '../src/global-search.mjs';
 import {searchBoards} from '../src/domain.mjs';
 test('Link availability never claims document or electrical validation',()=>{
  assert.match(availabilityLabel({status:'reachable',checked:'2026-09-26T00:00:00Z'}),/identity is a separate check.*2026-09-26/);
@@ -50,4 +51,19 @@ test('SBC and architecture filters preserve ARM, x86 and RISC-V identities',()=>
  assert.deepEqual(searchBoards(boards,{query:'x86'}).map(b=>b.name),['IOTA']);
  assert.deepEqual(searchBoards(boards,{architecture:'ARM'}).map(b=>b.name),['Pi 5','Pico 2']);
  assert.deepEqual(searchBoards(boards,{architecture:'RISC-V'}).map(b=>b.name),['Mars','Pico 2']);
+});
+
+test('Reviewed online diagrams appear in the library and stay separate from saved files',()=>{
+ const diagram={kind:'connector-reference',physicalPinout:true,url:'https://maker.example/header.png',label:'Expansion header'};
+ const board=(id,resource)=>({id,name:'Device '+id,brand:'Maker',family:'Module',assets:[],documentation:{resources:[resource]},device:{category:'Display'}});
+ const physical=board('physical',diagram),support=board('support',{...diagram,label:'Bus assignments',physicalPinout:false});
+ const legacy=board('legacy',{kind:'connector-reference',url:diagram.url});
+ const unsafe=board('unsafe',{...diagram,url:'https://user:pass@maker.example/secret.png'});
+ const boards=[physical,support,legacy,unsafe];
+ assert.deepEqual(searchBoards(boards,{scope:'reviewed',devicesOnly:true}).map(b=>b.id),['physical','support']);
+ assert.deepEqual(searchBoards(boards,{kind:'pinout image'}),[physical]);
+ assert.deepEqual(searchBoards(boards,{kind:'GPIO reference image'}),[support]);
+ assert.deepEqual(searchBoards(boards,{query:'expansion header'}),[physical]);
+ assert.deepEqual(searchCatalog({boards},'Device',{pinoutsOnly:true}).map(x=>x.record.id),['physical']);
+ assert.equal(physical.assets.length,0);
 });

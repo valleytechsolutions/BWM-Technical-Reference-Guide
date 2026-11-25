@@ -1,4 +1,5 @@
 import {createSearchCache} from './search-cache.mjs';
+import {hasBoardReference,onlineDiagrams,hasOnlinePinout} from './hardware-links.mjs';
 const cachedSearch=createSearchCache();
 // Collection intakes use both labels for saved source PDFs. Keep older
 // snapshots searchable without rewriting their published source metadata.
@@ -14,7 +15,7 @@ function searchIndex(board){
  const core=[board.name,board.brand,board.processor,board.architecture,board.family,board.device?.category,...(board.device?.tags||[])];
  const aliases=board.aliases||[];
  const references=(board.assets||[]).flatMap(a=>[a.label,a.type,...(a.aliases||[]),...(a.originals||[])]);
- const fields=[...core,...aliases,...references,...(board.pinReferences||[]).flatMap(r=>r.pins.flatMap(p=>[p.label,p.purpose])),board.searchText].filter(Boolean);
+ const fields=[...core,...aliases,...references,...onlineDiagrams(board).map(d=>d.label),...(board.pinReferences||[]).flatMap(r=>r.pins.flatMap(p=>[p.label,p.purpose])),board.searchText].filter(Boolean);
  const index={name:normalize(board.name),aliases:aliases.map(normalize),core:core.map(normalize).join('\0'),fields:[...new Set(fields.map(normalize))].join('\0'),tokens:new Set(fields.flatMap(words)),identity:[board.name,board.processor].map(normalize).join('\0'),variants:new Set([board.name,board.processor].flatMap(espVariants))};
  indexCache.set(board,index);return index;
 }
@@ -32,11 +33,14 @@ export function searchBoards(boards,{query='',brand='',processor='',family='',ar
  if(query.trim()&&!terms.some(t=>/[a-z0-9]/.test(t)))return [];
  const key=JSON.stringify([terms,variant,brand,processor,family,architecture,kind,scope,savedOnly,savedOnly?favorites:[],devicesOnly,deviceCategory,includeUndocumented]);
  return cachedSearch(boards,key,()=>boards.filter(b=>{
-  if(!includeUndocumented&&!b.assets.length||brand&&b.brand!==brand||processor&&!(b.processor||'').split(' / ').includes(processor)||family&&(family==='SBC'?!['Other SBC','Raspberry Pi SBC'].includes(b.family):b.family!==family)||architecture&&b.architecture!==architecture&&!(b.architecture||'').split(' / ').includes(architecture))return false;
+  if(!includeUndocumented&&!hasBoardReference(b)||brand&&b.brand!==brand||processor&&!(b.processor||'').split(' / ').includes(processor)||family&&(family==='SBC'?!['Other SBC','Raspberry Pi SBC'].includes(b.family):b.family!==family)||architecture&&b.architecture!==architecture&&!(b.architecture||'').split(' / ').includes(architecture))return false;
   if(devicesOnly&&!b.device||deviceCategory&&b.device?.category!==deviceCategory)return false;
   if(savedOnly&&!favorites.includes(b.id))return false;
-  if(kind&&!b.assets.some(a=>canonicalReferenceType(a.type)===canonicalReferenceType(kind)))return false;
-  if(scope==='reviewed'&&!b.assets.some(a=>a.review==='Reviewed source'))return false;
+  if(kind&&!b.assets.some(a=>canonicalReferenceType(a.type)===canonicalReferenceType(kind))){
+   const linkedMatch=onlineDiagrams(b).some(d=>kind===(d.physicalPinout?'pinout image':'GPIO reference image'));
+   if(!linkedMatch)return false;
+  }
+  if(scope==='reviewed'&&!b.assets.some(a=>a.review==='Reviewed source')&&!onlineDiagrams(b).length)return false;
   if(scope==='source'&&!b.assets.some(a=>a.review==='Unreviewed source'))return false;
   if(!q)return true;
   const idx=searchIndex(b);
@@ -49,7 +53,7 @@ export function searchBoards(boards,{query='',brand='',processor='',family='',ar
   if(q&&/[a-z]/.test(q)&&[idx.name,...idx.aliases].some(f=>includesModel(f,q)))return true;
   return terms.every((t,i)=>idx.tokens.has(t)||(!/^\d+(?:\.\d+)*$/.test(t)&&includesModel(idx.fields,normalizedTerms[i])));
  }).map(b=>{
-  const idx=q?searchIndex(b):null;let rank=b.pinouts?20:0;
+  const idx=q?searchIndex(b):null;let rank=b.pinouts||hasOnlinePinout(b)?20:0;
   if(q&&idx.name===q)rank+=1000;
   else if(q&&idx.aliases.includes(q))rank+=700;
   else if(q&&includesModel(idx.name,q))rank+=400;

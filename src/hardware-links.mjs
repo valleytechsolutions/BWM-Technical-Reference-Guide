@@ -7,6 +7,19 @@ export function availabilityLabel(availability){
 export function safeSourceURL(url){try{const u=new URL(url);return ['https:','http:'].includes(u.protocol)&&!u.username&&!u.password;}catch{return false;}}
 export function safeLibraryPath(file){return typeof file==='string'&&/^media\/[a-f0-9]{64}\.(pdf|png|jpg|jpeg|svg|webp)$/i.test(file);}
 
+// Only newly reviewed diagram links carry the physicalPinout boolean.
+export function onlineDiagrams(record) {
+ return (record.documentation?.resources || []).filter(resource =>
+  resource.kind === 'connector-reference' && typeof resource.physicalPinout === 'boolean' &&
+  !resource.file && safeSourceURL(resource.url));
+}
+export function hasBoardReference(record) {
+ return Boolean(record.assets?.length || onlineDiagrams(record).length);
+}
+export function hasOnlinePinout(record) {
+ return onlineDiagrams(record).some(resource => resource.physicalPinout);
+}
+
 // Resources are explicitly typed by the researcher. Neither a filename nor a
 // chip datasheet is evidence that the exact board has a datasheet.
 export function hardwareLinks(record){

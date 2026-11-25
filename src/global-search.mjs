@@ -1,5 +1,6 @@
 import {searchBoards,normalize} from './domain.mjs';
 import {searchMakerParts} from './maker-search.mjs';
+import {hasOnlinePinout} from './hardware-links.mjs';
 import {searchWiringGuides} from './wiring-guides.mjs';
 export function searchCatalog(catalog,query,{scope='all',pinoutsOnly=false}={}){
  if(!query.trim())return [];
@@ -9,7 +10,7 @@ export function searchCatalog(catalog,query,{scope='all',pinoutsOnly=false}={}){
  const guides=!pinoutsOnly&&['all','wiring'].includes(scope)?searchWiringGuides(catalog.wiringGuides||[],query):[];
  const q=normalize(query);
  return [...makers.map(record=>({kind:'maker',record})),...boards.map(record=>({kind:'board',record})),...guides.map(record=>({kind:'wiring',record}))]
-  .filter(x=>!pinoutsOnly||x.record.pinoutCoverage?.physicalCount>0)
-  .map((x,i)=>({...x,rank:normalize(x.record.name)===q?10000:((x.record.aliases||[]).some(a=>normalize(a)===q)?9000:0)+(x.record.pinoutCoverage?.physicalCount?50:0)-i/1000}))
+  .filter(x=>!pinoutsOnly||x.record.pinoutCoverage?.physicalCount>0||hasOnlinePinout(x.record))
+  .map((x,i)=>({...x,rank:normalize(x.record.name)===q?10000:((x.record.aliases||[]).some(a=>normalize(a)===q)?9000:0)+(x.record.pinoutCoverage?.physicalCount||hasOnlinePinout(x.record)?50:0)-i/1000}))
   .sort((a,b)=>b.rank-a.rank);
 }

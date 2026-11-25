@@ -1,15 +1,16 @@
 import React,{useMemo,useState} from 'react';
 import {Search,Clock,Layers} from 'lucide-react';
 import {searchBoards,normalize} from './domain.mjs';
+import {hasBoardReference,hasOnlinePinout} from './hardware-links.mjs';
 import {Kicker} from './Theme.jsx';
 
 export default function DevicesView({catalog,query,favorites,toggleFavorite,open,BoardCard,SourceLink}){
  const [category,setCategory]=useState(''),[brand,setBrand]=useState(''),[processor,setProcessor]=useState(''),[pinoutsOnly,setPinoutsOnly]=useState(false),[limit,setLimit]=useState(30);
- const devices=useMemo(()=>catalog.boards.filter(b=>b.device&&b.assets.length),[catalog]);
+ const devices=useMemo(()=>catalog.boards.filter(b=>b.device&&hasBoardReference(b)),[catalog]);
  const categories=[...new Set(devices.map(b=>b.device.category))].sort();
  const brands=[...new Set(devices.map(b=>b.brand))].sort();
  const processors=[...new Set(devices.map(b=>b.processor).filter(Boolean))].sort();
- const matches=useMemo(()=>searchBoards(catalog.boards,{query,brand,processor,devicesOnly:true,deviceCategory:category}).filter(b=>!pinoutsOnly||b.pinouts>0),[catalog,query,brand,processor,category,pinoutsOnly]);
+ const matches=useMemo(()=>searchBoards(catalog.boards,{query,brand,processor,devicesOnly:true,deviceCategory:category}).filter(b=>!pinoutsOnly||b.pinouts>0||hasOnlinePinout(b)),[catalog,query,brand,processor,category,pinoutsOnly]);
  React.useEffect(()=>setLimit(30),[query,brand,processor,category,pinoutsOnly]);
  const watchlist=(catalog.deviceWatchlist||[]).filter(b=>(!brand||b.brand===brand)&&(!processor||b.processor===processor)&&(!category||b.category===category)&&(!query.trim()||normalize([b.name,b.brand,b.processor,...(b.aliases||[])].join(' ')).includes(normalize(query))));
  function reset(){setCategory('');setBrand('');setProcessor('');setPinoutsOnly(false);}
@@ -20,7 +21,7 @@ export default function DevicesView({catalog,query,favorites,toggleFavorite,open
    <div className="device-categories" aria-label="Device categories">{['',...categories].map(c=><button key={c} aria-pressed={category===c} className={category===c?'selected':''} onClick={()=>setCategory(c)}>{c||'All devices'}<span>{devices.filter(b=>!c||b.device.category===c).length}</span></button>)}</div>
    <div className="filter-bar device-filters">{[['Manufacturer',brand,setBrand,brands],['Microcontroller',processor,setProcessor,processors]].map(([label,value,set,options])=><label className="select-field" key={label}><span>{label}</span><select aria-label={'Device '+label.toLowerCase()} value={value} onChange={e=>set(e.target.value)}><option value="">All {label==='Manufacturer'?'manufacturers':'microcontrollers'}</option>{options.map(o=><option key={o}>{o}</option>)}</select></label>)}<label className="device-pinout-toggle"><input type="checkbox" checked={pinoutsOnly} onChange={e=>setPinoutsOnly(e.target.checked)}/>Pinout images only</label>{(category||brand||processor||pinoutsOnly)&&<button className="text-link" onClick={reset}>Reset device filters</button>}</div>
    <p className="search-hint">Use the search bar above. Try “T Embed”, “T-Beam”, “LoRa”, or a manufacturer. Partial connector maps and supporting references keep their own labels.</p>
-   <div className="result-toolbar"><span aria-live="polite"><b>{matches.length}</b> devices with saved references{query&&<> matching <strong>“{query}”</strong></>}</span></div>
+   <div className="result-toolbar"><span aria-live="polite"><b>{matches.length}</b> devices with references{query&&<> matching <strong>“{query}”</strong></>}</span></div>
    {matches.length?<div className="board-grid">{matches.slice(0,limit).map(b=><div className="device-result" key={b.id}><BoardCard board={b} favorite={favorites.includes(b.id)} toggleFavorite={toggleFavorite} open={()=>open(b)}/><div className="device-record-label"><span>{b.device.category}</span>{b.device.phase==='in-development'&&<span className="development-label">Pre-release documentation</span>}</div></div>)}</div>:<div className="empty-state"><Search size={28}/><h3>No device references match these filters.</h3><p>Try another model name or clear a filter. Missing pinout sheets are tracked below.</p><button className="secondary-button" onClick={reset}>Reset device filters</button></div>}
    {matches.length>limit&&<div className="load-more"><button className="secondary-button" onClick={()=>setLimit(n=>n+30)}>Show 30 more</button><span>Showing {limit} of {matches.length}</span></div>}
   </section>
