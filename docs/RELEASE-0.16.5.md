@@ -8,4 +8,8 @@ The board and module views now open manufacturer-hosted pinouts. Search, device 
 
 Use **Updates & offline library → Check for updates**. After installing the update, choose **Download offline library** to save the new originals. The 28 distinct physical-pinout images and two Arduino PDFs can be used offline. Manufacturer-hosted references require internet access.
 
-Desktop packages and native installation results are listed on the [release page](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.16.5). The platform checks cover installer and updater behavior. Electrical bench testing remains open.
+## Desktop packages
+
+The [0.16.5 release](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases/tag/v0.16.5) includes the unsigned Windows x64 installer and the Linux amd64 DEB, updater metadata, SHA-256 checksums and the native validation report. Fresh installation and application update checks passed on Windows Server 2022 and 2025 and on Ubuntu 22.04 and 24.04. The updater test uses a fixture built from the candidate code with an older test version. [Four-runner validation](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/actions/runs/45669629755).
+
+The tested runtime commit is `8a97ae0e9988ba09b2ab03c0a9c89ea2ac0733f6`. Original source references retain the rights recorded with each file. Electrical bench testing remains open.

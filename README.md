@@ -19,7 +19,7 @@ Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-pa
 
 ## November 25 GPIO references / 0.16.5
 
-Collection **2026.11.2** adds 40 board, device and module listings, identifies the earlier Seeed XIAO rear pads, and makes manufacturer-hosted GPIO diagrams searchable. [Revision and model guide](docs/wiki/november-25-gpio-pinouts.md) · [Release notes](docs/RELEASE-0.16.5.md).
+Collection **2026.11.2** adds 40 board, device and module listings, identifies the earlier Seeed XIAO rear pads, and makes manufacturer-hosted GPIO diagrams searchable. [Revision and model guide](docs/wiki/november-25-gpio-pinouts.md) · [Validated Windows and Linux downloads](docs/RELEASE-0.16.5.md).
 
 ## November 3 update / desktop 0.16.4
 
