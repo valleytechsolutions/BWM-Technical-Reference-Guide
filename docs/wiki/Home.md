@@ -2,9 +2,10 @@
 
 Board pinouts, manufacturer source files and power data. Every reference keeps its source, revision and review status.
 
-[Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://git.churchofmalware.org/Valleytech/BWM-Technical-Reference-Guide/releases)
+[Open the guide](https://valleytech-black-wire-guide.pages.dev/) · [Public reference wiki](https://valleytech-black-wire-guide.pages.dev/wiki/) · [Windows downloads](https://github.com/valleytechsolutions/BWM-Technical-Reference-Guide/releases)
 
 - [Wiring & protocols](Wiring.md) — Original connection diagrams and practical guides.
+- [Tindie board and carrier pinouts](tindie-pinouts-november-2026.md) — First Edition / 2026 · Digital collection 2026.11.3 · 24 physical pinout references across 22 listings
 - [November 25 GPIO pinouts and revised boards](november-25-gpio-pinouts.md) — First Edition / 2026 • Collection 2026.11.2 • App 0.16.5
 - [November 3: new pinouts, sensors and hardware documentation](november-3-hardware-update.md) — Collection 2026.11.1 adds 15 listings, updates three existing listings and saves 33 references, including nine physical pinout images. Includes the November 7 Cerberus addition.
 - [October 30: new hardware references and desktop collection update](october-30-hardware-update.md) — Collection 2026.10.6 adds 13 listings, updates one board and saves 39 references.

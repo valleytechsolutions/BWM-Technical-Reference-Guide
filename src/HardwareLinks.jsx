@@ -1,5 +1,5 @@
 import React from 'react';
-import {hardwareLinks,documentationSummary,documentKinds,availabilityLabel,onlineDiagrams} from './hardware-links.mjs';
+import {hardwareLinks,documentationSummary,documentKinds,availabilityLabel,onlineDiagrams,safeSourceURL} from './hardware-links.mjs';
 export default function HardwareLinks({record,SourceLink,onOpenDocument,compact=false}){
  const diagrams=onlineDiagrams(record),urls=new Set(diagrams.map(d=>d.url));
  const links=hardwareLinks(record).filter(s=>!urls.has(s.url)||s.kind==='website'),summary=documentationSummary(record);
@@ -8,10 +8,11 @@ export default function HardwareLinks({record,SourceLink,onOpenDocument,compact=
  const originalDiagrams=diagrams.length>0&&<section className="hardware-links" aria-label="Online diagrams">
   <h3>Online diagrams</h3><div className="source-links">{diagrams.map(d=><div className="hardware-document" key={d.url}>
    <SourceLink url={d.url}>{d.label||'Open original diagram'}</SourceLink>
-   <small>{d.physicalPinout?'Physical pinout':'Supporting GPIO reference'} · Manufacturer-hosted</small>
+   <small>{d.physicalPinout?'Physical pinout':'Supporting GPIO reference'} · Online original</small>
    {d.description&&<p>{d.description}</p>}
    {(d.checked||d.rights||d.sha256)&&<details><summary>Source and review details</summary>
     {d.checked&&<p>Source checked {d.checked}</p>}{d.review&&<p>{d.review}</p>}{d.rights&&<p>{d.rights}</p>}
+    {safeSourceURL(d.originalUrl)&&d.originalUrl!==d.url.split('#')[0]&&<SourceLink url={d.originalUrl}>Original file in the designer’s repository</SourceLink>}
     {d.sha256&&<code className="hash">SHA-256 {d.sha256}</code>}
    </details>}
   </div>)}</div></section>;

@@ -17,6 +17,10 @@
 
 Find **ESP32, Arduino, Raspberry Pi, RP2040/RP2350, board pinouts, OLED/LCD/e-paper displays, sensors and maker modules**. Search the exact model, inspect the original source, check its revision and keep useful boards saved locally. Hardware coverage and missing documentation are explicit.
 
+## November 26 Tindie pinouts / 0.16.6
+
+Collection **2026.11.3** adds 24 pinouts across 22 seller listings. Four originals are available offline and 20 open on the seller’s or designer’s site. Choose the matching HiiBot IoTs2 revision or Tall Dog carrier layout before using its drawing. [Model and revision guide](docs/wiki/tindie-pinouts-november-2026.md) · [Desktop release notes](docs/RELEASE-0.16.6.md)
+
 ## November 25 GPIO references / 0.16.5
 
 Collection **2026.11.2** adds 40 board, device and module listings, identifies the earlier Seeed XIAO rear pads, and makes manufacturer-hosted GPIO diagrams searchable. [Revision and model guide](docs/wiki/november-25-gpio-pinouts.md) · [Validated Windows and Linux downloads](docs/RELEASE-0.16.5.md).
